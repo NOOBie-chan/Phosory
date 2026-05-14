@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="styles/header&footer.css">
+<link rel="stylesheet" href="styles/style4.css">
+<script src="script/observer.js"></script>
+<script src="script/on-click.js"></script>
+<title>Phosory Services | Web Development, Software & Cybersecurity Solutions</title>
+
+<meta name="description" content="Explore Phosory services including web development, software engineering, UI/UX design, and cybersecurity solutions built for performance and scalability.">
+
+<meta name="keywords" content="Phosory services, web development services, software development, UI UX design services, cybersecurity solutions, tech agency services">
+
+<meta name="author" content="Phosory">
+
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://phosory.netlify.app/services">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Phosory Services | Digital Solutions">
+<meta property="og:description" content="Web development, software engineering, UI/UX design, and cybersecurity services tailored for modern businesses.">
+<meta property="og:url" content="https://phosory.netlify.app/services">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://phosory.netlify.app/assets/services-preview.jpg">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Phosory Services">
+<meta name="twitter:description" content="Explore our web, software, and cybersecurity services.">
+<meta name="twitter:image" content="https://phosory.netlify.app/assets/services-preview.jpg">
+</head>
+<body>
+  <nav>
+         <ul class="sidebar">
+            <li onclick="hideSidebar()"><i class="fas fa-x"></i></li>
+            <li onclick="window.location.href = 'index.html'"><a href="index.html">Home</a></li>
+            <li onclick="window.location.href = 'services.html'"><a href="services.html">Services</a></li>
+            <li onclick="window.location.href = 'about.html'"><a href="about.html">About Us</a></li>
+            <li onclick="window.location.href = 'contact.html'"><a href="">Contact Us</a></li>
+            <li><img src="images/icon.webp" alt="Phosory Logo"></li>
+        </ul>
+        <div class="header" id="header">
+            <div class="logo">
+                <img src="images/icon.webp" width="10%" alt="Phosory Icon" loading="lazy">
+                <span>Phosory</span>
+            </div>
+            <div class="links">
+                <a href="index.html" class="hideOnMobile">Home</a>
+                <a href="services.html" class="hideOnMobile">Services</a>
+                <a href="about.html" class="hideOnMobile">About Us</a>
+                <a href="contact.html" class="hideOnMobile">Contact Us</a>
+                <i class="fas fa-bars" onclick="showSidebar()"></i>
+            </div>
+        </div>
+        <script>
+            window.addEventListener("scroll", function(){
+            let header = this.document.getElementById("header");
+            if(this.window.scrollY > 10){
+                    header.classList.add("scrolled");
+                }
+                else{
+                    header.classList.remove("scrolled");
+                }
+            });
+        </script>
+    </nav>
+    <canvas id="particles"></canvas>
+<section class="hero">
+  <h1>Build Your System</h1>
+  <p>Select a service and configure your project live.</p>
+</section>
+<section class="grid">
+  <div class="card" data-service="UI/UX Design">
+    <span>UI/UX Design</span>
+  </div>
+  <div class="card website" id="website" data-service="Web Solutions">
+    <span>Websites</span>
+    </script>
+  </div>
+  <div class="card" data-service="Web Applications">
+    <span>Web Applications</span>
+  </div>
+  <div class="card" data-service="Software">
+    <span>Software Systems</span>
+  </div>
+  <div class="card" data-service="Automation">
+    <span>Automation Tools</span>
+  </div>
+  <div class="card" data-service="Cybersecurity">
+    <span>Cybersecurity Solutions</span>
+  </div>
+  <div class="card coming">
+    <span>More Coming +</span>
+  </div>
+</section>
+<div id="panel" class="panel">
+
+  <div class="panel-content">
+
+    <button id="close">✕</button>
+
+    <h2 id="title"></h2>
+
+    <p id="serviceDescription"></p>
+
+    <p id="typeDescription"></p>
+
+    <div id="controls"></div>
+
+    <div id="features"></div>
+
+    <div class="price-box">
+
+      <span>Total Price:</span>
+
+      <h1 id="price">$0</h1>
+
+    </div>
+
+    <button id="order">
+      Place Order
+    </button>
+
+  </div>
+
+</div>
+<script src="script/services.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCwnV4AVN_sjSmuobmer0jKLpVqNZX7Gzs",
+    authDomain: "phosory.firebaseapp.com",
+    projectId: "phosory",
+    storageBucket: "phosory.firebasestorage.app",
+    messagingSenderId: "582612122852",
+    appId: "1:582612122852:web:32edb719cf6f1ffd8a40f1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script> -->

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block private or useless pages (optional)
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://phosory.netlify.app/sitemap.xml

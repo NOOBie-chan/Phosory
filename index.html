@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/header&footer.css">
+    <script src="script/nav.js"></script>
+    <script src="script/observer.js"></script>
+    <script src="script/on-click.js"></script>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico?v=2">
+    <title>Phosory | Modern Digital Solutions, Web & Software Development</title>
+
+    <meta name="description" content="Phosory is a modern digital solutions company building fast, secure, and scalable websites, software systems, and UI/UX designs for businesses and startups.">
+
+    <meta name="keywords" content="Phosory, web development, software development, cybersecurity, UI UX design, modern websites, digital agency, tech solutions, Lagos developers">
+
+    <meta name="author" content="Phosory">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://phosory.netlify.app/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Phosory | Digital Solutions That Build the Future">
+    <meta property="og:description" content="We design and build fast, secure, and modern digital systems including websites and software solutions.">
+    <meta property="og:url" content="https://phosory.netlify.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://phosory.netlify.app/assets/preview.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Phosory | Digital Solutions">
+    <meta name="twitter:description" content="Modern websites, software, and cybersecurity-driven solutions built for performance.">
+    <meta name="twitter:image" content="https://phosory.netlify.app/assets/preview.jpg">
+</head>
+<body>
+    <nav>
+        <ul class="sidebar">
+            <li onclick="hideSidebar()"><i class="fas fa-x"></i></li>
+            <li onclick="window.location.href = 'index.html'"><a href="#">Home</a></li>
+            <li onclick="window.location.href = 'services.html'"><a href="services.html">Services</a></li>
+            <li onclick="window.location.href = 'about.html'"><a href="about.html">About Us</a></li>
+            <li onclick="window.location.href = 'contact.html'"><a href="contact.html">Contact Us</a></li>
+            <li><img src="images/icon.webp" alt=""></li>
+        </ul>
+        <div class="header" id="header">
+            <div class="logo">
+                <img src="images/icon.webp" width="10%" alt="Phosory Icon" loading="lazy">
+                <span>Phosory</span>
+            </div>
+            <div class="links">
+                <a href="" class="hideOnMobile">Home</a>
+                <a href="services.html" class="hideOnMobile">Services</a>
+                <a href="about.html" class="hideOnMobile">About Us</a>
+                <a href="contact.html" class="hideOnMobile">Contact Us</a>
+                <i class="fas fa-bars" onclick="showSidebar()"></i>
+            </div>
+        </div>
+        <script>
+            window.addEventListener("scroll", function(){
+            let header = this.document.getElementById("header");
+            if(this.window.scrollY > 10){
+                    header.classList.add("scrolled");
+                }
+                else{
+                    header.classList.remove("scrolled");
+                }
+            });
+        </script>
+    </nav>
+
+    <header class="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <h1 class="fade-in">Connecting Clients to Affordable, High-Quality Tech Solutions</h1>
+            <p class="fade-in"><b class="fade-in">Phosory</b> empowers emerging tech professionals by connecting them with real client projects, while helping businesses access reliable, affordable tech services.</p>
+            <div class="btns">
+                <a href="contact.html"><button class="fir fade-in">Get Started</button></a>
+                <a href="services.html"><button class="sec fade-in">Explore Services</button></a>
+            </div>
+        </div>
+        <script src="script/hero.js"></script>
+    </header>
+
+    <span class="center">
+            <section class="thin fade-in">
+            <div class="slider">
+                <ul>
+                    <li>Trustworthy</li>
+                    <li>|</li>
+                    <li>Built for growth</li>
+                    <li>|</li>
+                    <li>Secure infrastructure</li>
+                    <li>|</li>
+                    <li>Fast delivery</li>
+                    <li>|</li>
+                    <li>Talent-driven innovation</li>
+                    <li>|</li>
+                </ul>
+                <ul aria-hidden="true">
+                    <li>Trustworthy</li>
+                    <li>|</li>
+                    <li>Built for growth</li>
+                    <li>|</li>
+                    <li>Secure infrastructure</li>
+                    <li>|</li>
+                    <li>Fast delivery</li>
+                    <li>|</li>
+                    <li>Talent-driven innovation</li>
+                    <li>|</li>
+                </ul>
+            </div>
+        </section>
+    </span>
+
+    <section class="do">
+        <h2 class="fade-in">What We Do</h2>
+        <div class="cards">
+            <div class="card fade-in" onclick="window.location.href = 'services.html'">
+                <span><i class="fas fa-laptop-code"></i> <i class="fas fa-arrow-right"></i></span>
+                <h3>Web Development</h3>
+                <p>Build responsive, high-performing websites designed to strengthen your brand and drive growth.</p>
+            </div>
+            <div class="card fade-in" onclick="window.location.href = 'services.html'">
+                <span><i class="fas fa-terminal"></i> <i class="fas fa-arrow-right"></i></span>
+                <h3>Software Development</h3>
+                <p>Develop scalable software solutions tailored to streamline operations and solve complex challenges.</p>
+            </div>
+            <div class="card fade-in" onclick="window.location.href = 'services.html'">
+                <span><i class="fas fa-window-maximize"></i> <i class="fas fa-arrow-right"></i></span>
+                <h3>Web Applications</h3>
+                <p>Create dynamic web applications focused on performance, usability and seamless user experiences.</p>
+            </div>
+            <div class="card fade-in" onclick="window.location.href = 'services.html'">
+                <span><i class="fas fa-robot"></i> <i class="fas fa-arrow-right"></i></span>
+                <h3>Automation Tools</h3>
+                <p>Implement intelligent automation systems that improve efficiency and reduce repetitive manual tasks.</p>
+            </div>
+            <div class="card fade-in" onclick="window.location.href = 'services.html'">
+                <span><i class="fas fa-shield-halved"></i> <i class="fas fa-arrow-right"></i></span>
+                <h3>Cybersecurity Solutions</h3>
+                <p>Protect digital infrastructure with reliable cybersecurity solutions built for modern businesses.</p>
+            </div>
+            <div class="card last fade-in" onclick="window.location.href = 'services.html'">
+                <h3>More Coming +</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="difference">
+        <h2>What Makes Us Different?</h2>
+        <span class="span fade-in"><p class="p">We combine innovation, execution and growth-focused systems that move businesses forward.</p></span>
+        <div class="cards">
+            <div class="car">
+                <div class="card fade-in">
+                    <span class=""><i class="fas fa-terminal"></i></span>
+                    <h3>Execution</h3>
+                    <p>Turn ideas into deployed systems rapidly with structured workflow and accountability.</p>
+                </div>           
+            </div>
+            <div class="car">
+                <div class="card fade-in">
+                    <span><i class="fas fa-arrow-trend-up"></i></span>
+                    <h3>Scalability</h3>
+                    <p>Solutions designed by growth, flexibility and expansion across evolving business demands.</p>
+                </div>
+                <div class="card fade-in">
+                    <span><i class="fas fa-crosshairs"></i></span>
+                    <h3>Precision</h3>
+                    <p>Every product design is data-backed, secure, user-focused and built for reliability.</p>
+                </div>
+            </div>
+            <div class="car">
+                <div class="card fade-in">
+                    <span><i class="fas fa-bolt"></i></span>
+                    <h3>Empowerment</h3>
+                    <p>We build systems empowering businesses and developers simultaneously through transparent collaboration, practical innovation, skill development and measurable growth.</p>
+                </div>
+                <div class="card fade-in">
+                    <span><i class="fas fa-arrows-rotate"></i></span>
+                    <h3>Adaptability</h3>
+                    <p>Phosory evolves with technology shifts, market demands and client objectives without sacrificing quality, efficiency, security, performance or execution standards.</p>
+                </div>
+            </div>
+        </div>
+   </section>
+
+   <section class="mv-section">
+    <div class="mv-card mission-card" id="missionCard">
+        <div class="mv-content">
+        <h3>Mission</h3>
+        <p>
+            Empowering businesses and individuals with scalable digital
+            solutions, cybersecurity awareness, and innovative technology
+            built for growth.
+        </p>
+        </div>
+        <button class="mv-icon mission-icon" id="missionBtn">
+        <i class="fa-solid fa-bullseye"></i>
+        </button>
+    </div>
+    <div class="mv-card vision-card" id="visionCard">
+        <button class="mv-icon vision-icon" id="visionBtn">
+        <i class="fa-solid fa-eye"></i>
+        </button>
+        <div class="mv-content">
+        <h3>Vision</h3>
+        <p>
+            Building a future where technology, talent development,
+            and innovation create lasting impact across Africa and beyond.
+        </p>
+        </div>
+    </div>
+    <script>
+        const missionCard = document.getElementById("missionCard");
+        const visionCard = document.getElementById("visionCard");
+        document.getElementById("missionBtn").addEventListener("click", () => {
+            missionCard.classList.toggle("active");
+            visionCard.classList.remove("active");
+        });
+        document.getElementById("visionBtn").addEventListener("click", () => {
+            visionCard.classList.toggle("active");
+            missionCard.classList.remove("active");
+        });
+    </script>
+</section>
+
+    <section class="how">
+        <h2 class="fade-in">How We Work</h2>
+        <div class="cards">
+            <div class="card fade-in">
+                <i class="far fa-handshake"></i>
+                <span class="car">
+                    <p>For Clients</p>
+                    <span>Tell us what you need</span>
+                </span>
+            </div>
+            <div class="card fade-in">
+                <i class="fas fa-cubes"></i>
+                <span class="car">
+                    <p>Talent Matching</p>
+                    <span>We connect you with the right team</span>
+                </span>
+            </div>
+            <div class="card fade-in">
+                <i class="fas fa-fingerprint"></i>
+                <span class="car">
+                    <p>Delivery & Support</p>
+                    <span>Get quality results at affordable cost</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <span class="center">
+            <section class="talent">
+            <h2 class="fade-in">We don't just build systems. We also grow people.</h2>
+            <div class="sides">
+                <div class="left">
+                    <p class="fade-in"><b>Phosory</b> is creating an ecosystem where innovation, execution and growth work together to empower the next generation of tech talent.</p>
+                    <span>
+                        <button class="fade-in">Join Our Network</button>
+                        <button class="fade-in">Work With Us</button>
+                    </span>
+                    <img src="images/icon.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="card fade-in">
+                        <h3 class="fade-in">Skill Development</h3>
+                        <p class="fade-in">Learn through real world execution</p>
+                    </div>
+                    <div class="card fade-in">
+                        <h3 class="fade-in">Innovation Culture</h3>
+                        <p class="fade-in">Work on scalable and modern systems</p>
+                    </div>
+                    <div class="card fade-in">
+                        <h3 class="fade-in">Joint Growth</h3>
+                        <p class="fade-in">Grow with mentorship and teamwork</p>
+                    </div>
+                    <div class="card fade-in">
+                        <h3 class="fade-in">Security Mindset</h3>
+                        <p class="fade-in">Develop with security in mind.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </span>
+
+    <section class="answers">
+        <h2 class="fade-in">FAQs</h2>
+        <p class="text fade-in">We've got the answers</p>
+        <div class="cards">
+            <div class="card fade-in">
+                <span class="top" id="t1">
+                   <p> What does <b>Phosory</b> mean?</p>
+                   <i onclick="showBottom1()">+</i>
+                </span>
+                <span class="bottom" id="b1">
+                    The name <b>"Phosory"</b> is derived from: 
+                    <ul>
+                        <li>"Phos" (φῶς) - Greek for light</li>
+                        <li>"Ori" (אורי) - Hebrew for my light</li>
+                    </ul>
+                    Combined, <b>Phosory</b> = “light + my light” → “light that belongs to me” / “light that is from me”.
+                    <br>It symbolizes knowledge, growth, clarity, and digital transformation.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t2">
+                   <p> What does <b>Phosory</b> mean for the brand?</p>
+                   <i class="far fa-plus" onclick="showBottom2()"></i>
+                </span>
+                <span class="bottom" id="b2">
+                   This isn't about light in a generic sense, it's more personal and purpose-driven
+                   <ul>
+                        <li>Every developer has their own light (skill, talent, potential) - <b>Phosory</b> brings that light out and connects it to real opportunities</li>
+                        <li>Clients receive solutions powered by real human potential</li>
+                    </ul>
+                    It's not just tech, it's people shining through tech
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t3">
+                   <p> Is <b>Phosory</b> a freelance platform?</p>
+                   <i onclick="showBottom3()">+</i>
+                </span>
+                <span class="bottom" id="b3">
+                    No. <b>Phosory </b>is not a freelance platform and that's the point <br>
+                    Freelance platforms connect you and leave you to figure things out. <b>Phosory</b>
+                    takes control of the process, ensuring projects are properly structured, executed and completed with oversight.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t4">
+                   <p> How are developers selected?</p>
+                   <i class="far fa-plus" onclick="showBottom4()"></i>
+                </span>
+                <span class="bottom" id="b4">
+                   Developers aren't just picked they're evaluated and refined. <br>
+                    <b>Phosory</b> looks at skill and problem-solving ability. Developers who join are 
+                    expected to meet a certain standard before working on real projects.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t5">
+                   <p> How does <b>Phosory</b> ensure quality?</p>
+                   <i onclick="showBottom5()">+</i>
+                </span>
+                <span class="bottom" id="b5">
+                    Through proper structure and supervision. <br>
+                    Projects aren't left in the hands of a random developer. There's guidance,
+                    review and a system that ensures:
+                    <ul>
+                        <li>Clear requirements</li>
+                        <li>Proper execution</li>
+                        <li>Consistent standards</li>
+                    </ul>
+                    No guesswork. No abandoned projects.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t6">
+                   <p>How long do projects take?</p>
+                   <i class="far fa-plus" onclick="showBottom6()"></i>
+                </span>
+                <span class="bottom" id="b6">
+                   It depends on the scope. <br>
+                   Simple projects can take days to a couple of weeks, while more complex
+                   systems take longer. What matters is that timelines are defined upfront and
+                   managed, not left vague.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t7">
+                   <p> How is pricing handled?</p>
+                   <i onclick="showBottom7()">+</i>
+                </span>
+                <span class="bottom" id="b7">
+                    Pricing is based on project scope, complexity and requirements. <br>
+                    Instead of random bids. <b>Phosory</b> structres the project first then gives 
+                    a clear justified cost.
+                </span>
+            </div>
+            <div class="card fade-in">
+                <span class="top" id="t8">
+                   <p> Can beginners join as developers?</p>
+                   <i class="far fa-plus" onclick="showBottom8()"></i>
+                </span>
+                <span class="bottom" id="b8">
+                   Beginners can join to learn and grow but they don't just jump into
+                   critical projects. They're guided, trained and gradually introduced
+                   to real work as they improve.
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <span class="center">
+        <section class="cta-section">
+            <div class="cta-glow"></div>
+            <div class="cta-card">
+                <p class="cta-label">READY TO BUILD?</p>
+                <h1>Ready to Build the Future?</h1>
+                <p class="cta-text">From idea to execution, we build systems that scale, perform and last</p>
+                <div class="cta-buttons">
+                <button class="primary-btn" onclick="window.location.href = 'services.html'">Start a Project</button>
+                <button class="secondary-btn" onclick="window.location.href = 'contact.html'">Contact Us</button>
+                </div>
+            </div>
+            <div class="particles">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </section>
+    </span>
+
+    <footer class="phosory-footer">
+        <div class="footer-grid"></div>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="images/icon.webp" width="23%" height="auto" alt="Phosory Logo">
+            <h2>Phosory</h2>
+            <h3>Illuminate Everything</h3>
+            <p>Engineering clarity through systems, design, and intelligence. Built for the future — not trends.</p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            </div>
+            <div class="footer-links">
+                <h3>Navigate</h3>
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-links">
+            <h3>Services</h3>
+            <a href="#">Web Development</a>
+            <a href="#">Web Application</a>
+            <a href="#">Cybersecurity</a>
+            <a href="#">Automation</a>
+            <a href="#">Software Systems</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Phosory. Built for precision. Built for the future.</p>
+        </div>
+    </footer>   
+</body>
+</html>
