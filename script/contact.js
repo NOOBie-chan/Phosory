@@ -249,3 +249,18 @@ Features: ${features || "None"}`;
         }
     },300);
 }
+
+let isSubmitting = false;
+
+clientForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (isSubmitting) return;
+  isSubmitting = true;
+
+  try {
+    // your code here
+  } finally {
+    isSubmitting = false;
+  }
+});

@@ -105,7 +105,7 @@
     </div>
 </section>
 <section class="contact-wrapper">
-    <form class="modern-form" id="clientForm" onsubmit="return false" autocomplete="off" data-netlify="true" netlify-honeypot = "bot-field">
+    <form class="modern-form" id="clientForm" autocomplete="off" data-netlify="true" netlify-honeypot = "bot-field">
         <div class="form-top">
             <div>
                 <span class="tiny-tag">CLIENT ACCESS</span>
@@ -119,11 +119,11 @@
             <input type="hidden" name="form-name" value="contact">
             <p hidden> <label for="">Don't fill this out: <input name="bot-field"></label></p>
             <div class="field">
-                <input type="text" name="name" required>
+                <input type="text" name="name" id="name" required>
                 <label>Client Name</label>
             </div>
             <div class="field">
-                <input type="email" name="email" required>
+                <input type="email" name="email" id="email" required>
                 <label>Email Address</label>
             </div>
             <div class="field full">
@@ -171,7 +171,7 @@
             <i class="fas fa-arrow-right"></i>
         </button>
     </form>
-    <form class="modern-form devTheme" id="devForm" onsubmit="return false" autocomplete="off" data-netlify="true" netlify-honeypot = "bot-field">
+    <form class="modern-form devTheme" id="devForm" autocomplete="off" data-netlify="true" netlify-honeypot = "bot-field">
         <div class="form-top">
             <div>
                 <span class="tiny-tag purpleTag">DEVELOPER ACCESS</span>
@@ -294,5 +294,7 @@
 </footer>
 <script src="script/contact.js"></script>
 <script src="script/autofill.js"></script>
+<script type="module" src="script/submit-order.js"></script>
+<script type="module" src="script/submit-dev.js"></script>
 </body>
 </html>

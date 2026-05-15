@@ -1,0 +1,501 @@
+/* login.css */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    background:#040816;
+
+    color:white;
+
+    min-height:100vh;
+
+    overflow:hidden;
+
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+/* =========================
+   GRID
+========================= */
+
+.background-grid{
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+    z-index:1;
+
+}
+
+/* =========================
+   GLOW EFFECTS
+========================= */
+
+.bg-glow{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(120px);
+
+    opacity:0.18;
+
+    z-index:1;
+
+}
+
+.glow1{
+
+    width:400px;
+    height:400px;
+
+    background:cyan;
+
+    top:-100px;
+    left:-100px;
+
+}
+
+.glow2{
+
+    width:350px;
+    height:350px;
+
+    background:#7b2fff;
+
+    bottom:-120px;
+    right:-100px;
+
+}
+
+/* =========================
+   LOGO BACKGROUND
+========================= */
+
+.logo-background{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:1;
+
+    pointer-events:none;
+
+}
+
+.logo-background img{
+
+    width:500px;
+
+    opacity:0.045;
+
+    animation:logoFloat 7s ease-in-out infinite;
+
+    filter:drop-shadow(0 0 40px cyan);
+
+}
+
+@keyframes logoFloat{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.08);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+/* =========================
+   WRAPPER
+========================= */
+
+.login-wrapper{
+
+    position:relative;
+
+    z-index:10;
+
+    width:100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:2rem;
+
+}
+
+/* =========================
+   CARD
+========================= */
+
+.login-card{
+
+    width:100%;
+    max-width:460px;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,0.05),
+        rgba(255,255,255,0.02)
+    );
+
+    border:1px solid rgba(0,255,255,0.12);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:32px;
+
+    padding:3rem 2.3rem;
+
+    box-shadow:
+    0 0 60px rgba(0,255,255,0.08);
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.login-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        130deg,
+        transparent,
+        rgba(255,255,255,0.03),
+        transparent
+    );
+
+    pointer-events:none;
+
+}
+
+/* =========================
+   TOP
+========================= */
+
+.login-top{
+
+    text-align:center;
+
+    margin-bottom:2rem;
+
+}
+
+.logo-box{
+
+    width:95px;
+    height:95px;
+
+    margin:auto;
+
+    border-radius:24px;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(0,255,255,0.1),
+        rgba(123,47,255,0.1)
+    );
+
+    border:1px solid rgba(0,255,255,0.15);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    margin-bottom:1.5rem;
+
+    box-shadow:
+    0 0 40px rgba(0,255,255,0.12);
+
+}
+
+.logo-box img{
+
+    width:62%;
+
+}
+
+.login-top h1{
+
+    font-size:2.3rem;
+
+    margin-bottom:0.4rem;
+
+    background:
+    linear-gradient(to right, cyan, #7b2fff);
+
+    -webkit-background-clip:text;
+    background-clip: text;
+    -webkit-text-fill-color:transparent;
+
+}
+
+.login-top p{
+
+    color:rgba(255,255,255,0.6);
+
+    font-size:0.95rem;
+
+}
+
+/* =========================
+   FORM
+========================= */
+
+form{
+
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+
+}
+
+.input-group{
+
+    position:relative;
+
+}
+
+.input-group i{
+
+    position:absolute;
+
+    top:50%;
+    left:1rem;
+
+    transform:translateY(-50%);
+
+    color:rgba(255,255,255,0.45);
+
+}
+
+.input-group input{
+
+    width:100%;
+
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    outline:none;
+
+    padding:1.1rem 1rem 1.1rem 3rem;
+
+    border-radius:18px;
+
+    color:white;
+
+    transition:0.3s;
+
+    font-size:0.95rem;
+
+}
+
+.input-group input:focus{
+
+    border-color:cyan;
+
+    box-shadow:
+    0 0 20px rgba(0,255,255,0.08);
+
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.login-status{
+
+    display:none;
+
+    padding:1rem;
+
+    border-radius:16px;
+
+    background:rgba(0,255,255,0.08);
+
+    border:1px solid rgba(0,255,255,0.15);
+
+    color:cyan;
+
+    font-size:0.92rem;
+
+    animation:pulse 1s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:0.6;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.6;
+    }
+
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button{
+
+    height:60px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        135deg,
+        cyan,
+        #7b2fff
+    );
+
+    color:white;
+
+    font-size:1rem;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:1rem;
+
+    margin-top:0.5rem;
+
+    box-shadow:
+    0 10px 30px rgba(0,255,255,0.2);
+
+}
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 15px 40px rgba(0,255,255,0.25);
+
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.login-footer{
+
+    margin-top:2rem;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:0.7rem;
+
+    color:rgba(255,255,255,0.55);
+
+    font-size:0.85rem;
+
+}
+
+.status-dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#00ffae;
+
+    box-shadow:
+    0 0 15px #00ffae;
+
+    animation:blink 1.5s infinite;
+
+}
+
+@keyframes blink{
+
+    0%{
+        opacity:0.4;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.4;
+    }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .login-card{
+
+        padding:2.5rem 1.4rem;
+
+    }
+
+    .logo-background img{
+
+        width:340px;
+
+    }
+
+}

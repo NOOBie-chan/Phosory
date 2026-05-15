@@ -1,0 +1,121 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Phosory Admin Access</title>
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <link rel="stylesheet" href="styles/login.css">
+
+  <link rel="icon" type="image/x-icon" href="./favicon.ico?v=2">
+</head>
+
+<body>
+
+  <!-- BACKGROUND -->
+
+  <div class="background-grid"></div>
+
+  <div class="bg-glow glow1"></div>
+  <div class="bg-glow glow2"></div>
+
+  <!-- LOGO BACKGROUND -->
+
+  <div class="logo-background">
+    <img src="images/icon.webp" alt="Phosory Logo">
+  </div>
+
+  <!-- LOGIN CONTAINER -->
+
+  <section class="login-wrapper">
+
+    <div class="login-card">
+
+      <!-- TOP -->
+
+      <div class="login-top">
+
+        <div class="logo-box">
+          <img src="images/icon.webp" alt="">
+        </div>
+
+        <h1>Phosory</h1>
+
+        <p>
+          Enterprise Control System
+        </p>
+
+      </div>
+
+      <!-- FORM -->
+
+      <form id="loginForm">
+
+        <div class="input-group">
+
+          <i class="fas fa-envelope"></i>
+
+          <input
+          type="email"
+          id="email"
+          placeholder="Admin Email"
+          required>
+
+        </div>
+
+        <div class="input-group">
+
+          <i class="fas fa-lock"></i>
+
+          <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required>
+
+        </div>
+
+        <!-- STATUS -->
+
+        <div id="loginStatus" class="login-status"></div>
+
+        <!-- BUTTON -->
+
+        <button
+        type="submit"
+        id="loginBtn">
+
+          <span>ENTER SYSTEM</span>
+
+          <i class="fas fa-arrow-right"></i>
+
+        </button>
+
+      </form>
+
+      <!-- FOOT -->
+
+      <div class="login-footer">
+
+        <div class="status-dot"></div>
+
+        <span>
+          Secure enterprise authentication active
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script type="module" src="script/login.js"></script>
+
+</body>
+</html>
