@@ -151,7 +151,13 @@ View Resume
 
 <p>
 <strong>Applied:</strong>
-${d.createdAt?.toDate?.().toLocaleString() || "Just now"}
+${
+d.createdAt?.seconds
+? new Date(
+d.createdAt.seconds * 1000
+).toLocaleString()
+: "Submitting..."
+}
 </p>
 
 <div class="actions">
