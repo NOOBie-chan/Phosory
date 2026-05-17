@@ -1,82 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
 <title>Phosory Admin</title>
 
-<link rel="stylesheet" href="styles/admin.css"/>
+<link
+rel="stylesheet"
+href="styles/admin.css">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
+<!-- GRID BACKGROUND -->
+<div class="grid-bg"></div>
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<!-- MOBILE OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <!-- SIDEBAR -->
-<div class="sidebar">
+<aside class="sidebar" id="sidebar">
 
-  <div class="brand">
-    <div class="logo"></div>
-    <h2>PHOSORY</h2>
-  </div>
+    <div class="logo-wrap">
 
-  <button onclick="showView('dashboard')">Dashboard</button>
-  <button onclick="showView('orders')">Orders</button>
-  <button onclick="showView('devs')">Developers</button>
-  <button onclick="showView('audit')">Audit Log</button>
+        <div class="logo-circle">
+            <img
+            src="images/icon.webp"
+            alt="Phosory">
+        </div>
 
-  <button id="logoutBtn" class="logout">Logout</button>
+        <div>
+            <h2>PHOSORY</h2>
+            <span>Cyber Dashboard</span>
+        </div>
 
-</div>
+    </div>
+
+    <button
+    class="nav-btn active-btn"
+    data-view="dashboard">
+
+        <i class="fas fa-chart-pie"></i>
+        Dashboard
+
+    </button>
+
+    <button
+    class="nav-btn"
+    data-view="orders">
+
+        <i class="fas fa-briefcase"></i>
+        Orders
+
+    </button>
+
+    <button
+    class="nav-btn"
+    data-view="developers">
+
+        <i class="fas fa-code"></i>
+        Developers
+
+    </button>
+
+    <button
+    class="nav-btn"
+    data-view="audit">
+
+        <i class="fas fa-shield-alt"></i>
+        Audit Log
+
+    </button>
+
+    <button
+    id="logoutBtn"
+    class="logout-btn">
+
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+
+    </button>
+
+</aside>
 
 <!-- MAIN -->
-<div class="main">
+<main class="main-content">
 
-  <div class="topbar">
-    <h1 id="title">Dashboard</h1>
-    <input id="search" placeholder="Search..." />
-  </div>
+    <!-- TOPBAR -->
+    <header class="topbar">
 
-  <!-- DASHBOARD -->
-  <div id="dashboard" class="view active">
+        <div class="left-topbar">
 
-    <div class="grid">
+            <button
+            class="menu-btn"
+            id="menuBtn">
 
-      <div class="card">
-        <h3>Orders</h3>
-        <p id="ordersCount">0</p>
-      </div>
+                <i class="fas fa-bars"></i>
 
-      <div class="card">
-        <h3>Developers</h3>
-        <p id="devCount">0</p>
-      </div>
+            </button>
 
-      <div class="card">
-        <h3>Approved</h3>
-        <p id="approvedCount">0</p>
-      </div>
+            <div>
 
-      <div class="card">
-        <h3>Rejected</h3>
-        <p id="rejectedCount">0</p>
-      </div>
+                <h1 id="pageTitle">
+                    Dashboard
+                </h1>
 
-    </div>
-    <div class="analytics-card">
-    <canvas id="chart"></canvas>
-    </div>
-  </div>
+                <p class="subtext">
+                    Monitor your systems in real-time
+                </p>
 
-  <!-- ORDERS -->
-  <div id="orders" class="view hidden"></div>
+            </div>
 
-  <!-- DEVELOPERS -->
-  <div id="devs" class="view hidden"></div>
+        </div>
 
-  <!-- AUDIT -->
-  <div id="audit" class="view hidden"></div>
+        <div class="right-topbar">
 
-</div>
+            <input
+            type="text"
+            id="search"
+            class="search-input"
+            placeholder="Search developers or orders...">
+
+        </div>
+
+    </header>
+
+    <!-- DASHBOARD -->
+    <section
+    id="dashboard"
+    class="view-section active-view">
+
+        <!-- STATS -->
+        <div class="cards-grid">
+
+            <div class="stat-card">
+
+                <div class="card-icon cyan">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+
+                <div>
+                    <h2 id="ordersCount">0</h2>
+                    <p>Total Orders</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="card-icon purple">
+                    <i class="fas fa-code"></i>
+                </div>
+
+                <div>
+                    <h2 id="devCount">0</h2>
+                    <p>Developers</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="card-icon green">
+                    <i class="fas fa-check"></i>
+                </div>
+
+                <div>
+                    <h2 id="approvedCount">0</h2>
+                    <p>Approved</p>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="card-icon red">
+                    <i class="fas fa-xmark"></i>
+                </div>
+
+                <div>
+                    <h2 id="rejectedCount">0</h2>
+                    <p>Rejected</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ANALYTICS -->
+        <div class="analytics-card">
+
+            <div class="analytics-header">
+
+                <h3>System Analytics</h3>
+
+                <span class="live-dot">
+                    LIVE
+                </span>
+
+            </div>
+
+            <canvas id="chart"></canvas>
+
+        </div>
+
+    </section>
+
+    <!-- ORDERS -->
+    <section
+    id="orders"
+    class="view-section">
+
+        <div
+        class="list-grid"
+        id="ordersContainer">
+        </div>
+
+    </section>
+
+    <!-- DEVELOPERS -->
+    <section
+    id="developers"
+    class="view-section">
+
+        <div
+        class="list-grid"
+        id="developersContainer">
+        </div>
+
+    </section>
+
+    <!-- AUDIT -->
+    <section
+    id="audit"
+    class="view-section">
+
+        <div
+        class="list-grid"
+        id="auditContainer">
+        </div>
+
+    </section>
+
+</main>
 
 <script type="module" src="script/admin.js"></script>
 

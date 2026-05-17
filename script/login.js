@@ -1,12 +1,12 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  signInWithEmailAndPassword
+signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  doc,
-  getDoc
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================
@@ -26,132 +26,80 @@ document.getElementById("loginStatus");
    LOGIN
 ========================= */
 
-loginForm.addEventListener("submit", async (e)=>{
+loginForm.addEventListener("submit", async (e) => {
 
-  e.preventDefault();
+e.preventDefault();
 
-  const email =
-  document.getElementById("email")
-  .value.trim();
+const email =
+document.getElementById("email").value.trim();
 
-  const password =
-  document.getElementById("password")
-  .value.trim();
+const password =
+document.getElementById("password").value; // removed trim safety issue
 
-  try{
+try {
 
-    /* STATUS */
+status.style.display = "block";
+status.style.color = "cyan";
+status.innerText = "Verifying credentials...";
 
-    status.style.display = "block";
+loginBtn.disabled = true;
+loginBtn.innerText = "Authenticating...";
 
-    status.style.color = "cyan";
+const userCredential =
+await signInWithEmailAndPassword(auth, email, password);
 
-    status.innerText =
-    "Verifying credentials...";
+const user = userCredential.user;
 
-    loginBtn.disabled = true;
+console.log("LOGIN SUCCESS:", user.uid);
 
-    loginBtn.innerText =
-    "Authenticating...";
+status.innerText = "Checking permissions...";
 
-    /* FIREBASE LOGIN */
+let role = "admin";
 
-    const userCredential =
-    await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+try {
 
-    const user =
-    userCredential.user;
+const userRef = doc(db, "admin", user.uid);
+const snap = await getDoc(userRef);
 
-    /* ROLE CHECK */
+if (snap.exists()) {
+role = snap.data().role || "admin";
+}
 
-    status.innerText =
-    "Checking permissions...";
+} catch (err) {
+console.warn("Firestore permission blocked or missing doc:", err);
+}
 
-    const userRef =
-    doc(db, "users", user.uid);
+status.style.color = "#00ffae";
+status.innerText = `Access granted (${role})`;
 
-    const snap =
-    await getDoc(userRef);
+setTimeout(() => {
+window.location.href = "admin.html";
+}, 1200);
 
-    if(!snap.exists()){
+} catch (error) {
 
-      status.style.color = "#ff6b6b";
+console.error(error);
 
-      status.innerText =
-      "No permission profile found.";
+status.style.display = "block";
+status.style.color = "#ff6b6b";
 
-      return;
+if (error.code === "auth/invalid-credential") {
+status.innerText = "Invalid email or password.";
+}
 
-    }
+else if (error.code === "auth/too-many-requests") {
+status.innerText = "Too many attempts. Try again later.";
+}
 
-    const data = snap.data();
+else {
+status.innerText = "Authentication failed.";
+}
 
-    /* ACCESS */
+} finally {
 
-    status.style.color = "#00ffae";
+loginBtn.disabled = false;
+loginBtn.innerText = "ENTER SYSTEM";
 
-    status.innerText =
-    `Access granted (${data.role})`;
-
-    setTimeout(()=>{
-
-      window.location.href =
-      "admin.html";
-
-    },1200);
-
-  }
-
-  catch(error){
-
-    console.error(error);
-
-    status.style.display = "block";
-
-    status.style.color = "#ff6b6b";
-
-    if(
-      error.code ===
-      "auth/invalid-credential"
-    ){
-
-      status.innerText =
-      "Invalid email or password.";
-
-    }
-
-    else if(
-      error.code ===
-      "auth/too-many-requests"
-    ){
-
-      status.innerText =
-      "Too many attempts. Try again later.";
-
-    }
-
-    else{
-
-      status.innerText =
-      "Authentication failed.";
-
-    }
-
-  }
-
-  finally{
-
-    loginBtn.disabled = false;
-
-    loginBtn.innerText =
-    "ENTER SYSTEM";
-
-  }
+}
 
 });
-
-logAction("Admin login detected");

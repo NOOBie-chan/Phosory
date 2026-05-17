@@ -119,36 +119,45 @@ h2{
     }
 }
 
+/* =========================
+   RESPONSIVE OUR STORY SECTION
+========================= */
+
 .our-story-section{
-      position: relative;
-      padding: 120px 8%;
-      overflow: hidden;
+    position: relative;
+    padding: clamp(70px, 8vw, 120px) 8%;
+    overflow: hidden;
 }
+
 .story-bg{
     position: absolute;
     inset: 0;
     z-index: 0;
 }
+
 .glow{
     position: absolute;
     border-radius: 50%;
     filter: blur(120px);
     opacity: .18;
 }
+
 .glow-1{
-    width: 450px;
-    height: 450px;
+    width: min(45vw, 450px);
+    height: min(45vw, 450px);
     background: cyan;
     top: -100px;
     left: -150px;
 }
+
 .glow-2{
-    width: 400px;
-    height: 400px;
+    width: min(40vw, 400px);
+    height: min(40vw, 400px);
     background: #00ff95;
     bottom: -120px;
     right: -100px;
 }
+
 .grid-overlay{
     position: absolute;
     inset: 0;
@@ -157,45 +166,67 @@ h2{
     linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
     background-size: 50px 50px;
 }
+
+/* =========================
+   HEADER
+========================= */
+
 .story-header{
     position: relative;
     z-index: 2;
     text-align: center;
     max-width: 900px;
-    margin: auto auto 120px;
+    margin: auto auto clamp(70px, 8vw, 120px);
 }
+
 .story-header h2{
     margin: 25px 0;
     line-height: 1.1;
+    font-size: clamp(2rem, 5vw, 4.5rem);
 }
+
 .story-header p{
     color: #c8c8c8;
     line-height: 1.9;
-    font-size: 1.1rem;
+    font-size: clamp(.95rem, 1.6vw, 1.1rem);
 }
+
+/* =========================
+   MAIN GRID
+========================= */
+
 .story-container{
     position: relative;
     z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1.2fr;
-    gap: 80px;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: start;
 }
+
+/* =========================
+   LEFT SIDE
+========================= */
+
 .story-left{
     position: relative;
 }
+
 .sticky-content{
     position: sticky;
     top: 100px;
 }
+
 .main-orb{
     position: relative;
-    width: 230px;
-    height: 230px;
+    width: clamp(170px, 22vw, 230px);
+    height: clamp(170px, 22vw, 230px);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 50px;
 }
+
 .orb-core{
     position: relative;
     width: 100%;
@@ -210,27 +241,22 @@ h2{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
+    font-size: clamp(2rem, 5vw, 4rem);
     color: white;
     z-index: 5;
-    animation:
-    orbPulse 3s infinite ease-in-out;
+    animation: orbPulse 3s infinite ease-in-out;
     box-shadow:
     0 0 30px cyan,
     0 0 70px rgba(0,255,255,.45),
     0 0 120px rgba(0,255,255,.25);
 }
+
 @keyframes orbPulse{
-    0%{
-    transform: scale(1);
-    }
-    50%{
-    transform: scale(1.05);
-    }
-    100%{
-    transform: scale(1);
-    }
+    0%{ transform: scale(1); }
+    50%{ transform: scale(1.05); }
+    100%{ transform: scale(1); }
 }
+
 .orb-ring{
     position: absolute;
     inset: -18px;
@@ -238,18 +264,17 @@ h2{
     border: 1px solid rgba(0,255,255,.35);
     animation: rotate 14s linear infinite;
 }
+
 .ring-2{
     inset: -40px;
     animation-direction: reverse;
 }
+
 @keyframes rotate{
-    from{
-    transform: rotate(0deg);
-    }
-    to{
-    transform: rotate(360deg);
-    }
+    from{ transform: rotate(0deg); }
+    to{ transform: rotate(360deg); }
 }
+
 .main-orb::before,
 .main-orb::after{
     content: "";
@@ -261,70 +286,72 @@ h2{
     animation: ripple 4s infinite;
     z-index: 1;
 }
+
 .main-orb::after{
     animation-delay: 2s;
 }
+
 @keyframes ripple{
     0%{
-    transform: scale(1);
-    opacity: .8;
+        transform: scale(1);
+        opacity: .8;
     }
     70%{
-    transform: scale(1.55);
-    opacity: 0;
+        transform: scale(1.55);
+        opacity: 0;
     }
     100%{
-    opacity: 0;
+        opacity: 0;
     }
 }
+
 .particle{
     position: absolute;
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: cyan;
-    box-shadow:
-    0 0 15px cyan;
-    animation:
-    orbit 6s linear infinite;
+    box-shadow: 0 0 15px cyan;
+    animation: orbit 6s linear infinite;
 }
-.p2{
-    animation-delay: 1.5s;
-}
-.p3{
-    animation-delay: 3s;
-}
-.p4{
-    animation-delay: 4.5s;
-}
+
+.p2{ animation-delay: 1.5s; }
+.p3{ animation-delay: 3s; }
+.p4{ animation-delay: 4.5s; }
+
 @keyframes orbit{
     0%{
-    transform:
+        transform:
         rotate(0deg)
-        translateX(130px)
+        translateX(clamp(90px, 12vw, 130px))
         rotate(0deg);
     }
     100%{
-    transform:
+        transform:
         rotate(360deg)
-        translateX(130px)
+        translateX(clamp(90px, 12vw, 130px))
         rotate(-360deg);
     }
 }
+
 .story-left h3{
-    font-size: 2.2rem;
+    font-size: clamp(1.7rem, 4vw, 2.2rem);
     margin-bottom: 20px;
 }
+
 .story-left p{
     color: #b8b8b8;
     line-height: 1.9;
+    font-size: clamp(.95rem, 1.4vw, 1rem);
 }
+
 .mini-stats{
     margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
+
 .stat-card{
     padding: 18px 20px;
     border-radius: 20px;
@@ -334,24 +361,33 @@ h2{
     backdrop-filter: blur(15px);
     transition: .4s;
 }
+
 .stat-card:hover{
     transform: translateX(10px);
     border-color: cyan;
 }
+
 .stat-card h4{
     margin-bottom: 5px;
 }
+
 .stat-card span{
     color: #9d9d9d;
     font-size: .95rem;
 }
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
 .story-right{
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 70px;
-    padding-left: 90px;
+    gap: clamp(40px, 5vw, 70px);
+    padding-left: clamp(40px, 7vw, 90px);
 }
+
 .timeline-line{
     position: absolute;
     left: 28px;
@@ -368,6 +404,7 @@ h2{
     );
     overflow: hidden;
 }
+
 .timeline-progress{
     position: absolute;
     left: 0;
@@ -381,11 +418,12 @@ h2{
     0 0 30px cyan,
     0 0 60px cyan;
 }
+
 .story-card{
     position: relative;
     display: flex;
-    gap: 25px;
-    padding: 35px;
+    gap: clamp(15px, 2vw, 25px);
+    padding: clamp(22px, 3vw, 35px);
     border-radius: 30px;
     background: rgba(255,255,255,.045);
     border: 1px solid rgba(255,255,255,.08);
@@ -394,14 +432,18 @@ h2{
     overflow: hidden;
     transition: .45s ease;
 }
+
 .story-card:hover{
     transform:
     translateY(-10px)
     translateX(8px);
+
     border-color: rgba(0,255,255,.4);
+
     box-shadow:
     0 20px 60px rgba(0,0,0,.35);
 }
+
 .story-card::before{
     content: "";
     position: absolute;
@@ -416,12 +458,14 @@ h2{
     transform: translateX(-120%);
     transition: 1s;
 }
+
 .story-card:hover::before{
     transform: translateX(120%);
 }
+
 .timeline-dot{
     position: absolute;
-    left: -72px;
+    left: -52px;
     top: 50px;
     width: 20px;
     height: 20px;
@@ -434,20 +478,16 @@ h2{
     0 0 70px cyan;
     animation: pulseDot 2s infinite;
 }
+
 @keyframes pulseDot{
-    0%{
-    transform: scale(1);
-    }
-    50%{
-    transform: scale(1.4);
-    }
-    100%{
-    transform: scale(1);
-    }
+    0%{ transform: scale(1); }
+    50%{ transform: scale(1.4); }
+    100%{ transform: scale(1); }
 }
+
 .card-icon{
-    min-width: 70px;
-    height: 70px;
+    min-width: clamp(55px, 8vw, 70px);
+    height: clamp(55px, 8vw, 70px);
     border-radius: 20px;
     background:
     linear-gradient(
@@ -458,28 +498,37 @@ h2{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
     color: cyan;
 }
+
 .card-content span{
     color: cyan;
-    font-size: .85rem;
+    font-size: .8rem;
     letter-spacing: 3px;
 }
+
 .card-content h3{
     margin: 12px 0;
-    font-size: 1.7rem;
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
 }
+
 .card-content p{
     color: #c7c7c7;
     line-height: 1.8;
+    font-size: clamp(.92rem, 1.4vw, 1rem);
 }
+
+/* =========================
+   CTA
+========================= */
+
 .story-cta{
     position: relative;
     z-index: 2;
-    margin-top: 130px;
+    margin-top: clamp(80px, 10vw, 130px);
     text-align: center;
-    padding: 80px 40px;
+    padding: clamp(50px, 7vw, 80px) clamp(20px, 5vw, 40px);
     border-radius: 40px;
     background:
     linear-gradient(
@@ -490,6 +539,7 @@ h2{
     border: 1px solid rgba(255,255,255,.08);
     overflow: hidden;
 }
+
 .story-cta::before{
     content: "";
     position: absolute;
@@ -503,18 +553,22 @@ h2{
     left: 50%;
     transform: translateX(-50%);
 }
+
 .story-cta h3{
     position: relative;
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
     margin-bottom: 20px;
 }
+
 .story-cta p{
     position: relative;
     max-width: 700px;
     margin: auto;
     color: #c7c7c7;
     line-height: 1.8;
+    font-size: clamp(.95rem, 1.5vw, 1rem);
 }
+
 .story-btn{
     position: relative;
     display: inline-flex;
@@ -527,48 +581,127 @@ h2{
     font-weight: 700;
     transition: .4s;
 }
+
 .story-btn:hover{
     transform: translateY(-5px);
     box-shadow:
     0 10px 30px rgba(0,255,255,.35);
 }
-@media(max-width: 1000px){
+
+/* =========================
+   TABLET RESPONSIVENESS
+========================= */
+
+@media (max-width: 992px){
+
     .story-container{
-    grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
+
     .sticky-content{
-    position: relative;
-    top: 0;
+        position: relative;
+        top: 0;
     }
-    .main-orb{
-    margin-inline: auto;
-    }
+
     .story-left{
-    text-align: center;
+        text-align: center;
     }
+
+    .main-orb{
+        margin-inline: auto;
+    }
+
     .mini-stats{
-    max-width: 500px;
-    margin-inline: auto;
+        max-width: 500px;
+        margin-inline: auto;
+    }
+
+    .story-right{
+        padding-left: 70px;
     }
 }
-@media(max-width: 768px){
-    .story-header h2{
-    font-size: 2.5rem;
+
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+
+@media (max-width: 768px){
+
+    .our-story-section{
+        padding-inline: 5%;
     }
+
     .story-right{
-    padding-left: 70px;
+        padding-left: 45px;
+        gap: 30px;
     }
+
+    .timeline-line{
+        left: 12px;
+    }
+
     .timeline-dot{
-    left: -52px;
+        left: -31px;
+        width: 16px;
+        height: 16px;
     }
+
     .story-card{
-    padding: 28px;
+        flex-direction: column;
+        border-radius: 24px;
     }
-    .card-content h3{
-    font-size: 1.4rem;
+
+    .card-icon{
+        min-width: 60px;
+        width: 60px;
+        height: 60px;
     }
-    .story-cta h3{
-    font-size: 2rem;
+
+    .story-card:hover{
+        transform: translateY(-5px);
+    }
+
+    .story-btn{
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px){
+
+    .story-header{
+        margin-bottom: 60px;
+    }
+
+    .story-right{
+        padding-left: 35px;
+    }
+
+    .timeline-line{
+        left: 8px;
+    }
+
+    .timeline-dot{
+        left: -24px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .story-card{
+        padding: 20px;
+    }
+
+    .story-cta{
+        border-radius: 28px;
+    }
+
+    .story-btn{
+        padding: 15px 24px;
+        font-size: .95rem;
     }
 }
 
@@ -1081,4 +1214,4 @@ h2{
   .cta-buttons {
     flex-direction: column;
   }
-}
+} 
