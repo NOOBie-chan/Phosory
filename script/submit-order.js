@@ -1,53 +1,51 @@
 import { db } from "./firebase.js";
+
 import {
-  collection,
-  addDoc,
-  serverTimestamp
+collection,
+addDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================================
-   CLIENT FORM
-================================ */
+const form = document.getElementById("orderForm");
 
-const clientForm = document.getElementById("clientForm");
+form.addEventListener("submit", async (e)=>{
 
-let isSubmittingOrder = false;
+e.preventDefault();
 
-clientForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+const submitBtn = form.querySelector("button");
 
-  if (isSubmittingOrder) return;
-  isSubmittingOrder = true;
+submitBtn.innerText = "Submitting...";
+submitBtn.disabled = true;
 
-  try {
-    const data = {
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      service: document.getElementById("projectType").value,
-      budget: document.getElementById("budgetSlider").value,
-      details: document.getElementById("message").value,
-      status: "pending",
-      createdAt: serverTimestamp()
-    };
+try{
 
-    // SAVE TO FIRESTORE (REALTIME TRIGGER)
-    await addDoc(collection(db, "orders"), data);
+await addDoc(collection(db,"orders"),{
 
-    // EMAILJS (ONCE ONLY)
-    emailjs.init("N9VA5XSXq7FpHO8Tc");
-    await emailjs.send(
-      "service_l643f6d",
-      "template_mfi2awy",
-      data
-    );
+name: form.organization.value,
+email: form.email.value,
+service: form.service.value,
+budget: form.budget.value,
 
-    alert("Order submitted successfully");
-    clientForm.reset();
+status:"pending",
 
-  } catch (err) {
-    console.error(err);
-    alert("Order failed");
-  } finally {
-    isSubmittingOrder = false;
-  }
+createdAt: serverTimestamp()
+
+});
+
+alert("Order submitted successfully");
+
+form.reset();
+
+}
+catch(err){
+
+console.error(err);
+
+alert("Failed to submit order");
+
+}
+
+submitBtn.innerText = "Submit";
+submitBtn.disabled = false;
+
 });

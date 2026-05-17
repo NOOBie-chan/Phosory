@@ -1,213 +1,84 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="styles/admin.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Phosory Admin</title>
 
-  <title>Phosory Admin</title>
-
-  <!-- FONT AWESOME -->
-  <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
-  <!-- CHART JS -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- EMAILJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="stylesheet" href="styles/admin.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-  <!-- SIDEBAR -->
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-  <aside class="sidebar">
+  <div class="brand">
+    <div class="logo"></div>
+    <h2>PHOSORY</h2>
+  </div>
 
-    <div class="logo">
-      <img src="images/icon.webp" alt="Phosory Logo">
-      <h2>Phosory</h2>
-    </div>
+  <button onclick="showView('dashboard')">Dashboard</button>
+  <button onclick="showView('orders')">Orders</button>
+  <button onclick="showView('devs')">Developers</button>
+  <button onclick="showView('audit')">Audit Log</button>
 
-    <button class="nav-btn" id="dashboardBtn">
-      <i class="fas fa-chart-line"></i>
-      Dashboard
-    </button>
+  <button id="logoutBtn" class="logout">Logout</button>
 
-    <button class="nav-btn" id="ordersBtn">
-      <i class="fas fa-box"></i>
-      Orders
-    </button>
+</div>
 
-    <button class="nav-btn" id="developersBtn">
-      <i class="fas fa-code"></i>
-      Developers
-    </button>
-
-    <button class="nav-btn" id="approvedBtn">
-      <i class="fas fa-check-circle"></i>
-      Approved
-    </button>
-
-    <button class="nav-btn" id="rejectedBtn">
-      <i class="fas fa-times-circle"></i>
-      Rejected
-    </button>
-
-    <button class="logout-btn" id="logoutBtn">
-      Logout
-    </button>
-
-  </aside>
-
-  <!-- MAIN -->
-
-  <main class="main">
+<!-- MAIN -->
+<div class="main">
 
   <div class="topbar">
-
-    <h1 id="pageTitle">
-      Dashboard
-    </h1>
-
-    <input
-    type="text"
-    id="searchInput"
-    class="search-bar"
-    placeholder="Search...">
-
+    <h1 id="title">Dashboard</h1>
+    <input id="search" placeholder="Search..." />
   </div>
 
-  <!-- STATS -->
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="view active">
 
-  <div class="cards">
+    <div class="grid">
 
-    <div class="card" id="ordersCard">
-      <h2 id="ordersCount">0</h2>
-      <p>Orders</p>
-    </div>
-
-    <div class="card" id="developersCard">
-      <h2 id="devCount">0</h2>
-      <p>Developers</p>
-    </div>
-
-    <div class="card" id="approvedCard">
-      <h2 id="approvedCount">0</h2>
-      <p>Approved</p>
-    </div>
-
-    <div class="card" id="rejectedCard">
-      <h2 id="rejectedCount">0</h2>
-      <p>Rejected</p>
-    </div>
-
-  </div>
-
-  <!-- DYNAMIC CONTENT -->
-
-  <div id="contentArea">
-
-    <!-- DASHBOARD HOME -->
-
-    <div id="dashboardView">
-
-      <div class="dashboard-section">
-
-        <h2 class="section-title">
-          Recent Orders
-        </h2>
-
-        <div class="mini-grid" id="recentOrders"></div>
-
+      <div class="card">
+        <h3>Orders</h3>
+        <p id="ordersCount">0</p>
       </div>
 
-      <div class="dashboard-section">
-
-        <h2 class="section-title">
-          Recently Accepted Developers
-        </h2>
-
-        <div class="mini-grid" id="recentDevelopers"></div>
-
+      <div class="card">
+        <h3>Developers</h3>
+        <p id="devCount">0</p>
       </div>
 
-      <div class="analytics-card">
-        <canvas id="analyticsChart"></canvas>
+      <div class="card">
+        <h3>Approved</h3>
+        <p id="approvedCount">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Rejected</h3>
+        <p id="rejectedCount">0</p>
       </div>
 
     </div>
-
-    <!-- ORDERS -->
-
-    <div
-    id="ordersView"
-    style="display:none;">
-
-      <h2 class="section-title">
-        Orders
-      </h2>
-
-      <div
-      class="list-grid"
-      id="ordersList"></div>
-
+    <div class="analytics-card">
+    <canvas id="chart"></canvas>
     </div>
-
-    <!-- DEVELOPERS -->
-
-    <div
-    id="developersView"
-    style="display:none;">
-
-      <h2 class="section-title">
-        Developers
-      </h2>
-
-      <div
-      class="list-grid"
-      id="devList"></div>
-
-    </div>
-
-    <!-- APPROVED -->
-
-    <div
-    id="approvedView"
-    style="display:none;">
-
-      <h2 class="section-title">
-        Approved
-      </h2>
-
-      <div
-      class="list-grid"
-      id="approvedList"></div>
-
-    </div>
-
-    <!-- REJECTED -->
-
-    <div
-    id="rejectedView"
-    style="display:none;">
-
-      <h2 class="section-title">
-        Rejected
-      </h2>
-
-      <div
-      class="list-grid"
-      id="rejectedList"></div>
-
-    </div>
-
   </div>
 
-</main>
+  <!-- ORDERS -->
+  <div id="orders" class="view hidden"></div>
 
-  <script type="module" src="script/admin.js"></script>
+  <!-- DEVELOPERS -->
+  <div id="devs" class="view hidden"></div>
+
+  <!-- AUDIT -->
+  <div id="audit" class="view hidden"></div>
+
+</div>
+
+<script type="module" src="script/admin.js"></script>
 
 </body>
 </html>

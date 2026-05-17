@@ -1,653 +1,373 @@
 import { auth, db } from "./firebase.js";
-
 import {
-  onAuthStateChanged,
-  signOut
+onAuthStateChanged,
+signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  doc,
-  updateDoc
+collection,
+onSnapshot,
+updateDoc,
+doc,
+addDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  listenOrders,
-  listenDevelopers
-} from "./realtime.js";
+let orders = [];
+let devs = [];
+let chart;
 
-/* =========================
-   EMAILJS
-========================= */
-
-emailjs.init("YOUR_PUBLIC_KEY");
-
-/* =========================
-   GLOBALS
-========================= */
-
-let allOrders = [];
-let allDevelopers = [];
-let analyticsChart;
-
-/* =========================
-   AUTH
-========================= */
-
-onAuthStateChanged(auth, (user) => {
-
-  if(!user){
-    window.location.href = "login.html";
-    return;
-  }
-
-  initializeRealtime();
-
-});
-
-/* =========================
-   LOGOUT
-========================= */
-
-document.getElementById("logoutBtn")
-.onclick = async () => {
-
-  await signOut(auth);
-
-  window.location.href = "login.html";
-
+const views = {
+dashboard: document.getElementById("dashboard"),
+orders: document.getElementById("orders"),
+devs: document.getElementById("devs"),
+audit: document.getElementById("audit")
 };
 
-/* =========================
-   REALTIME
-========================= */
+const title = document.getElementById("title");
 
-function initializeRealtime(){
+/* ================= AUTH ================= */
 
-  listenOrders((orders) => {
+onAuthStateChanged(auth, (user)=>{
+if(!user){
+window.location.href="login.html";
+return;
+}
+loadData();
+});
 
-    allOrders = orders;
+/* ================= LOGOUT ================= */
 
-    renderOrders(
-      orders.filter(o => o.status !== "rejected")
-    );
+document.getElementById("logoutBtn").onclick = ()=>{
+signOut(auth);
+};
 
-    renderRecentOrders();
+/* ================= NAV ================= */
 
-    updateStats();
+window.showView = (view)=>{
+Object.values(views).forEach(v=>v.classList.remove("active"));
+views[view].classList.add("active");
+title.innerText = view.toUpperCase();
+};
 
-  });
+/* ================= REALTIME ================= */
 
-  listenDevelopers((devs) => {
+function loadData(){
 
-    allDevelopers = devs;
+onSnapshot(collection(db,"orders"),(snap)=>{
+orders = snap.docs.map(d=>({id:d.id,...d.data()}));
+renderOrders();
+updateStats();
+});
 
-    renderDevelopers(
-      devs.filter(d => d.status !== "rejected")
-    );
+onSnapshot(collection(db,"developers"),(snap)=>{
+devs = snap.docs.map(d=>({id:d.id,...d.data()}));
+renderDevs();
+updateStats();
+});
 
-    renderRecentDevelopers();
-
-    updateStats();
-
-  });
+onSnapshot(collection(db,"audit_logs"),(snap)=>{
+renderAudit(snap.docs.map(d=>d.data()));
+});
 
 }
 
-/* =========================
-   ORDERS
-========================= */
+/* ================= ORDERS ================= */
 
-function renderOrders(orders){
+function renderOrders(data = orders){
 
-  const container =
-  document.getElementById("ordersList");
+views.orders.innerHTML = data
+.sort((a,b)=>
+(b.createdAt?.seconds || 0) -
+(a.createdAt?.seconds || 0)
+)
+.map(o=>`
 
-  container.innerHTML = orders.map(o => `
+<div class="item ${o.status === "rejected" ? "blurred" : ""}">
 
-    <div class="item">
+<div class="status ${o.status}">
+${o.status}
+</div>
 
-      <h3>${o.name}</h3>
+<h3>${o.name}</h3>
 
-      <p>${o.email}</p>
+<p><strong>Email:</strong> ${o.email}</p>
 
-      <p>${o.service}</p>
+<p><strong>Service:</strong> ${o.service}</p>
 
-      <small>${o.status}</small>
+<p><strong>Budget:</strong> ${o.budget}</p>
 
-      <div class="actions">
+<p>
+<strong>Submitted:</strong>
+${o.createdAt?.toDate?.().toLocaleString() || "Just now"}
+</p>
 
-        <button
-        class="approve-btn"
-        onclick="approveOrder('${o.id}')">
-        Approve
-        </button>
+<div class="actions">
 
-        <button
-        class="reject-btn"
-        onclick="rejectOrder('${o.id}')">
-        Reject
-        </button>
+<button onclick="approveOrder('${o.id}')">
+Approve
+</button>
 
-      </div>
+<button onclick="rejectOrder('${o.id}')">
+Reject
+</button>
 
-    </div>
+</div>
 
-  `).join("");
+</div>
 
-}
-
-/* =========================
-   DEVELOPERS
-========================= */
-
-function renderDevelopers(devs){
-
-  const container =
-  document.getElementById("devList");
-
-  container.innerHTML = devs.map(d => `
-
-    <div class="item">
-
-      <h3>${d.name}</h3>
-
-      <p>${d.email}</p>
-
-      <p>${d.skill}</p>
-
-      <small>${d.status}</small>
-
-      <a href="${d.resumeURL}" target="_blank">
-      View Resume
-      </a>
-
-      <div class="actions">
-
-        <button
-        class="approve-btn"
-        onclick="acceptDev('${d.id}','${d.email}','${d.name}')">
-        Accept
-        </button>
-
-        <button
-        class="reject-btn"
-        onclick="rejectDev('${d.id}','${d.email}','${d.name}')">
-        Reject
-        </button>
-
-      </div>
-
-    </div>
-
-  `).join("");
+`).join("");
 
 }
 
-/* =========================
-   RECENT
-========================= */
+/* ================= DEVS ================= */
 
-function renderRecentOrders(){
+function renderDevs(data = devs){
 
-  const container =
-  document.getElementById("recentOrders");
+views.devs.innerHTML = data
+.sort((a,b)=>
+(b.createdAt?.seconds || 0) -
+(a.createdAt?.seconds || 0)
+)
+.map(d=>`
 
-  const recent = allOrders.slice(0,5);
+<div class="item ${d.status === "rejected" ? "blurred" : ""}">
 
-  container.innerHTML = recent.map(o => `
+<div class="status ${d.status}">
+${d.status}
+</div>
 
-    <div class="mini-card">
-      <h4>${o.name}</h4>
-      <p>${o.service}</p>
-    </div>
+<h3>${d.name}</h3>
 
-  `).join("");
+<p><strong>Email:</strong> ${d.email}</p>
+
+<p><strong>Skill:</strong> ${d.skill}</p>
+
+<p>
+<a href="${d.resumeURL}" target="_blank">
+View Resume
+</a>
+</p>
+
+<p>
+<strong>Applied:</strong>
+${d.createdAt?.toDate?.().toLocaleString() || "Just now"}
+</p>
+
+<div class="actions">
+
+<button onclick="approveDev('${d.id}')">
+Approve
+</button>
+
+<button onclick="rejectDev('${d.id}')">
+Reject
+</button>
+
+</div>
+
+</div>
+
+`).join("");
 
 }
 
-function renderRecentDevelopers(){
+/* ================= AUDIT ================= */
 
-  const container =
-  document.getElementById("recentDevelopers");
-
-  const recent =
-  allDevelopers
-  .filter(d => d.status === "accepted")
-  .slice(0,5);
-
-  container.innerHTML = recent.map(d => `
-
-    <div class="mini-card">
-      <h4>${d.name}</h4>
-      <p>${d.skill}</p>
-    </div>
-
-  `).join("");
-
+function renderAudit(logs){
+views.audit.innerHTML = logs.map(l=>`
+<div class="item">
+<h4>${l.action}</h4>
+<p>${l.target}</p>
+<small>${l.timestamp?.toDate?.() || ""}</small>
+</div>
+`).join("");
 }
 
-/* =========================
-   STATS
-========================= */
+/* ================= ACTIONS ================= */
+
+window.approveOrder = async (id)=>{
+await updateDoc(doc(db,"orders",id),{status:"approved"});
+await addDoc(collection(db,"audit_logs"),{
+action:"Approved order",
+target:id,
+timestamp:serverTimestamp()
+});
+};
+
+window.rejectOrder = async (id)=>{
+await updateDoc(doc(db,"orders",id),{status:"rejected"});
+await addDoc(collection(db,"audit_logs"),{
+action:"Rejected order",
+target:id,
+timestamp:serverTimestamp()
+});
+};
+
+window.approveDev = async (id)=>{
+await updateDoc(doc(db,"developers",id),{status:"accepted"});
+await addDoc(collection(db,"audit_logs"),{
+action:"Accepted developer",
+target:id,
+timestamp:serverTimestamp()
+});
+};
+
+window.rejectDev = async (id)=>{
+await updateDoc(doc(db,"developers",id),{status:"rejected"});
+await addDoc(collection(db,"audit_logs"),{
+action:"Rejected developer",
+target:id,
+timestamp:serverTimestamp()
+});
+};
+
+/* ================= STATS ================= */
 
 function updateStats(){
 
-  document.getElementById("ordersCount")
-  .innerText = allOrders.length;
+document.getElementById("ordersCount").innerText =
+orders.length;
 
-  document.getElementById("devCount")
-  .innerText = allDevelopers.length;
+document.getElementById("devCount").innerText =
+devs.length;
 
-  document.getElementById("approvedCount")
-  .innerText =
-  allOrders.filter(o => o.status === "approved").length +
-  allDevelopers.filter(d => d.status === "accepted").length;
+document.getElementById("approvedCount").innerText =
 
-  document.getElementById("rejectedCount")
-  .innerText =
-  allOrders.filter(o => o.status === "rejected").length +
-  allDevelopers.filter(d => d.status === "rejected").length;
+orders.filter(o=>o.status==="approved").length +
 
-  loadAnalytics();
+devs.filter(d=>d.status==="accepted").length;
 
-}
+document.getElementById("rejectedCount").innerText =
 
-/* =========================
-   ANALYTICS
-========================= */
+orders.filter(o=>o.status==="rejected").length +
 
-function loadAnalytics(){
+devs.filter(d=>d.status==="rejected").length;
 
-  const canvas =
-  document.getElementById("analyticsChart");
-
-  if(!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  if(analyticsChart){
-    analyticsChart.destroy();
-  }
-
-  analyticsChart = new Chart(ctx, {
-
-    type:"bar",
-
-    data:{
-
-      labels:[
-        "Orders",
-        "Developers",
-        "Approved",
-        "Rejected"
-      ],
-
-      datasets:[{
-        label:"Analytics",
-
-        data:[
-          allOrders.length,
-          allDevelopers.length,
-
-          allOrders.filter(o =>
-          o.status === "approved").length,
-
-          allOrders.filter(o =>
-          o.status === "rejected").length
-        ]
-      }]
-    },
-
-    options:{
-      responsive:true
-    }
-
-  });
+loadChart();
 
 }
 
-/* =========================
-   SEARCH
-========================= */
+function loadChart(){
 
-document.getElementById("searchInput")
-.addEventListener("input",(e)=>{
+const ctx =
+document.getElementById("chart");
 
-  const value =
-  e.target.value.toLowerCase();
+if(!ctx) return;
 
-  renderOrders(
+if(chart){
+chart.destroy();
+}
 
-    allOrders.filter(o =>
-      o.name.toLowerCase()
-      .includes(value)
-    )
+chart = new Chart(ctx,{
 
-  );
+type:"bar",
 
-  renderDevelopers(
+data:{
 
-    allDevelopers.filter(d =>
-      d.name.toLowerCase()
-      .includes(value)
-    )
+labels:[
+"Orders",
+"Developers",
+"Approved",
+"Rejected"
+],
 
-  );
+datasets:[{
+
+label:"System Analytics",
+
+data:[
+
+orders.length,
+
+devs.length,
+
+orders.filter(o=>o.status==="approved").length +
+devs.filter(d=>d.status==="accepted").length,
+
+orders.filter(o=>o.status==="rejected").length +
+devs.filter(d=>d.status==="rejected").length
+
+],
+
+borderRadius:10
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+legend:{
+labels:{
+color:"white"
+}
+}
+},
+
+scales:{
+
+x:{
+ticks:{
+color:"white"
+},
+grid:{
+color:"rgba(255,255,255,.05)"
+}
+},
+
+y:{
+ticks:{
+color:"white"
+},
+grid:{
+color:"rgba(255,255,255,.05)"
+}
+}
+
+}
+
+}
 
 });
 
-
-document.getElementById("approvedBtn")
-.onclick = () => {
-
-  const approvedContainer =
-  document.getElementById("approvedList");
-
-  approvedContainer.innerHTML = "";
-
-  const approvedOrders =
-  allOrders.filter(o =>
-    o.status === "approved"
-  );
-
-  const approvedDevs =
-  allDevelopers.filter(d =>
-    d.status === "accepted"
-  );
-
-  approvedContainer.innerHTML +=
-  approvedOrders.map(o => `
-
-    <div class="item">
-      <h3>${o.name}</h3>
-      <p>${o.service}</p>
-      <small>Approved Order</small>
-    </div>
-
-  `).join("");
-
-  approvedContainer.innerHTML +=
-  approvedDevs.map(d => `
-
-    <div class="item">
-      <h3>${d.name}</h3>
-      <p>${d.skill}</p>
-      <small>Accepted Developer</small>
-    </div>
-
-  `).join("");
-
-  showSection(sections.approved);
-
-};
-
-document.getElementById("rejectedBtn")
-.onclick = () => {
-
-  const rejectedContainer =
-  document.getElementById("rejectedList");
-
-  rejectedContainer.innerHTML = "";
-
-  const rejectedOrders =
-  allOrders.filter(o =>
-    o.status === "rejected"
-  );
-
-  const rejectedDevs =
-  allDevelopers.filter(d =>
-    d.status === "rejected"
-  );
-
-  rejectedContainer.innerHTML +=
-  rejectedOrders.map(o => `
-
-    <div class="item">
-      <h3>${o.name}</h3>
-      <p>${o.service}</p>
-      <small>Rejected Order</small>
-    </div>
-
-  `).join("");
-
-  rejectedContainer.innerHTML +=
-  rejectedDevs.map(d => `
-
-    <div class="item">
-      <h3>${d.name}</h3>
-      <p>${d.skill}</p>
-      <small>Rejected Developer</small>
-    </div>
-
-  `).join("");
-
-  showSection(sections.rejected);
-
-};
-
-/* =========================
-   VIEW SWITCHING
-========================= */
-
-const pageTitle =
-document.getElementById("pageTitle");
-
-const dashboardView =
-document.getElementById("dashboardView");
-
-const ordersView =
-document.getElementById("ordersView");
-
-const developersView =
-document.getElementById("developersView");
-
-const approvedView =
-document.getElementById("approvedView");
-
-const rejectedView =
-document.getElementById("rejectedView");
-
-function hideViews(){
-
-  dashboardView.style.display = "none";
-  ordersView.style.display = "none";
-  developersView.style.display = "none";
-  approvedView.style.display = "none";
-  rejectedView.style.display = "none";
-
 }
 
-function showView(view){
+/* ================= SEARCH ================= */
 
-  hideViews();
+document.getElementById("search")
+.addEventListener("input",(e)=>{
 
-  view.style.display = "block";
+const value =
+e.target.value.toLowerCase();
 
-}
+const filteredOrders =
+orders.filter(o=>
 
-/* =========================
-   SIDEBAR BUTTONS
-========================= */
+(o.name || "").toLowerCase().includes(value) ||
 
-document.getElementById("dashboardBtn")
-.onclick = () => {
+(o.email || "").toLowerCase().includes(value) ||
 
-  pageTitle.innerText = "Dashboard";
+(o.service || "").toLowerCase().includes(value)
 
-  showView(dashboardView);
+);
 
-};
+const filteredDevs =
+devs.filter(d=>
 
-document.getElementById("ordersBtn")
-.onclick = () => {
+(d.name || "").toLowerCase().includes(value) ||
 
-  pageTitle.innerText = "Orders";
+(d.email || "").toLowerCase().includes(value) ||
 
-  showView(ordersView);
+(d.skill || "").toLowerCase().includes(value)
 
-};
+);
 
-document.getElementById("developersBtn")
-.onclick = () => {
+renderOrders(filteredOrders);
 
-  pageTitle.innerText = "Developers";
+renderDevs(filteredDevs);
 
-  showView(developersView);
-
-};
-
-document.getElementById("approvedBtn")
-.onclick = () => {
-
-  pageTitle.innerText = "Approved";
-
-  const approvedContainer =
-  document.getElementById("approvedList");
-
-  approvedContainer.innerHTML = "";
-
-  const approvedOrders =
-  allOrders.filter(o =>
-    o.status === "approved"
-  );
-
-  const approvedDevs =
-  allDevelopers.filter(d =>
-    d.status === "accepted"
-  );
-
-  approvedContainer.innerHTML +=
-  approvedOrders.map(o => `
-    <div class="item">
-      <h3>${o.name}</h3>
-      <p>${o.service}</p>
-      <small>Approved Order</small>
-    </div>
-  `).join("");
-
-  approvedContainer.innerHTML +=
-  approvedDevs.map(d => `
-    <div class="item">
-      <h3>${d.name}</h3>
-      <p>${d.skill}</p>
-      <small>Accepted Developer</small>
-    </div>
-  `).join("");
-
-  showView(approvedView);
-
-};
-
-document.getElementById("rejectedBtn")
-.onclick = () => {
-
-  pageTitle.innerText = "Rejected";
-
-  const rejectedContainer =
-  document.getElementById("rejectedList");
-
-  rejectedContainer.innerHTML = "";
-
-  const rejectedOrders =
-  allOrders.filter(o =>
-    o.status === "rejected"
-  );
-
-  const rejectedDevs =
-  allDevelopers.filter(d =>
-    d.status === "rejected"
-  );
-
-  rejectedContainer.innerHTML +=
-  rejectedOrders.map(o => `
-    <div class="item">
-      <h3>${o.name}</h3>
-      <p>${o.service}</p>
-      <small>Rejected Order</small>
-    </div>
-  `).join("");
-
-  rejectedContainer.innerHTML +=
-  rejectedDevs.map(d => `
-    <div class="item">
-      <h3>${d.name}</h3>
-      <p>${d.skill}</p>
-      <small>Rejected Developer</small>
-    </div>
-  `).join("");
-
-  showView(rejectedView);
-
-};
-
-window.approveOrder = async (id) => {
-
-  await updateDoc(
-    doc(db,"orders",id),
-    {
-      status:"approved"
-    }
-  );
-
-};
-
-window.rejectOrder = async (id) => {
-
-  await updateDoc(
-    doc(db,"orders",id),
-    {
-      status:"rejected"
-    }
-  );
-
-};
-
-window.acceptDev = async (
-  id,
-  email,
-  name
-) => {
-
-  await updateDoc(
-    doc(db,"developers",id),
-    {
-      status:"accepted"
-    }
-  );
-
-  emailjs.init("N9VA5XSXq7FpHO8Tc");
-  await emailjs.send(
-    "service_l643f6d",
-    "template_wz38zsa",
-    {
-      name,
-      email
-    }
-  );
-
-};
-
-window.rejectDev = async (
-  id,
-  email,
-  name
-) => {
-
-  await updateDoc(
-    doc(db,"developers",id),
-    {
-      status:"rejected"
-    }
-  );
-
-  emailjs.init("O36tGYSsch_6D37XK");
-  await emailjs.send(
-    "service_30h4w0q",
-    "template_w0ruy8r",
-    {
-      name,
-      email
-    }
-  );
-
-};
+});

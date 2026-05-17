@@ -2,63 +2,88 @@ import { db } from "./firebase.js";
 
 import {
   collection,
+  onSnapshot,
   query,
-  orderBy,
-  onSnapshot
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================================
-   REALTIME ORDERS
-================================ */
+export function listenOrders(callback){
 
-export function listenOrders(callback) {
-
-  const q = query(
-    collection(db, "orders"),
-    orderBy("createdAt", "desc")
+  const q =
+  query(
+    collection(db,"orders"),
+    orderBy("createdAt","desc")
   );
 
-  onSnapshot(q, (snapshot) => {
+  onSnapshot(q,(snapshot)=>{
 
-    const orders = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const orders = [];
 
-    console.log("Realtime Orders:", orders);
+    snapshot.forEach(doc=>{
+
+      orders.push({
+        id:doc.id,
+        ...doc.data()
+      });
+
+    });
 
     callback(orders);
 
-  }, (err) => {
-    console.error("Orders Listener Error:", err);
   });
 
 }
 
-/* ================================
-   REALTIME DEVELOPERS
-================================ */
+export function listenDevelopers(callback){
 
-export function listenDevelopers(callback) {
-
-  const q = query(
-    collection(db, "developers"),
-    orderBy("createdAt", "desc")
+  const q =
+  query(
+    collection(db,"developers"),
+    orderBy("createdAt","desc")
   );
 
-  onSnapshot(q, (snapshot) => {
+  onSnapshot(q,(snapshot)=>{
 
-    const devs = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const devs = [];
 
-    console.log("Realtime Developers:", devs);
+    snapshot.forEach(doc=>{
+
+      devs.push({
+        id:doc.id,
+        ...doc.data()
+      });
+
+    });
 
     callback(devs);
 
-  }, (err) => {
-    console.error("Developers Listener Error:", err);
+  });
+
+}
+
+export function listenaudit_logs(callback){
+
+  const q =
+  query(
+    collection(db,"audit_logs"),
+    orderBy("time","desc")
+  );
+
+  onSnapshot(q,(snapshot)=>{
+
+    const logs = [];
+
+    snapshot.forEach(doc=>{
+
+      logs.push({
+        id:doc.id,
+        ...doc.data()
+      });
+
+    });
+
+    callback(logs);
+
   });
 
 }

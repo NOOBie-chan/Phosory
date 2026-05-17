@@ -1,72 +1,179 @@
-import { db, storage } from "./firebase.js";
+import { db } from "./firebase.js";
 
 import {
-  collection,
-  addDoc,
-  serverTimestamp
+collection,
+addDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+const devForm =
+document.getElementById("devForm");
 
-/* ================================
-   DEV FORM
-================================ */
+const resumeInput =
+document.getElementById("resumeInput");
 
-const devForm = document.getElementById("devForm");
+const resumeLinkInput =
+document.getElementById("resumeLink");
 
-let isSubmittingDev = false;
+const uploadTitle =
+document.getElementById("uploadTitle");
 
-devForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+const uploadSubtext =
+document.getElementById("uploadSubtext");
 
-  if (isSubmittingDev) return;
-  isSubmittingDev = true;
+/* =========================
+   FILE UI
+========================= */
 
-  try {
-    const file = document.getElementById("resumeInput").files[0];
+resumeInput.addEventListener("change",()=>{
 
-    if (!file) {
-      alert("Please upload a resume");
-      return;
-    }
+const file = resumeInput.files[0];
 
-    // UPLOAD RESUME
-    const fileRef = ref(storage, "resumes/" + Date.now() + "-" + file.name);
-    await uploadBytes(fileRef, file);
+if(file){
 
-    const resumeURL = await getDownloadURL(fileRef);
+uploadTitle.innerText = file.name;
 
-    const data = {
-      name: devForm.querySelector('input[name="name"]').value,
-      email: devForm.querySelector('input[name="email"]').value,
-      skill: devForm.querySelector('select[name="skills"]').value,
-      resumeURL,
-      status: "pending",
-      createdAt: serverTimestamp()
-    };
+uploadSubtext.innerText =
+`${(file.size / 1024 / 1024).toFixed(2)} MB`;
 
-    // SAVE TO FIRESTORE
-    await addDoc(collection(db, "developers"), data);
+}
 
-    // EMAILJS
-emailjs.init("O36tGYSsch_6D37XK");
-    await emailjs.send(
-      "service_30h4w0q",
-      "template_4km6hlw",
-      data
-    );
+});
 
-    alert("Application submitted");
-    devForm.reset();
+/* =========================
+   CLOUDINARY
+========================= */
 
-  } catch (err) {
-    console.error(err);
-    alert("Submission failed");
-  } finally {
-    isSubmittingDev = false;
-  }
+async function uploadResume(file){
+
+const formData = new FormData();
+
+formData.append("file", file);
+
+formData.append(
+"upload_preset",
+"Phosory"
+);
+
+const response = await fetch(
+
+"https://api.cloudinary.com/v1_1/du19nhphj/raw/upload",
+
+{
+method:"POST",
+body:formData
+}
+
+);
+
+const data = await response.json();
+
+return data.secure_url;
+
+}
+
+/* =========================
+   SUBMIT
+========================= */
+
+devForm.addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+const submitBtn =
+devForm.querySelector("button");
+
+submitBtn.disabled = true;
+
+submitBtn.innerHTML =
+`Submitting...`;
+
+try{
+
+const formData =
+new FormData(devForm);
+
+const name =
+formData.get("name");
+
+const email =
+formData.get("email");
+
+const skill =
+formData.get("skills");
+
+const file =
+resumeInput.files[0];
+
+if(!file){
+
+alert("Please upload a resume");
+
+submitBtn.disabled = false;
+
+submitBtn.innerHTML =
+`Apply Now <i class="fas fa-arrow-right"></i>`;
+
+return;
+
+}
+
+/* =========================
+   UPLOAD RESUME
+========================= */
+
+const resumeURL =
+await uploadResume(file);
+
+resumeLinkInput.value =
+resumeURL;
+
+/* =========================
+   SAVE TO FIRESTORE
+========================= */
+
+await addDoc(
+collection(db,"developers"),
+{
+
+name,
+email,
+skill,
+resumeURL,
+
+status:"pending",
+
+submittedAt:serverTimestamp()
+
+}
+);
+
+/* =========================
+   SUCCESS
+========================= */
+
+alert("Application submitted successfully");
+
+devForm.reset();
+
+uploadTitle.innerText =
+"Upload Resume";
+
+uploadSubtext.innerText =
+"PDF, DOC or DOCX";
+
+}
+catch(err){
+
+console.error(err);
+
+alert("Failed to submit application");
+
+}
+
+submitBtn.disabled = false;
+
+submitBtn.innerHTML =
+`Apply Now <i class="fas fa-arrow-right"></i>`;
+
 });

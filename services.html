@@ -81,7 +81,7 @@
   <div class="card" data-service="UI/UX Design">
     <span>UI/UX Design</span>
   </div>
-  <div class="card website" id="website" data-service="Web Solutions">
+  <div class="card website" data-service="Web Solutions">
     <span>Websites</span>
     </script>
   </div>
@@ -103,31 +103,71 @@
 </section>
 <div id="panel" class="panel">
 
+  <div class="panel-overlay"></div>
+
   <div class="panel-content">
 
-    <button id="close">✕</button>
+    <button id="close">
 
-    <h2 id="title"></h2>
+      <i class="fas fa-xmark"></i>
 
-    <p id="serviceDescription"></p>
+    </button>
 
-    <p id="typeDescription"></p>
+    <div class="panel-top">
 
-    <div id="controls"></div>
+      <div class="panel-badge">
+        PHOSORY CONFIGURATOR
+      </div>
 
-    <div id="features"></div>
+      <h2 id="title"></h2>
 
-    <div class="price-box">
+      <p id="serviceDescription"></p>
 
-      <span>Total Price:</span>
-
-      <h1 id="price">$0</h1>
+      <p id="typeDescription"></p>
 
     </div>
 
-    <button id="order">
-      Place Order
-    </button>
+    <div class="panel-body">
+
+      <div class="panel-section">
+
+        <div class="section-title">
+          Configuration
+        </div>
+
+        <div id="controls"></div>
+
+      </div>
+
+      <div class="panel-section">
+
+        <div id="features"></div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-bottom">
+
+      <div class="price-box">
+
+        <div class="price-label">
+          Estimated Total
+        </div>
+
+        <h1 id="price">$0</h1>
+
+      </div>
+
+      <button id="order">
+
+        <i class="fas fa-arrow-right"></i>
+
+        Continue Project
+
+      </button>
+
+    </div>
 
   </div>
 

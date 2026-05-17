@@ -153,3 +153,5 @@ loginForm.addEventListener("submit", async (e)=>{
   }
 
 });
+
+logAction("Admin login detected");
