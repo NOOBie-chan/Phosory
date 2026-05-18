@@ -124,7 +124,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             </div>
 
         </div>
-
+        <div id="status" class="system-status"></div>
         <div class="right-topbar">
 
             <input
@@ -246,12 +246,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     <section
     id="audit"
     class="view-section">
-
+        <div class="audit-filters">
+          <button onclick="switchAuditView('all')">All</button>
+          <button onclick="switchAuditView('auth')">Auth</button>
+          <button onclick="switchAuditView('orders')">Orders</button>
+          <button onclick="switchAuditView('devs')">Devs</button>
+        </div>
         <div
         class="list-grid"
         id="auditView">
         </div>
-
     </section>
 
 </main>

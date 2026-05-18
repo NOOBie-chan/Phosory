@@ -32,19 +32,14 @@ const sections = {
 let orders = [];
 let devs = [];
 let chart;
-let currentRole = null;
 let currentUser = null;
 
 function isAdmin(){
-
-  return currentRole === "admin";
-
+  return (window.currentRole || "").toLowerCase() === "admin";
 }
 
 function isModerator(){
-
-  return currentRole === "moderator";
-
+  return (window.currentRole || "").toLowerCase() === "moderator";
 }
 
 searchInput?.addEventListener("input", (e) => {
@@ -83,7 +78,9 @@ const navBtns = document.querySelectorAll(".nav-btn");
 const pageTitle = document.getElementById("pageTitle");
 
 function switchView(viewId) {
-  sections.forEach(sec => sec.classList.remove("active-view"));
+  document.querySelectorAll(".view-section").forEach(section => {
+    section.classList.remove("active-view");
+  });
 
   const target = document.getElementById(viewId);
   if (target) target.classList.add("active-view");
@@ -212,92 +209,90 @@ overlay.classList.remove("show-overlay");
 
 /* ================= AUTH ================= */
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
 
   console.log("AUTH USER:", user);
 
-  if(!user){
+  if (!user) {
     window.location.href = "login.html";
     return;
   }
 
-  try{
+  try {
 
     console.log("UID:", user.uid);
 
-    const adminRef =
-    doc(db, "admins", user.uid);
+    const adminRef = doc(db, "admins", user.uid);
 
     console.log("READING DOC...");
 
-    const adminSnap =
-    await getDoc(adminRef);
+    const adminSnap = await getDoc(adminRef);
 
     console.log("DOC EXISTS:", adminSnap.exists());
 
-    if(!adminSnap.exists()){
-
+    if (!adminSnap.exists()) {
       console.log("NO ADMIN DOC FOUND");
-
       return;
-
     }
 
-    const adminData =
-    adminSnap.data();
+    const adminData = adminSnap.data();
 
     console.log("ADMIN DATA:", adminData);
 
-    currentRole =
-    adminData.role;
+    // =========================
+    // GLOBAL USER STATE
+    // =========================
+   window.currentRole = adminData.role || "moderator";
+  console.log("ROLE LOCKED:", window.currentRole);
+    window.currentEmail = user.email;
 
-    console.log("ROLE:", currentRole);
-
+    console.log("ROLE:", window.currentRole);
     setupPermissions();
-
     loadData();
 
-  }
-
-  catch(err){
-
+  } catch (err) {
     console.error("FULL ERROR:", err);
-
   }
 
 });
 
-function setupPermissions(){
+function setupPermissions() {
 
-const actionButtons =
-document.querySelectorAll(".actions");
+  const role = window.currentRole;
 
-if(currentRole === "moderator"){
+  console.log("FINAL ROLE CHECK:", role);
 
-document.body.classList.add(
-"readonly-mode"
-);
+  const isAdmin = role === "admin";
 
+  document.querySelectorAll(".approve-btn, .reject-btn").forEach(btn => {
+
+    btn.style.display = isAdmin ? "inline-flex" : "none";
+
+  });
 }
 
-if(currentRole === "admin"){
+document.getElementById("logoutBtn").onclick = async () => {
+  try {
 
-console.log("Admin access granted");
+    const user = auth.currentUser;
 
-}
+    if (user) {
+      await addDoc(collection(db, "audit_logs"), {
+      action: "Logout successful",
+      target: user.email,
+      role: window.currentRole,
+      timestamp: serverTimestamp(),
+      type: "auth"
+    });
+    }
 
-if(currentRole === "superadmin"){
+    await signOut(auth);
 
-console.log("Super Admin access granted");
+    window.location.href = "login.html";
 
-}
-
-}
-
-/* ================= LOGOUT ================= */
-
-document.getElementById("logoutBtn").onclick = ()=>{
-signOut(auth);
+  } catch (err) {
+    console.error("Logout error:", err);
+  }
 };
 
 /* ================= NAV ================= */
@@ -350,8 +345,18 @@ console.error("Dev listener failed", e);
 }
 
 try {
-onSnapshot(collection(db,"audit_logs"),(snap)=>{
-renderAudit(snap.docs.map(d=>d.data()));
+onSnapshot(collection(db, "audit_logs"), (snap) => {
+  const logs = snap.docs.map(d => {
+    const data = d.data();
+
+    return {
+      ...data,
+      type: (data.type || "").toLowerCase()
+    };
+  });
+
+  window.allLogs = logs;
+  renderAudit(logs);
 });
 } catch(e){
 console.error("Audit listener failed", e);
@@ -499,35 +504,37 @@ ${isAdmin() ? `
 }
 /* ================= AUDIT ================= */
 
-function renderAudit(logs) {
+function renderAudit(logs){
 
   const container = document.getElementById("auditView");
-  if (!container) return;
+  if(!container) return;
 
   container.innerHTML = logs
-    .sort((a, b) =>
-      (b.timestamp?.seconds || 0) -
-      (a.timestamp?.seconds || 0)
+    .sort((a,b) =>
+      (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)
     )
     .map(l => {
 
       const time =
-        l.timestamp?.toDate?.().toLocaleString() ||
-        "unknown time";
+        l.timestamp?.toDate?.().toLocaleString() || "unknown time";
 
       let colorClass = "log-neutral";
 
-      if (l.action.toLowerCase().includes("approved")) colorClass = "log-success";
-      if (l.action.toLowerCase().includes("accepted")) colorClass = "log-success";
-      if (l.action.toLowerCase().includes("rejected")) colorClass = "log-danger";
+      const action = (l.action || "").toLowerCase();
+
+      if(action.includes("approved")) colorClass = "log-success";
+      if(action.includes("accepted")) colorClass = "log-success";
+      if(action.includes("rejected")) colorClass = "log-danger";
+      if(action.includes("login")) colorClass = "log-auth";
+      if(action.includes("logout")) colorClass = "log-danger";
 
       return `
         <div class="audit-item ${colorClass}">
           <div class="audit-dot"></div>
 
           <div class="audit-content">
-            <h4>${l.action}</h4>
-            <p>${l.target}</p>
+            <h4>${l.action || "Unknown"}</h4>
+            <p>${l.target || ""}</p>
             <span>${time}</span>
           </div>
         </div>
@@ -536,6 +543,39 @@ function renderAudit(logs) {
     .join("");
 }
 
+/* ================= AUDIT FILTER ================= */
+
+window.switchAuditView = (filter) => {
+
+  const logs = window.allLogs || [];
+
+  if (filter === "all") {
+    renderAudit(logs);
+    return;
+  }
+
+  const filtered = logs.filter(l => {
+
+    const type = (l.type || "").toLowerCase();
+
+    switch (filter) {
+
+      case "auth":
+        return type === "auth";
+
+      case "orders":
+        return type === "order" || type === "orders";
+
+      case "devs":
+        return type === "dev" || type === "developer" || type === "developers";
+
+      default:
+        return false;
+    }
+  });
+
+  renderAudit(filtered);
+};
 /* ================= ACTIONS ================= */
 
 window.approveOrder = async (id) => {
@@ -549,6 +589,7 @@ window.approveOrder = async (id) => {
   await addDoc(collection(db, "audit_logs"), {
     action: "Approved order",
     target: id,
+    type: "order",
     timestamp: serverTimestamp()
   });
 };
@@ -564,6 +605,7 @@ window.rejectOrder = async (id) => {
   await addDoc(collection(db, "audit_logs"), {
     action: "Rejected order",
     target: id,
+    type: "order",
     timestamp: serverTimestamp()
   });
 };
@@ -579,6 +621,7 @@ window.approveDev = async (id) => {
   await addDoc(collection(db, "audit_logs"), {
     action: "Accepted developer",
     target: id,
+    type: "dev",
     timestamp: serverTimestamp()
   });
 };
@@ -594,6 +637,7 @@ window.rejectDev = async (id) => {
   await addDoc(collection(db, "audit_logs"), {
     action: "Rejected developer",
     target: id,
+    type: "dev",
     timestamp: serverTimestamp()
   });
 };
@@ -608,6 +652,7 @@ status:"pending"
 await addDoc(collection(db,"audit_logs"),{
 action:"Developer reset to pending",
 target:id,
+type:"dev",
 timestamp:serverTimestamp()
 });
 
