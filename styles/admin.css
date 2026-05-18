@@ -726,7 +726,95 @@ body{
 
 }
 
+.email-link{
+  color: cyan;
+  text-decoration: none;
+  transition: 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+.email-link:hover{
+  border-bottom: 1px solid cyan;
+  opacity: 0.8;
+}
+
 .blurred{
     opacity:.45;
     filter:blur(1px);
+}
+
+#audit{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:10px;
+}
+
+/* main log card */
+.audit-item{
+  display:flex;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(15,15,25,0.85);
+  border:1px solid rgba(0,255,255,0.08);
+  position:relative;
+  transition:0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.audit-item:hover{
+  transform:translateX(5px);
+  border-color:rgba(0,255,255,0.4);
+}
+
+/* timeline dot */
+.audit-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  margin-top:6px;
+  background:cyan;
+  box-shadow:0 0 10px cyan;
+}
+
+/* content */
+.audit-content h4{
+  margin:0;
+  font-size:0.95rem;
+  color:white;
+}
+
+.audit-content p{
+  margin:4px 0;
+  font-size:0.85rem;
+  color:#aaa;
+}
+
+.audit-content span{
+  font-size:0.75rem;
+  color:#666;
+}
+
+/* status colors */
+.log-success .audit-dot{
+  background:#00ffaa;
+  box-shadow:0 0 12px #00ffaa;
+}
+
+.log-danger .audit-dot{
+  background:#ff4d6d;
+  box-shadow:0 0 12px #ff4d6d;
+}
+
+.log-neutral .audit-dot{
+  background:cyan;
+}
+
+.view-section {
+  display: none !important;
+}
+
+.view-section.active-view {
+  display: block !important;
 }

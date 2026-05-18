@@ -14,15 +14,38 @@ serverTimestamp,
 getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+function clearAllViews() {
+  document.getElementById("ordersContainer").innerHTML = "";
+  document.getElementById("developersContainer").innerHTML = "";
+  document.getElementById("auditView").innerHTML = "";
+}
+
 const searchInput = document.getElementById("search");
 let searchQuery = "";
-const sections = document.querySelectorAll(".view-section");
+const sections = {
+  dashboard: document.getElementById("dashboard"),
+  orders: document.getElementById("orders"),
+  developers: document.getElementById("developers"),
+  audit: document.getElementById("audit")
+};
 
 let orders = [];
 let devs = [];
 let chart;
 let currentRole = null;
 let currentUser = null;
+
+function isAdmin(){
+
+  return currentRole === "admin";
+
+}
+
+function isModerator(){
+
+  return currentRole === "moderator";
+
+}
 
 searchInput?.addEventListener("input", (e) => {
 searchQuery = e.target.value.toLowerCase();
@@ -55,6 +78,27 @@ renderOrders(filteredOrders);
 renderDevs(filteredDevs);
 
 }
+
+const navBtns = document.querySelectorAll(".nav-btn");
+const pageTitle = document.getElementById("pageTitle");
+
+function switchView(viewId) {
+  sections.forEach(sec => sec.classList.remove("active-view"));
+
+  const target = document.getElementById(viewId);
+  if (target) target.classList.add("active-view");
+
+  pageTitle.innerText =
+    viewId.charAt(0).toUpperCase() + viewId.slice(1);
+}
+
+/* sidebar clicks */
+navBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const view = btn.dataset.view;
+    switchView(view);
+  });
+});
 
 const views = {
 dashboard: document.getElementById("dashboard"),
@@ -168,46 +212,58 @@ overlay.classList.remove("show-overlay");
 
 /* ================= AUTH ================= */
 
-onAuthStateChanged(auth, async (user)=>{
+onAuthStateChanged(auth, async(user)=>{
 
-if(!user){
+  console.log("AUTH USER:", user);
 
-window.location.href = "login.html";
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
 
-return;
+  try{
 
-}
+    console.log("UID:", user.uid);
 
-currentUser = user;
+    const adminRef =
+    doc(db, "admins", user.uid);
 
-const adminRef =
-doc(db,"admins",user.uid);
+    console.log("READING DOC...");
 
-const adminSnap =
-await getDoc(adminRef);
+    const adminSnap =
+    await getDoc(adminRef);
 
-if(!adminSnap.exists()){
+    console.log("DOC EXISTS:", adminSnap.exists());
 
-alert("Access denied");
+    if(!adminSnap.exists()){
 
-await signOut(auth);
+      console.log("NO ADMIN DOC FOUND");
 
-window.location.href =
-"login.html";
+      return;
 
-return;
+    }
 
-}
+    const adminData =
+    adminSnap.data();
 
-const adminData =
-adminSnap.data();
+    console.log("ADMIN DATA:", adminData);
 
-currentRole =
-adminData.role;
+    currentRole =
+    adminData.role;
 
-setupPermissions();
+    console.log("ROLE:", currentRole);
 
-loadData();
+    setupPermissions();
+
+    loadData();
+
+  }
+
+  catch(err){
+
+    console.error("FULL ERROR:", err);
+
+  }
 
 });
 
@@ -246,10 +302,25 @@ signOut(auth);
 
 /* ================= NAV ================= */
 
-window.showView = (view)=>{
-Object.values(views).forEach(v=>v.classList.remove("active"));
-views[view].classList.add("active");
-title.innerText = view.toUpperCase();
+window.showView = (view) => {
+
+  // hide all sections first
+  Object.values(sections).forEach(sec => {
+    sec.classList.remove("active-view");
+  });
+
+  // show only selected
+  sections[view].classList.add("active-view");
+
+  // OPTIONAL: update title
+  document.getElementById("pageTitle").innerText =
+    view.charAt(0).toUpperCase() + view.slice(1);
+
+  // 🔥 IMPORTANT: prevent overlap bugs
+  document.getElementById("ordersContainer").innerHTML = "";
+  document.getElementById("developersContainer").innerHTML = "";
+  document.getElementById("auditView").innerHTML = "";
+  clearAllViews();
 };
 
 /* ================= REALTIME ================= */
@@ -318,7 +389,9 @@ ${o.status || "pending"}
 
 <p>
 <strong>Email:</strong>
-${o.email || "No email"}
+<a href="mailto:${o.email}" class="email-link">
+${o.email}
+</a>
 </p>
 
 <p>
@@ -338,13 +411,14 @@ ${o.createdAt?.toDate?.().toLocaleString() || "Just now"}
 
 <div class="actions">
 
-<button onclick="approveOrder('${o.id}')">
-Approve
-</button>
-
-<button onclick="rejectOrder('${o.id}')">
-Reject
-</button>
+${isAdmin() ? `
+  <div class="actions">
+    <button onclick="approveOrder('${o.id}')">Approve</button>
+    <button onclick="rejectOrder('${o.id}')">Reject</button>
+  </div>
+` : `
+  <div class="readonly-tag">View Only</div>
+`}
 
 </div>
 
@@ -384,7 +458,9 @@ ${d.status || "pending"}
 
 <p>
 <strong>Email:</strong>
-${d.email || "No email"}
+<a href="mailto:${d.email}" class="email-link">
+${d.email}
+</a>
 </p>
 
 <p>
@@ -399,19 +475,20 @@ View Resume
 </p>
 
 <p>
-<strong>Created:</strong>
-${d.createdAt?.toDate?.().toLocaleString() || "Just now"}
+<strong>Submitted:</strong>
+${d.submittedAt?.toDate?.().toLocaleString() || "Just now"}
 </p>
 
 <div class="actions">
 
-<button onclick="approveDev('${d.id}')">
-Approve
-</button>
-
-<button onclick="rejectDev('${d.id}')">
-Reject
-</button>
+${isAdmin() ? `
+  <div class="actions">
+    <button onclick="approveDev('${d.id}')">Approve</button>
+    <button onclick="rejectDev('${d.id}')">Reject</button>
+  </div>
+` : `
+  <div class="readonly-tag">Moderator Access</div>
+`}
 
 </div>
 
@@ -422,86 +499,103 @@ Reject
 }
 /* ================= AUDIT ================= */
 
-function renderAudit(logs){
-document.getElementById("auditContainer").innerHTML = logs.map(l=>`
-<div class="item">
-<h4>${l.action}</h4>
-<p>${l.target}</p>
-<small>${l.timestamp?.toDate?.() || ""}</small>
-</div>
-`).join("");
+function renderAudit(logs) {
+
+  const container = document.getElementById("auditView");
+  if (!container) return;
+
+  container.innerHTML = logs
+    .sort((a, b) =>
+      (b.timestamp?.seconds || 0) -
+      (a.timestamp?.seconds || 0)
+    )
+    .map(l => {
+
+      const time =
+        l.timestamp?.toDate?.().toLocaleString() ||
+        "unknown time";
+
+      let colorClass = "log-neutral";
+
+      if (l.action.toLowerCase().includes("approved")) colorClass = "log-success";
+      if (l.action.toLowerCase().includes("accepted")) colorClass = "log-success";
+      if (l.action.toLowerCase().includes("rejected")) colorClass = "log-danger";
+
+      return `
+        <div class="audit-item ${colorClass}">
+          <div class="audit-dot"></div>
+
+          <div class="audit-content">
+            <h4>${l.action}</h4>
+            <p>${l.target}</p>
+            <span>${time}</span>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 /* ================= ACTIONS ================= */
 
-window.approveOrder = async (id)=>{
+window.approveOrder = async (id) => {
 
-await updateDoc(doc(db,"orders",id),{
-status:"approved"
-});
+  if (!isAdmin()) return;
 
-await addDoc(collection(db,"audit_logs"),{
-action:"Order approved",
-target:id,
-timestamp:serverTimestamp()
-});
+  await updateDoc(doc(db, "orders", id), {
+    status: "approved"
+  });
 
+  await addDoc(collection(db, "audit_logs"), {
+    action: "Approved order",
+    target: id,
+    timestamp: serverTimestamp()
+  });
 };
 
-window.rejectOrder = async (id)=>{
+window.rejectOrder = async (id) => {
 
-await updateDoc(doc(db,"orders",id),{
-status:"rejected"
-});
+  if (!isAdmin()) return;
 
-await addDoc(collection(db,"audit_logs"),{
-action:"Order rejected",
-target:id,
-timestamp:serverTimestamp()
-});
+  await updateDoc(doc(db, "orders", id), {
+    status: "rejected"
+  });
 
+  await addDoc(collection(db, "audit_logs"), {
+    action: "Rejected order",
+    target: id,
+    timestamp: serverTimestamp()
+  });
 };
 
-window.resetOrderStatus = async (id)=>{
+window.approveDev = async (id) => {
 
-await updateDoc(doc(db,"orders",id),{
-status:"pending"
-});
+  if (!isAdmin()) return;
 
-await addDoc(collection(db,"audit_logs"),{
-action:"Order reset to pending",
-target:id,
-timestamp:serverTimestamp()
-});
+  await updateDoc(doc(db, "developers", id), {
+    status: "accepted"
+  });
 
+  await addDoc(collection(db, "audit_logs"), {
+    action: "Accepted developer",
+    target: id,
+    timestamp: serverTimestamp()
+  });
 };
 
-window.approveDev = async (id)=>{
+window.rejectDev = async (id) => {
 
-await updateDoc(doc(db,"developers",id),{
-status:"accepted"
-});
+  if (!isAdmin()) return;
 
-await addDoc(collection(db,"audit_logs"),{
-action:"Developer accepted",
-target:id,
-timestamp:serverTimestamp()
-});
+  await updateDoc(doc(db, "developers", id), {
+    status: "rejected"
+  });
 
-};
-
-window.rejectDev = async (id)=>{
-
-await updateDoc(doc(db,"developers",id),{
-status:"rejected"
-});
-
-await addDoc(collection(db,"audit_logs"),{
-action:"Developer rejected",
-target:id,
-timestamp:serverTimestamp()
-});
-
+  await addDoc(collection(db, "audit_logs"), {
+    action: "Rejected developer",
+    target: id,
+    timestamp: serverTimestamp()
+  });
 };
 
 /* 🔥 NEW: RESET DEV */

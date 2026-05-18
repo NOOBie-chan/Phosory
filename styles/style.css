@@ -38,6 +38,11 @@ body{
     background-color: var(--bg-primary);
 }
 
+b{
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
 .thin{
     background-color: #050505;
     width: 80%;
