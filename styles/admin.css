@@ -793,13 +793,18 @@ body{
 
 /* status colors */
 .log-success .audit-dot{
-  background:#00ffaa;
-  box-shadow:0 0 12px #00ffaa;
+  background:#00ff7b !important;
+  box-shadow:0 0 12px #00ffaa !important;
 }
 
 .log-danger .audit-dot{
-  background:#ff4d6d;
-  box-shadow:0 0 12px #ff4d6d;
+  background:#ff4d6d !important;
+  box-shadow:0 0 12px #ff4d6d !important;
+}
+
+.log-out .audit-dot{
+  background:#ff0000 !important;
+  box-shadow:0 0 12px #ff0000 !important;
 }
 
 .log-neutral .audit-dot{
@@ -858,4 +863,77 @@ body{
 .audit-filters button:hover {
   background: cyan;
   color: black;
+}
+
+.role-admin{
+background:rgba(0,255,170,.15);
+color:#00ffae;
+padding:8px 14px;
+border-radius:30px;
+font-weight:600;
+border:1px solid rgba(0,255,170,.3);
+}
+
+.role-moderator{
+background:rgba(0,180,255,.15);
+color:#00bfff;
+padding:8px 14px;
+border-radius:30px;
+font-weight:600;
+border:1px solid rgba(0,180,255,.3);
+}
+
+.right-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+}
+
+.audit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#auditView {
+  margin-top: 10px;
+}
+
+#exportAudit {
+  background: #00ffae;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.audit-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.audit-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.audit-filters button,
+#exportAudit {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.log-session-expired .audit-dot {
+  background: #000000;
+  box-shadow: 0 0 12px rgba(0,0,0,0.9);
 }

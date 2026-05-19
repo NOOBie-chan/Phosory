@@ -17,7 +17,8 @@ import {
    STATE CONTROL
 ========================= */
 let justLoggedIn = false;
-
+let loginAttempts = 0;
+let lockUntil = 0;
 /* =========================
    ELEMENTS
 ========================= */
@@ -46,7 +47,13 @@ loginForm.addEventListener("submit", async (e) => {
     /* AUTH */
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    const now = Date.now();
 
+    if (lockUntil > now) {
+      const seconds = Math.ceil((lockUntil - now) / 1000);
+      status.innerText = `Too many attempts. Try again in ${seconds}s`;
+      return;
+    }
     console.log("LOGIN SUCCESS:", user.uid);
 
     /* ROLE FETCH */
@@ -94,6 +101,13 @@ loginForm.addEventListener("submit", async (e) => {
     }, 1200);
 
   } catch (error) {
+    loginAttempts++;
+    if (loginAttempts >= 5) {
+      lockUntil = Date.now() + 60 * 1000 * 5; // 5 minutes lock
+      loginAttempts = 0;
+
+      status.innerText = "Too many failed attempts. Locked for 5 minutes.";
+    }
     console.error(error);
 
     status.style.display = "block";

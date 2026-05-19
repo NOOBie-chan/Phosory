@@ -14,11 +14,19 @@ serverTimestamp,
 getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+let USER_STATE = Object.freeze({
+  role: null,
+  email: null,
+  uid: null
+});
+
 function clearAllViews() {
   document.getElementById("ordersContainer").innerHTML = "";
   document.getElementById("developersContainer").innerHTML = "";
   document.getElementById("auditView").innerHTML = "";
 }
+/* HIDE PAGE UNTIL VERIFIED */
+document.body.style.visibility = "hidden";
 
 const searchInput = document.getElementById("search");
 let searchQuery = "";
@@ -35,12 +43,37 @@ let chart;
 let currentUser = null;
 
 function isAdmin(){
-  return (window.currentRole || "").toLowerCase() === "admin";
+  return (USER_STATE.role || "").toLowerCase() === "admin";
 }
 
 function isModerator(){
-  return (window.currentRole || "").toLowerCase() === "moderator";
+  return (USER_STATE.role || "").toLowerCase() !== "";
 }
+
+let timeout;
+
+function resetTimer(){
+
+clearTimeout(timeout);
+
+timeout = setTimeout(async()=>{
+  await addDoc(collection(db,"audit_logs"),{
+action:"Session expired",
+target:USER_STATE.email,
+role:USER_STATE.role,
+type:"auth",
+timestamp:serverTimestamp()
+});
+await signOut(auth);
+
+window.location.href="login.html";
+
+},10*60*1000);
+
+}
+
+document.addEventListener("mousemove",resetTimer);
+document.addEventListener("keydown",resetTimer);
 
 searchInput?.addEventListener("input", (e) => {
 searchQuery = e.target.value.toLowerCase();
@@ -215,6 +248,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     window.location.href = "login.html";
+    document.body.style.visibility = "hidden";
     return;
   }
 
@@ -231,38 +265,68 @@ onAuthStateChanged(auth, async (user) => {
     console.log("DOC EXISTS:", adminSnap.exists());
 
     if (!adminSnap.exists()) {
-      console.log("NO ADMIN DOC FOUND");
-      return;
+
+        console.log("NO ADMIN DOC FOUND");
+
+        await signOut(auth);
+
+        window.location.href = "login.html";
+        document.body.style.visibility = "hidden";
+        return;
     }
-
     const adminData = adminSnap.data();
-
     console.log("ADMIN DATA:", adminData);
+    const validRoles = ["admin", "moderator"];
+    if (!validRoles.includes(adminData.role)) {
 
-    // =========================
-    // GLOBAL USER STATE
-    // =========================
-   window.currentRole = adminData.role || "moderator";
-  console.log("ROLE LOCKED:", window.currentRole);
-    window.currentEmail = user.email;
+        await signOut(auth);
 
-    console.log("ROLE:", window.currentRole);
+        window.location.href = "login.html";
+      document.body.style.visibility = "hidden";
+        return;
+    }
+   
+   USER_STATE = Object.freeze({
+    role: adminData.role || "moderator",
+    email: user.email,
+    uid: user.uid
+  });
+   
+  document.body.style.visibility = "visible";
+    console.log("ROLE:", USER_STATE.role);
     setupPermissions();
     loadData();
+    resetTimer();
 
   } catch (err) {
     console.error("FULL ERROR:", err);
   }
 
+  const roleDisplay =
+document.getElementById("loggedRole");
+
+if(roleDisplay){
+
+   roleDisplay.innerHTML = `
+      ${USER_STATE.role.toUpperCase()}
+   `;
+
+   roleDisplay.className =
+   USER_STATE.role === "admin"
+   ? "role-admin"
+   : "role-moderator";
+
+}
+
 });
 
 function setupPermissions() {
 
-  const role = window.currentRole;
+  const role = USER_STATE.role;
 
   console.log("FINAL ROLE CHECK:", role);
 
-  const isAdmin = role === "admin";
+  const isAdmin = (USER_STATE.role || "").toLowerCase() === "admin";
 
   document.querySelectorAll(".approve-btn, .reject-btn").forEach(btn => {
 
@@ -280,7 +344,7 @@ document.getElementById("logoutBtn").onclick = async () => {
       await addDoc(collection(db, "audit_logs"), {
       action: "Logout successful",
       target: user.email,
-      role: window.currentRole,
+      role: USER_STATE.role,
       timestamp: serverTimestamp(),
       type: "auth"
     });
@@ -289,6 +353,7 @@ document.getElementById("logoutBtn").onclick = async () => {
     await signOut(auth);
 
     window.location.href = "login.html";
+    document.body.style.visibility = "hidden";
 
   } catch (err) {
     console.error("Logout error:", err);
@@ -406,7 +471,7 @@ ${o.service || "N/A"}
 
 <p>
 <strong>Budget:</strong>
-${o.budget || "N/A"}
+$${o.budget || "N/A"}
 </p>
 
 <p>
@@ -504,43 +569,62 @@ ${isAdmin() ? `
 }
 /* ================= AUDIT ================= */
 
-function renderAudit(logs){
+function renderAudit(logs = []) {
 
   const container = document.getElementById("auditView");
-  if(!container) return;
+  if (!container) return;
 
-  container.innerHTML = logs
-    .sort((a,b) =>
-      (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)
-    )
-    .map(l => {
+  const sortedLogs = [...logs].sort((a, b) => {
+    const aTime = a?.timestamp?.toDate?.()?.getTime?.() || 0;
+    const bTime = b?.timestamp?.toDate?.()?.getTime?.() || 0;
+    return bTime - aTime;
+  });
 
-      const time =
-        l.timestamp?.toDate?.().toLocaleString() || "unknown time";
+  container.innerHTML = sortedLogs.map(log => {
+    const action = (log.action || "").toLowerCase();
+    const type = (log.type || "").toLowerCase();
 
-      let colorClass = "log-neutral";
+    let colorClass = "log-neutral";
+    if (action.includes("approved")) colorClass = "log-success";
+    else if (action.includes("accepted")) colorClass = "log-success";
+    else if (action.includes("rejected")) colorClass = "log-danger";
+    else if (action.includes("login")) colorClass = "log-auth";
+    else if (action.includes("logout")) colorClass = "log-out";
+    else if (action.includes("Session expired")) colorClass = "log-session-expired";
 
-      const action = (l.action || "").toLowerCase();
+    // if (type === "auth") colorClass = "log-auth";
+    // if (type === "order") colorClass = "log-warning";
+    // if (type === "dev") colorClass = "log-info";
+    // if (type === "security") colorClass = "log-danger";
 
-      if(action.includes("approved")) colorClass = "log-success";
-      if(action.includes("accepted")) colorClass = "log-success";
-      if(action.includes("rejected")) colorClass = "log-danger";
-      if(action.includes("login")) colorClass = "log-auth";
-      if(action.includes("logout")) colorClass = "log-danger";
+    const time =
+      log.timestamp?.toDate?.()?.toLocaleString() ||
+      "unknown time";
 
-      return `
-        <div class="audit-item ${colorClass}">
-          <div class="audit-dot"></div>
+    const actionText = log.action || "Unknown action";
+    const targetText = log.target || "—";
+    const roleText = log.role ? `(${log.role})` : "";
 
-          <div class="audit-content">
-            <h4>${l.action || "Unknown"}</h4>
-            <p>${l.target || ""}</p>
-            <span>${time}</span>
-          </div>
+    return `
+      <div class="audit-item ${colorClass}">
+        
+        <div class="audit-dot"></div>
+
+        <div class="audit-content">
+
+          <h4>${actionText}</h4>
+
+          <p>
+            ${targetText} ${roleText}
+          </p>
+
+          <span>${time}</span>
+
         </div>
-      `;
-    })
-    .join("");
+
+      </div>
+    `;
+  }).join("");
 }
 
 /* ================= AUDIT FILTER ================= */
@@ -580,7 +664,15 @@ window.switchAuditView = (filter) => {
 
 window.approveOrder = async (id) => {
 
-  if (!isAdmin()) return;
+  if (!isAdmin()) 
+    await addDoc(collection(db,"audit_logs"),{
+      action:"Unauthorized action attempt",
+      target:USER_STATE.email,
+      role:USER_STATE.role,
+      type:"security",
+      timestamp:serverTimestamp()
+    });
+    if(!confirm("Approve this order?")) return;
 
   await updateDoc(doc(db, "orders", id), {
     status: "approved"
@@ -596,7 +688,8 @@ window.approveOrder = async (id) => {
 
 window.rejectOrder = async (id) => {
 
-  if (!isAdmin()) return;
+  if (!isAdmin()) 
+    if(!confirm("Reject this order?")) return;
 
   await updateDoc(doc(db, "orders", id), {
     status: "rejected"
@@ -612,15 +705,34 @@ window.rejectOrder = async (id) => {
 
 window.approveDev = async (id) => {
 
-  if (!isAdmin()) return;
+  if (!isAdmin()) {
+    if(!confirm("Approve this developer?")) return;
+  }
 
-  await updateDoc(doc(db, "developers", id), {
+  const devRef = doc(db, "developers", id);
+  const snap = await getDoc(devRef);
+  const dev = snap.data();
+
+  await updateDoc(devRef, {
     status: "accepted"
   });
 
+  // EMAIL
+  try {
+    await emailjs.send("service_l643f6d", "template_mfi2awy", {
+      email: dev.email,
+      name: dev.name,
+      status: "Accepted",
+      message: "Congratulations! Your application has been approved."
+    });
+  } catch (err) {
+    console.error("Email failed:", err);
+  }
+
   await addDoc(collection(db, "audit_logs"), {
     action: "Accepted developer",
-    target: id,
+    target: dev.email,
+    role: USER_STATE.role,
     type: "dev",
     timestamp: serverTimestamp()
   });
@@ -628,15 +740,34 @@ window.approveDev = async (id) => {
 
 window.rejectDev = async (id) => {
 
-  if (!isAdmin()) return;
+  if (!isAdmin()) {
+    if(!confirm("Reject this developer?")) return;
+  }
 
-  await updateDoc(doc(db, "developers", id), {
+  const devRef = doc(db, "developers", id);
+  const snap = await getDoc(devRef);
+  const dev = snap.data();
+
+  await updateDoc(devRef, {
     status: "rejected"
   });
 
+  // EMAIL
+  try {
+    await emailjs.send("service_l643f6d", "template_wz38zsa", {
+      email: dev.email,
+      name: dev.name,
+      status: "Rejected",
+      message: "Unfortunately your application was not approved."
+    });
+  } catch (err) {
+    console.error("Email failed:", err);
+  }
+
   await addDoc(collection(db, "audit_logs"), {
     action: "Rejected developer",
-    target: id,
+    target: dev.email,
+    role: USER_STATE.role,
     type: "dev",
     timestamp: serverTimestamp()
   });

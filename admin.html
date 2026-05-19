@@ -2,32 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Control Panel</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Internal admin dashboard for managing orders, developers, and system logs.">
+<meta property="og:title" content="Admin Dashboard">
+<meta property="og:description" content="Internal management system">
+<meta property="og:type" content="website">
 <title>Phosory Admin</title>
-
-<link
-rel="stylesheet"
-href="styles/admin.css">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
+<link rel="stylesheet" href="styles/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init("N9VA5XSXq7FpHO8Tc");
+</script>
 </head>
-
 <body>
-
-<!-- GRID BACKGROUND -->
 <div class="grid-bg"></div>
 <div class="glow glow1"></div>
 <div class="glow glow2"></div>
-
-<!-- MOBILE OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- SIDEBAR -->
@@ -43,7 +38,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
         <div>
             <h2>PHOSORY</h2>
-            <span>Cyber Dashboard</span>
+            <span>Dashboard</span>
         </div>
 
     </div>
@@ -124,9 +119,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             </div>
 
         </div>
-        <div id="status" class="system-status"></div>
         <div class="right-topbar">
-
+            <div class="user-info">
+                <span id="loggedRole">Loading...</span>
+            </div>
             <input
             type="text"
             id="search"
@@ -134,7 +130,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
             placeholder="Search developers or orders...">
 
         </div>
-
     </header>
 
     <!-- DASHBOARD -->
@@ -243,24 +238,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     </section>
 
     <!-- AUDIT -->
-    <section
-    id="audit"
-    class="view-section">
-        <div class="audit-filters">
-          <button onclick="switchAuditView('all')">All</button>
-          <button onclick="switchAuditView('auth')">Auth</button>
-          <button onclick="switchAuditView('orders')">Orders</button>
-          <button onclick="switchAuditView('devs')">Devs</button>
+    <section id="audit" class="view-section">
+        <div class="audit-topbar">
+            <div class="audit-filters">
+                <button onclick="switchAuditView('all')">All</button>
+                <button onclick="switchAuditView('auth')">Auth</button>
+                <button onclick="switchAuditView('orders')">Orders</button>
+                <button onclick="switchAuditView('devs')">Devs</button>
+            </div>
+            <button id="exportAudit">Export PDF</button>
         </div>
-        <div
-        class="list-grid"
-        id="auditView">
-        </div>
+        <div class="list-grid" id="auditView"></div>
     </section>
-
 </main>
 
 <script type="module" src="script/admin.js"></script>
-
+<script src="script/export.js"></script>
 </body>
 </html>
