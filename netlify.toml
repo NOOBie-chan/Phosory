@@ -39,6 +39,12 @@
         https://cdnjs.cloudflare.com
         https://cdn.jsdelivr.net;
 
+      media-src 'self'
+      https://pub-446f14ba278c41468983857ae9955885.r2.dev/circuit-loop.mp4
+
+      video-src 'self'
+      https://pub-446f14ba278c41468983857ae9955885.r2.dev/circuit-loop.mp4
+      
       font-src 'self'
         data:
         https://fonts.gstatic.com
