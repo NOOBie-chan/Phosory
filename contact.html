@@ -19,7 +19,6 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="script/nav.js"></script>
     <script src="script/observer.js"></script>
-    <script src="script/on-click.js"></script>
     <script src="script/email.js" defer></script>
     <title>Contact Phosory | Get In Touch for Digital Solutions</title>
 
@@ -51,11 +50,19 @@
 <body>
     <nav>
          <ul class="sidebar">
-            <li onclick="hideSidebar()"><i class="fas fa-x"></i></li>
-            <li onclick="window.location.href = 'index.html'"><a href="index.html">Home</a></li>
-            <li onclick="window.location.href = 'services.html'"><a href="services.html">Services</a></li>
-            <li onclick="window.location.href = 'about.html'"><a href="">About Us</a></li>
-            <li onclick="window.location.href = 'contact.html'"><a href="contact.html">Contact Us</a></li>
+            <li id="closeSidebarBtn"><i class="fas fa-x"></i></li>
+           <li class="nav-link" data-page="index.html">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="nav-link" data-page="services.html">
+                    <a href="services.html">Services</a>
+                </li>
+            <li class="nav-link" data-page="about.html">
+                    <a href="about.html">About Us</a>
+                </li>
+            <li class="nav-link" data-page="contact.html">
+                    <a href="contact.html">Contact Us</a>
+                </li>
             <li><img src="images/icon.webp" alt=""></li>
         </ul>
         <div class="header" id="header">
@@ -68,7 +75,7 @@
                 <a href="services.html" class="hideOnMobile">Services</a>
                 <a href="about.html" class="hideOnMobile">About Us</a>
                 <a href="contact.html" class="hideOnMobile">Contact Us</a>
-                <i class="fas fa-bars" onclick="showSidebar()"></i>
+                <i class="fas fa-bars" id="openSidebarBtn"></i>
             </div>
         </div>
     </nav>
@@ -251,8 +258,12 @@
         <i class="fas fa-file-download"></i>
         <h3>Profiles</h3>
         <div class="download-buttons">
-            <button onclick="downloadDev()">Talent PDF</button>
-            <button onclick="downloadClient()">Client PDF</button>
+            <button id="downloadTalentBtn">
+                Talent PDF
+            </button>
+            <button id="downloadClientBtn">
+                Client PDF
+            </button>
         </div>
     </div>
 </section>
@@ -296,5 +307,6 @@
 <script src="script/autofill.js"></script>
 <script type="module" src="script/submit-order.js"></script>
 <script type="module" src="script/submit-dev.js"></script>
+<script src="script/on-click.js"></script>
 </body>
 </html>

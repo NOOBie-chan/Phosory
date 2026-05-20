@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="styles/header&footer.css">
     <script src="script/nav.js"></script>
     <script src="script/observer.js"></script>
-    <script src="script/on-click.js"></script>
     <link rel="icon" type="image/x-icon" href="./favicon.ico?v=2">
     <title>Phosory | Modern Digital Solutions, Web & Software Development</title>
 
@@ -42,11 +41,19 @@
 <body>
     <nav>
         <ul class="sidebar">
-            <li onclick="hideSidebar()"><i class="fas fa-x"></i></li>
-            <li onclick="window.location.href = 'index.html'"><a href="#">Home</a></li>
-            <li onclick="window.location.href = 'services.html'"><a href="services.html">Services</a></li>
-            <li onclick="window.location.href = 'about.html'"><a href="about.html">About Us</a></li>
-            <li onclick="window.location.href = 'contact.html'"><a href="contact.html">Contact Us</a></li>
+            <li id="closeSidebarBtn"><i class="fas fa-x"></i></li>
+            <li class="nav-link" data-page="index.html">
+                <a href="index.html">Home</a>
+            </li>
+            <li class="nav-link" data-page="services.html">
+                <a href="services.html">Services</a>
+            </li>
+            <li class="nav-link" data-page="about.html">
+                <a href="about.html">About Us</a>
+            </li>
+            <li class="nav-link" data-page="contact.html">
+                <a href="contact.html">Contact Us</a>
+            </li>
             <li><img src="images/icon.webp" alt=""></li>
         </ul>
         <div class="header" id="header">
@@ -59,20 +66,10 @@
                 <a href="services.html" class="hideOnMobile">Services</a>
                 <a href="about.html" class="hideOnMobile">About Us</a>
                 <a href="contact.html" class="hideOnMobile">Contact Us</a>
-                <i class="fas fa-bars" onclick="showSidebar()"></i>
+                <i class="fas fa-bars" id="openSidebarBtn"></i>
             </div>
         </div>
-        <script>
-            window.addEventListener("scroll", function(){
-            let header = this.document.getElementById("header");
-            if(this.window.scrollY > 10){
-                    header.classList.add("scrolled");
-                }
-                else{
-                    header.classList.remove("scrolled");
-                }
-            });
-        </script>
+        <script src="script/header.js"></script>
     </nav>
 
     <header class="hero">
@@ -122,34 +119,46 @@
     <section class="do">
         <h2 class="fade-in">What We Do</h2>
         <div class="cards">
-            <div class="card fade-in" onclick="window.location.href = 'services.html'">
-                <span><i class="fas fa-laptop-code"></i> <i class="fas fa-arrow-right"></i></span>
-                <h3>Web Development</h3>
-                <p>Build responsive, high-performing websites designed to strengthen your brand and drive growth.</p>
-            </div>
-            <div class="card fade-in" onclick="window.location.href = 'services.html'">
-                <span><i class="fas fa-terminal"></i> <i class="fas fa-arrow-right"></i></span>
-                <h3>Software Development</h3>
-                <p>Develop scalable software solutions tailored to streamline operations and solve complex challenges.</p>
-            </div>
-            <div class="card fade-in" onclick="window.location.href = 'services.html'">
-                <span><i class="fas fa-window-maximize"></i> <i class="fas fa-arrow-right"></i></span>
-                <h3>Web Applications</h3>
-                <p>Create dynamic web applications focused on performance, usability and seamless user experiences.</p>
-            </div>
-            <div class="card fade-in" onclick="window.location.href = 'services.html'">
-                <span><i class="fas fa-robot"></i> <i class="fas fa-arrow-right"></i></span>
-                <h3>Automation Tools</h3>
-                <p>Implement intelligent automation systems that improve efficiency and reduce repetitive manual tasks.</p>
-            </div>
-            <div class="card fade-in" onclick="window.location.href = 'services.html'">
-                <span><i class="fas fa-shield-halved"></i> <i class="fas fa-arrow-right"></i></span>
-                <h3>Cybersecurity Solutions</h3>
-                <p>Protect digital infrastructure with reliable cybersecurity solutions built for modern businesses.</p>
-            </div>
-            <div class="card last fade-in" onclick="window.location.href = 'services.html'">
+            <a href="services.html">
+                <div class="card fade-in">
+                    <span><i class="fas fa-laptop-code"></i> <i class="fas fa-arrow-right"></i></span>
+                    <h3>Web Development</h3>
+                    <p>Build responsive, high-performing websites designed to strengthen your brand and drive growth.</p>
+                </div>
+            </a>
+            <a href="services.html">
+                <div class="card fade-in">
+                    <span><i class="fas fa-terminal"></i> <i class="fas fa-arrow-right"></i></span>
+                    <h3>Software Development</h3>
+                    <p>Develop scalable software solutions tailored to streamline operations and solve complex challenges.</p>
+                </div>
+            </a>
+            <a href="services.html">
+                <div class="card fade-in">
+                    <span><i class="fas fa-window-maximize"></i> <i class="fas fa-arrow-right"></i></span>
+                    <h3>Web Applications</h3>
+                    <p>Create dynamic web applications focused on performance, usability and seamless user experiences.</p>
+                </div>
+            </a>
+            <a href="services.html">
+                <div class="card fade-in">
+                    <span><i class="fas fa-robot"></i> <i class="fas fa-arrow-right"></i></span>
+                    <h3>Automation Tools</h3>
+                    <p>Implement intelligent automation systems that improve efficiency and reduce repetitive manual tasks.</p>
+                </div>
+            </a>
+            <a href="services.html">
+                <div class="card fade-in">
+                    <span><i class="fas fa-shield-halved"></i> <i class="fas fa-arrow-right"></i></span>
+                    <h3>Cybersecurity Solutions</h3>
+                    <p>Protect digital infrastructure with reliable cybersecurity solutions built for modern businesses.</p>
+                </div>
+            </a>
+            <a href="services.html">
+                <div class="card last fade-in">
                 <h3>More Coming +</h3>
             </div>
+            </a>
         </div>
     </section>
 
@@ -217,18 +226,7 @@
         </p>
         </div>
     </div>
-    <script>
-        const missionCard = document.getElementById("missionCard");
-        const visionCard = document.getElementById("visionCard");
-        document.getElementById("missionBtn").addEventListener("click", () => {
-            missionCard.classList.toggle("active");
-            visionCard.classList.remove("active");
-        });
-        document.getElementById("visionBtn").addEventListener("click", () => {
-            visionCard.classList.toggle("active");
-            missionCard.classList.remove("active");
-        });
-    </script>
+    <script src="script/MV.js"></script>
 </section>
 
     <section class="how">
@@ -299,7 +297,7 @@
             <div class="card fade-in">
                 <span class="top" id="t1">
                    <p> What does <b>Phosory</b> mean?</p>
-                   <i onclick="showBottom1()">+</i>
+                   <i id="showBottomBtn1">+</i>
                 </span>
                 <span class="bottom" id="b1">
                     The name <b>"Phosory"</b> is derived from: 
@@ -314,7 +312,7 @@
             <div class="card fade-in">
                 <span class="top" id="t2">
                    <p> What does <b>Phosory</b> mean for the brand?</p>
-                   <i class="far fa-plus" onclick="showBottom2()"></i>
+                   <i id="showBottomBtn2">+</i>
                 </span>
                 <span class="bottom" id="b2">
                    This isn't about light in a generic sense, it's more personal and purpose-driven
@@ -328,7 +326,7 @@
             <div class="card fade-in">
                 <span class="top" id="t3">
                    <p> Is <b>Phosory</b> a freelance platform?</p>
-                   <i onclick="showBottom3()">+</i>
+                   <i id="showBottomBtn3">+</i>
                 </span>
                 <span class="bottom" id="b3">
                     No. <b>Phosory </b>is not a freelance platform and that's the point <br>
@@ -339,7 +337,7 @@
             <div class="card fade-in">
                 <span class="top" id="t4">
                    <p> How are developers selected?</p>
-                   <i class="far fa-plus" onclick="showBottom4()"></i>
+                   <i id="showBottomBtn4">+</i>
                 </span>
                 <span class="bottom" id="b4">
                    Developers aren't just picked they're evaluated and refined. <br>
@@ -350,7 +348,7 @@
             <div class="card fade-in">
                 <span class="top" id="t5">
                    <p> How does <b>Phosory</b> ensure quality?</p>
-                   <i onclick="showBottom5()">+</i>
+                   <i id="showBottomBtn5">+</i>
                 </span>
                 <span class="bottom" id="b5">
                     Through proper structure and supervision. <br>
@@ -367,7 +365,7 @@
             <div class="card fade-in">
                 <span class="top" id="t6">
                    <p>How long do projects take?</p>
-                   <i class="far fa-plus" onclick="showBottom6()"></i>
+                   <i id="showBottomBtn6">+</i>
                 </span>
                 <span class="bottom" id="b6">
                    It depends on the scope. <br>
@@ -379,7 +377,7 @@
             <div class="card fade-in">
                 <span class="top" id="t7">
                    <p> How is pricing handled?</p>
-                   <i onclick="showBottom7()">+</i>
+                   <i id="showBottomBtn7">+</i>
                 </span>
                 <span class="bottom" id="b7">
                     Pricing is based on project scope, complexity and requirements. <br>
@@ -390,7 +388,7 @@
             <div class="card fade-in">
                 <span class="top" id="t8">
                    <p> Can beginners join as developers?</p>
-                   <i class="far fa-plus" onclick="showBottom8()"></i>
+                   <i id="showBottomBtn8">+</i>
                 </span>
                 <span class="bottom" id="b8">
                    Beginners can join to learn and grow but they don't just jump into
@@ -409,8 +407,8 @@
                 <h1>Ready to Build the Future?</h1>
                 <p class="cta-text">From idea to execution, we build systems that scale, perform and last</p>
                 <div class="cta-buttons">
-                <button class="primary-btn" onclick="window.location.href = 'services.html'">Start a Project</button>
-                <button class="secondary-btn" onclick="window.location.href = 'contact.html'">Contact Us</button>
+                <a href="services.html"><button class="primary-btn">Start a Project</button></a>
+                <a href="contact.html"><button class="secondary-btn">Contact Us</button></a>
                 </div>
             </div>
             <div class="particles">
@@ -452,5 +450,6 @@
             <p>© 2026 Phosory. Built for precision. Built for the future.</p>
         </div>
     </footer>   
+    <script src="script/on-click.js"></script>
 </body>
 </html>

@@ -1,3 +1,9 @@
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
+
+emailjs.init({
+  publicKey: "hzYpGwbtgq7-kUZMg"
+});
+
 window.addEventListener("scroll", function(){
     let header = document.getElementById("header");
     if(window.scrollY > 10){

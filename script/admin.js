@@ -14,6 +14,8 @@ serverTimestamp,
 getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+import { exportAuditPDF } from "./exportAudit.js";
+
 let USER_STATE = Object.freeze({
   role: null,
   email: null,
@@ -149,7 +151,19 @@ document.getElementById("sidebarOverlay");
 
 const navButtons =
 document.querySelectorAll(".nav-btn");
+document
+.querySelectorAll(".audit-filter")
+.forEach(btn=>{
 
+btn.addEventListener("click",()=>{
+
+switchAuditView(
+btn.dataset.filter
+);
+
+});
+
+});
 /* ================= SIDEBAR TOGGLE ================= */
 
 menuBtn.onclick = ()=>{
@@ -327,13 +341,25 @@ function setupPermissions() {
   console.log("FINAL ROLE CHECK:", role);
 
   const isAdmin = (USER_STATE.role || "").toLowerCase() === "admin";
+const auditTools =
+document.getElementById("auditTools");
 
+if(auditTools){
+
+auditTools.style.display =
+isAdmin ? "flex" : "none";
+
+}
   document.querySelectorAll(".approve-btn, .reject-btn").forEach(btn => {
 
     btn.style.display = isAdmin ? "inline-flex" : "none";
 
   });
 }
+
+window.isAdmin = function () {
+  return (window.currentRole || "").toLowerCase() === "admin";
+};
 
 document.getElementById("logoutBtn").onclick = async () => {
   try {
@@ -627,6 +653,16 @@ function renderAudit(logs = []) {
   }).join("");
 }
 
+document.getElementById("exportAudit")?.addEventListener("click", () => {
+  exportAuditPDF(
+    window.allLogs,
+    {
+      start: document.getElementById("startDate")?.value,
+      end: document.getElementById("endDate")?.value
+    },
+    isAdmin
+  );
+});
 /* ================= AUDIT FILTER ================= */
 
 window.switchAuditView = (filter) => {

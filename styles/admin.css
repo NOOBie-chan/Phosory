@@ -911,6 +911,22 @@ border:1px solid rgba(0,180,255,.3);
   font-weight: bold;
 }
 
+.audit-tools{
+display:flex;
+gap:10px;
+align-items:center;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.audit-tools input{
+padding:10px;
+border-radius:10px;
+border:none;
+background:#0d1117;
+color:white;
+}
+
 .audit-topbar {
   display: flex;
   justify-content: space-between;
@@ -934,6 +950,6 @@ border:1px solid rgba(0,180,255,.3);
 }
 
 .log-session-expired .audit-dot {
-  background: #000000;
-  box-shadow: 0 0 12px rgba(0,0,0,0.9);
+  background: #000000 !important;
+  box-shadow: 0 0 12px rgba(0,0,0,0.9) !important;
 }

@@ -49,7 +49,7 @@ nav{
 }
 
 .fa-bars{
-    display: none;
+    display: none !important;
     position: absolute;
     top: 1.2rem;
     right: 3rem;
@@ -242,7 +242,7 @@ nav{
         z-index: 2000;
     }
     .fa-bars{
-        display: block;
+        display: block !important;
     }
 }
 
@@ -251,6 +251,6 @@ nav{
         display: none;
     }
     .fa-bars{
-        display: none;
+        display: none !important;
     }
 }

@@ -241,18 +241,30 @@
     <section id="audit" class="view-section">
         <div class="audit-topbar">
             <div class="audit-filters">
-                <button onclick="switchAuditView('all')">All</button>
-                <button onclick="switchAuditView('auth')">Auth</button>
-                <button onclick="switchAuditView('orders')">Orders</button>
-                <button onclick="switchAuditView('devs')">Devs</button>
+                <button class="audit-filter" data-filter="all">
+                    All
+                </button>
+                <button class="audit-filter" data-filter="auth">
+                    Auth
+                </button>
+                <button class="audit-filter" data-filter="orders">
+                    Orders
+                </button>
+                <button class="audit-filter" data-filter="devs">
+                    Devs
+                </button>
             </div>
-            <button id="exportAudit">Export PDF</button>
+            <div class="audit-tools" id="auditTools">
+                <input type="date" id="startDate" >
+                <input type="date" id="endDate">
+                <button id="exportAudit">Export PDF</button>
+            </div>
         </div>
         <div class="list-grid" id="auditView"></div>
     </section>
 </main>
 
 <script type="module" src="script/admin.js"></script>
-<script src="script/export.js"></script>
+<script type="module" src="script/exportAudit.js"></script>
 </body>
 </html>
