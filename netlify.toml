@@ -2,11 +2,13 @@
 for = "/*"
 
 [headers.values]
+
 Content-Security-Policy = """
 default-src 'self';
 
 script-src
 'self'
+'unsafe-inline'
 https://www.gstatic.com
 https://www.googleapis.com
 https://cdn.jsdelivr.net
@@ -24,9 +26,9 @@ style-src
 'unsafe-inline'
 https://fonts.googleapis.com
 https://cdnjs.cloudflare.com
-https://cdn.jsdelivr.net
+https://stackpath.bootstrapcdn.com
 https://use.fontawesome.com
-https://stackpath.bootstrapcdn.com;
+https://cdn.jsdelivr.net;
 
 font-src
 'self'
@@ -36,14 +38,6 @@ https://cdnjs.cloudflare.com
 https://ka-f.fontawesome.com
 https://use.fontawesome.com;
 
-img-src
-'self'
-data:
-blob:
-https:
-https://res.cloudinary.com
-https://*.cloudflare.com;
-
 connect-src
 'self'
 https://firestore.googleapis.com
@@ -51,16 +45,24 @@ https://firebase.googleapis.com
 https://identitytoolkit.googleapis.com
 https://securetoken.googleapis.com
 https://api.emailjs.com
-https://api.cloudinary.com
 https://res.cloudinary.com
-https://www.gstatic.com
+https://*.cloudflare.com;
+
+img-src
+'self'
+data:
+blob:
+https:
+https://res.cloudinary.com
+https://cdn.jsdelivr.net
 https://*.cloudflare.com;
 
 media-src
 'self'
 blob:
 https:
-https://*.r2.dev;
+https://*.r2.dev
+https://pub-446f14ba278c41468983857ae9955885.r2.dev;
 
 frame-src
 https://www.google.com
