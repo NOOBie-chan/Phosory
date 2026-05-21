@@ -20,25 +20,6 @@ https://*.cloudflare.com
 https://cdn.emailjs.com
 https://api.emailjs.com;
 
-connect-src
-'self'
-https://firestore.googleapis.com
-https://firebase.googleapis.com
-https://identitytoolkit.googleapis.com
-https://securetoken.googleapis.com
-https://api.emailjs.com
-https://*.cloudflare.com
-https://res.cloudinary.com;
-
-img-src
-'self'
-data:
-blob:
-https:
-https://res.cloudinary.com
-https://cdn.jsdelivr.net
-https://*.cloudflare.com;
-
 style-src
 'self'
 'unsafe-inline'
@@ -48,20 +29,39 @@ https://stackpath.bootstrapcdn.com
 https://use.fontawesome.com
 https://cdn.jsdelivr.net;
 
-font-src 'self'
+font-src
+'self'
 data:
 https://fonts.gstatic.com
 https://cdnjs.cloudflare.com
-https://cdnjs.cloudflare.net
 https://ka-f.fontawesome.com
 https://use.fontawesome.com;
+
+img-src
+'self'
+data:
+blob:
+https:
+https://res.cloudinary.com
+https://*.cloudflare.com
+https://cdn.jsdelivr.net;
+
+connect-src
+'self'
+https://firestore.googleapis.com
+https://firebase.googleapis.com
+https://identitytoolkit.googleapis.com
+https://securetoken.googleapis.com
+https://api.emailjs.com
+https://res.cloudinary.com
+https://www.gstatic.com
+https://*.cloudflare.com;
 
 media-src
 'self'
 blob:
 https:
 https://*.r2.dev
-https://pub-446f14ba278c41468983857ae9955885.r2.dev
 https://*.cloudflare.com;
 
 frame-src
@@ -71,13 +71,11 @@ https://challenges.cloudflare.com;
 
 object-src 'none';
 base-uri 'self';
-form-action
-'self'
-https://api.emailjs.com;
+form-action 'self';
 frame-ancestors 'none';
 """
 
-X-Content-Type-Options = "nosniff"
-X-Frame-Options = "DENY"
-Referrer-Policy = "strict-origin-when-cross-origin"
-Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+X-Content-Type-Options="nosniff"
+X-Frame-Options="DENY"
+Referrer-Policy="strict-origin-when-cross-origin"
+Permissions-Policy="camera=(), microphone=(), geolocation=()"
