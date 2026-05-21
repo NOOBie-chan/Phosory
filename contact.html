@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous"
-    referrerpolicy="no-referrer" />
+    referrerpolicy="no-referrer">
     <link rel="stylesheet" href="styles/style3.css">
     <link rel="stylesheet" href="styles/header&footer.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -17,7 +17,6 @@
         })();
     </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <script src="script/nav.js"></script>
     <script src="script/observer.js"></script>
     <script src="script/email.js" defer></script>
     <title>Contact Phosory | Get In Touch for Digital Solutions</title>
@@ -48,37 +47,67 @@
 </head>
 
 <body>
-    <nav>
-         <ul class="sidebar">
-            <li id="closeSidebarBtn"><i class="fas fa-x"></i></li>
-           <li class="nav-link" data-page="index.html">
-                <a href="index.html">Home</a>
-            </li>
-            <li class="nav-link" data-page="services.html">
-                    <a href="services.html">Services</a>
-                </li>
-            <li class="nav-link" data-page="about.html">
-                    <a href="about.html">About Us</a>
-                </li>
-            <li class="nav-link" data-page="contact.html">
-                    <a href="contact.html">Contact Us</a>
-                </li>
-            <li><img src="images/icon.webp" alt=""></li>
-        </ul>
-        <div class="header" id="header">
-            <div class="logo">
-                <img src="images/icon.webp" width="10%" alt="Phosory Icon" loading="lazy">
-                <span>Phosory</span>
-            </div>
-            <div class="links">
-                <a href="index.html" class="hideOnMobile">Home</a>
-                <a href="services.html" class="hideOnMobile">Services</a>
-                <a href="about.html" class="hideOnMobile">About Us</a>
-                <a href="contact.html" class="hideOnMobile">Contact Us</a>
-                <i class="fas fa-bars" id="openSidebarBtn"></i>
+    <nav class="nav">
+    <div class="nav-container">
+
+        <!-- Logo -->
+        <div class="logo">
+        <img src="images/icon.webp" alt="Phosory" />
+        <span>Phosory</span>
+        </div>
+
+        <!-- Desktop Links -->
+        <div class="nav-links">
+
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+
+        <!-- Dropdown -->
+        <div class="dropdown">
+            <button class="dropdown-btn">
+            Profiles <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-menu">
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
             </div>
         </div>
+
+        <a href="contact.html">Contact</a>
+        </div>
+
+        <!-- Hamburger -->
+        <div class="hamburger" id="openMenu">
+        <i class="fas fa-bars"></i>
+        </div>
+
+    </div>
     </nav>
+    <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+        <span class="brand">Phosory</span>
+        <i class="fas fa-x close-btn" id="closeMenu"></i>
+    </div>
+    <div class="sidebar-links">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <div class="sidebar-dropdown">
+        <button id="mobileDropBtn">
+            Profiles <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="sidebar-dropdown-menu" id="mobileDropdown">
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
+        </div>
+        </div>
+        <a href="contact.html">Contact</a>
+    </div>
+    </div>
+
+
 <section class="contact-hero">
     <div class="grid-overlay"></div>
     <div class="orb orb1"></div>
@@ -169,8 +198,7 @@
             </div>
         </div>
         <div class="turnstile-wrap">
-            <div class="cf-turnstile"
-                data-sitekey="0x4AAAAAADIyz0i8pliKVIfO">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADIyz0i8pliKVIfO" id="clientTurnstile">
             </div>
         </div>
         <button type="submit" class="submit-btn cyanBtn">
@@ -223,8 +251,7 @@
             <input type="hidden" id="resumeLink" name="resume_link">
         </div>
         <div class="turnstile-wrap">
-            <div class="cf-turnstile"
-                data-sitekey="0x4AAAAAADIz4z3fnoRJf0Pp">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADIz4z3fnoRJf0Pp" id="devTurnstile">
             </div>
         </div>
         <button type="submit" class="submit-btn purpleBtn">
@@ -244,69 +271,89 @@
         <i class="fas fa-envelope"></i>
         <h3>Email</h3>
         <p>Reach us anytime</p>
-        <a href="mailto:odufuaomoghie9@gmail.com">
-            odufuaomoghie9@gmail.com
-        </a>
-    </div>
-    <div class="info-card">
-        <i class="fab fa-linkedin-in"></i>
-        <h3>LinkedIn</h3>
-        <p>Follow our journey</p>
-        <a href="#">LinkedIn</a>
+        <a href="mailto:phosory@gmail.com">phosory@gmail.com</a>
     </div>
     <div class="info-card">
         <i class="fas fa-file-download"></i>
         <h3>Profiles</h3>
         <div class="download-buttons">
-            <button id="downloadTalentBtn">
-                Talent PDF
-            </button>
-            <button id="downloadClientBtn">
-                Client PDF
-            </button>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">
+                <button id="downloadTalentBtn">
+                    Talent PDF
+                </button>
+            </a>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">
+                <button id="downloadClientBtn">
+                    Client PDF
+                </button>
+            </a>
         </div>
     </div>
 </section>
 <footer class="phosory-footer">
-    <div class="footer-grid"></div>
-    <div class="footer-container">
-        <div class="footer-brand">
-            <img src="images/icon.webp" width="23%" alt="Phosory Logo">
-            <h2>Phosory</h2>
-            <h3>Illuminate Everything</h3>
-            <p>
-                Engineering clarity through systems,
-                design, and intelligence.
-            </p>
-            <div class="socials">
-                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-        </div>
-        <div class="footer-links">
-                <h3>Navigate</h3>
-                <a href="index.html">Home</a>
-                <a href="services.html">Services</a>
-                <a href="about.html">About Us</a>
-                <a href="contact.html">Contact Us</a>
-        </div>
-        <div class="footer-links">
-            <h3>Services</h3>
-            <a href="#">Web Development</a>
-            <a href="#">Web Application</a>
-            <a href="#">Cybersecurity</a>
-            <a href="#">Automation</a>
-            <a href="#">Software Systems</a>
-        </div>
+
+  <!-- BACKGROUND LAYERS -->
+  <div class="footer-bg">
+    <div class="grid"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+  </div>
+
+  <!-- HERO LOGO SECTION -->
+  <div class="footer-hero-logo">
+    <img src="images/icon.webp" alt="Phosory Logo">
+    <h2>PHOSORY</h2>
+    <p>Secure • Scalable • Intelligent Systems</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="footer-container">
+
+    <!-- BRAND -->
+    <div class="footer-brand">
+      <p>
+        Building intelligent digital systems for modern businesses.
+        Clean. Secure. Scalable.
+      </p>
+
+      <div class="socials">
+        <a href="#"><i class="fab fa-x"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
     </div>
-    <div class="footer-bottom">
-        <p>© 2026 Phosory. Built for precision. Built for the future.</p>
+
+    <!-- LINKS -->
+    <div class="footer-links">
+      <h3>Navigation</h3>
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </div>
+
+    <!-- SERVICES -->
+    <div class="footer-links">
+      <h3>Services</h3>
+      <a href="services.html">Cybersecurity</a>
+      <a href="services.html">Web Development</a>
+      <a href="services.html">Web Application</a>
+      <a href="services.html">Software Development</a>
+      <a href="services.html">Automation</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    © 2026 Phosory. All rights reserved.
+  </div>
+
 </footer>
-<script src="script/contact.js"></script>
-<script src="script/autofill.js"></script>
+<script src="script/nav.js"></script>
+<script type="module" src="script/contact.js"></script>
+<script type="module" src="script/autofill.js"></script>
 <script type="module" src="script/submit-order.js"></script>
 <script type="module" src="script/submit-dev.js"></script>
-<script src="script/on-click.js"></script>
+<script type="module" src="script/on-click.js"></script>
 </body>
 </html>

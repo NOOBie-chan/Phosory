@@ -17,6 +17,15 @@
         "select-name": "off",
         "label": "off"
       }
-    ]
+    ],
+    "disown-opener": "off",
+    "axe/name-role-value": [
+      "default",
+      {
+        "link-name": "off",
+        "button-name": "off"
+      }
+    ],
+    "no-inline-styles": "off"
   }
 }

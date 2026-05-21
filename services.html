@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer" />
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+crossorigin="anonymous"
+referrerpolicy="no-referrer">
 <link rel="stylesheet" href="styles/header&footer.css">
 <link rel="stylesheet" href="styles/style4.css">
 <script src="script/observer.js"></script>
@@ -38,38 +38,65 @@
 <meta name="twitter:image" content="https://phosory.netlify.app/assets/services-preview.jpg">
 </head>
 <body>
-  <nav>
-         <ul class="sidebar">
-            <li id="closeSidebarBtn"><i class="fas fa-x"></i></li>
-           <li class="nav-link" data-page="index.html">
-              <a href="index.html">Home</a>
-          </li>
-            <li class="nav-link" data-page="services.html">
-                <a href="services.html">Services</a>
-            </li>
-            <li class="nav-link" data-page="about.html">
-                <a href="about.html">About Us</a>
-            </li>
-            <li class="nav-link" data-page="contact.html">
-              <a href="contact.html">Contact Us</a>
-            </li>
-            <li><img src="images/icon.webp" alt="Phosory Logo"></li>
-        </ul>
-        <div class="header" id="header">
-            <div class="logo">
-                <img src="images/icon.webp" width="10%" alt="Phosory Icon" loading="lazy">
-                <span>Phosory</span>
-            </div>
-            <div class="links">
-                <a href="index.html" class="hideOnMobile">Home</a>
-                <a href="services.html" class="hideOnMobile">Services</a>
-                <a href="about.html" class="hideOnMobile">About Us</a>
-                <a href="contact.html" class="hideOnMobile">Contact Us</a>
-                <i class="fas fa-bars" id="openSidebarBtn"></i>
+  <nav class="nav">
+    <div class="nav-container">
+
+        <!-- Logo -->
+        <div class="logo">
+        <img src="images/icon.webp" alt="Phosory" />
+        <span>Phosory</span>
+        </div>
+
+        <!-- Desktop Links -->
+        <div class="nav-links">
+
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+
+        <!-- Dropdown -->
+        <div class="dropdown">
+            <button class="dropdown-btn">
+            Profiles <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-menu">
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
             </div>
         </div>
-        <script src="script/header.js"></script>
+
+        <a href="contact.html">Contact</a>
+        </div>
+
+        <!-- Hamburger -->
+        <div class="hamburger" id="openMenu">
+        <i class="fas fa-bars"></i>
+        </div>
+
+    </div>
     </nav>
+    <div class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+        <span class="brand">Phosory</span>
+        <i class="fas fa-x close-btn" id="closeMenu"></i>
+    </div>
+    <div class="sidebar-links">
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <div class="sidebar-dropdown">
+        <button id="mobileDropBtn">
+            Profiles <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="sidebar-dropdown-menu" id="mobileDropdown">
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
+            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
+        </div>
+        </div>
+        <a href="contact.html">Contact</a>
+    </div>
+    </div>
     <canvas id="particles"></canvas>
 <section class="hero">
   <h1>Build Your System</h1>
@@ -171,5 +198,6 @@
 
 </div>
 <script src="script/services.js"></script>
+    <script src="script/nav.js"></script>
 </body>
 </html>

@@ -4,48 +4,59 @@ import {
 collection,
 addDoc,
 serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const form = document.getElementById("orderForm");
+const form = document.getElementById("clientForm");
+
+if(form){
 
 form.addEventListener("submit", async (e)=>{
 
 e.preventDefault();
 
-const submitBtn = form.querySelector("button");
-
-submitBtn.innerText = "Submitting...";
-submitBtn.disabled = true;
+const submitBtn = form.querySelector(".submit-btn");
 
 try{
 
-await addDoc(collection(db,"orders"),{
+submitBtn.innerText = "Saving...";
+submitBtn.disabled = true;
 
-name: form.organization.value,
+await addDoc(
+collection(db,"orders"),
+{
+
+name: form.name.value,
+
 email: form.email.value,
-service: form.service.value,
+
+service: form.projectType.value,
+
 budget: form.budget.value,
 
-status:"pending",
+details: form.details.value,
+
+status: "pending",
 
 createdAt: serverTimestamp()
 
 });
 
-alert("Order submitted successfully");
-
-form.reset();
+console.log("Order saved");
 
 }
 catch(err){
 
-console.error(err);
+console.error("Firestore save failed:",err);
 
-alert("Failed to submit order");
+}
+finally{
+
+submitBtn.disabled = false;
+submitBtn.innerText = "Submit Request";
 
 }
 
-submitBtn.innerText = "Submit";
-submitBtn.disabled = false;
-
 });
+
+}

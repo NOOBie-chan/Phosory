@@ -1,224 +1,449 @@
-// =============================
-// INIT EMAILJS
-// =============================
-(function(){
-  emailjs.init("hzYpGwbtgq7-kUZMg");
-})();
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
 
+emailjs.init("hzYpGwbtgq7-kUZMg");
 
-// =============================
-// TOAST (ERROR ONLY)
-// =============================
-function showToast(message, type = "error") {
-  let container = document.getElementById("toastContainer");
+function showToast(message){
 
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "toastContainer";
+let toast=document.createElement("div");
 
-    Object.assign(container.style, {
-      position: "fixed",
-      inset: "0",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: "99999",
-      pointerEvents: "none"
-    });
+toast.innerText=message;
 
-    document.body.appendChild(container);
-  }
+Object.assign(toast.style,{
+position:"fixed",
+top:"30px",
+right:"30px",
+background:"#111827",
+color:"#fff",
+padding:"18px 22px",
+borderRadius:"16px",
+zIndex:"999999",
+border:"1px solid rgba(255,255,255,0.1)",
+boxShadow:"0 10px 40px rgba(0,0,0,0.4)"
+});
 
-  const toast = document.createElement("div");
+document.body.appendChild(toast);
 
-  Object.assign(toast.style, {
-    padding: "20px 30px",
-    borderRadius: "16px",
-    color: "#fff",
-    fontSize: "18px",
-    textAlign: "center",
-    background: "#ef4444cc",
-    boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
-    opacity: "0",
-    transform: "scale(0.9)",
-    transition: "all 0.3s ease"
-  });
+setTimeout(()=>{
+toast.remove();
+},3000);
 
-  toast.innerText = message;
-  container.appendChild(toast);
+}
 
-  requestAnimationFrame(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "scale(1)";
-  });
+function showSuccessAnimation(){
 
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "scale(0.9)";
-    setTimeout(() => toast.remove(), 300);
-  }, 2500);
+const overlay=document.createElement("div");
+
+Object.assign(overlay.style,{
+position:"fixed",
+inset:"0",
+background:"rgba(0,0,0,0.7)",
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+zIndex:"999999"
+});
+
+overlay.innerHTML=`
+<div style="
+width:130px;
+height:130px;
+border-radius:50%;
+background:linear-gradient(
+135deg,
+#00ffff,
+#6c63ff
+);
+display:flex;
+justify-content:center;
+align-items:center;
+">
+<i class="fas fa-check"
+style="
+font-size:3rem;
+color:white;
+"></i>
+</div>
+`;
+
+document.body.appendChild(
+overlay
+);
+
+setTimeout(()=>{
+overlay.remove();
+},1600);
+
+}
+
+async function uploadToCloudinary(file){
+
+const cloudName="du19nhphj";
+
+const uploadPreset="Phosory";
+
+const formData=new FormData();
+
+formData.append(
+"file",
+file
+);
+
+formData.append(
+"upload_preset",
+uploadPreset
+);
+
+formData.append(
+"resource_type",
+"raw"
+);
+
+const res=await fetch(
+`https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
+{
+method:"POST",
+body:formData
+}
+);
+
+const data=await res.json();
+
+const fileUrl=
+data.secure_url ||
+data.url;
+
+if(!fileUrl){
+
+throw new Error(
+"Upload failed"
+);
+
+}
+
+return fileUrl;
+
+}
+
+async function verifyTurnstile(token){
+
+const verify=
+await fetch(
+"/.netlify/functions/verify-turnstile",
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/json"
+},
+body:JSON.stringify({
+token
+})
+}
+);
+
+return await verify.json();
+
 }
 
 
-// =============================
-// SUCCESS ANIMATION
-// =============================
-function showSuccessAnimation() {
-  const overlay = document.createElement("div");
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
 
-  Object.assign(overlay.style, {
-    position: "fixed",
-    inset: "0",
-    background: "rgba(0,0,0,0.6)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: "100000"
-  });
+const clientForm=
+document.getElementById(
+"clientForm"
+);
 
-  overlay.innerHTML = `
-    <div style="width:120px;height:120px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center;">
-      <svg width="60" height="60" viewBox="0 0 24 24">
-        <path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" fill="none"/>
-      </svg>
-    </div>
-  `;
+const devForm=
+document.getElementById(
+"devForm"
+);
 
-  document.body.appendChild(overlay);
-  setTimeout(() => overlay.remove(), 1500);
+
+
+
+// CLIENT FORM
+
+if(clientForm){
+
+let submitting=false;
+
+const button=
+clientForm.querySelector(
+".submit-btn"
+);
+
+clientForm.addEventListener(
+"submit",
+async(e)=>{
+
+e.preventDefault();
+
+if(submitting)
+return;
+
+submitting=true;
+
+const original=
+button.innerHTML;
+
+button.innerHTML=
+"Sending...";
+
+button.disabled=true;
+
+try{
+
+const token=
+turnstile.getResponse(
+document.getElementById(
+"clientTurnstile"
+)
+);
+
+if(!token){
+
+showToast(
+"Complete captcha"
+);
+
+throw new Error(
+"No captcha"
+);
+
+}
+
+const result=
+await verifyTurnstile(
+token
+);
+
+if(!result.success){
+
+showToast(
+"Captcha failed"
+);
+
+throw new Error(
+"Invalid captcha"
+);
+
+}
+
+const data=
+Object.fromEntries(
+new FormData(
+clientForm
+)
+);
+
+await emailjs.send(
+"service_8sgugr4",
+"template_3g1hxrs",
+data
+);
+
+showSuccessAnimation();
+
+clientForm.reset();
+
+button.innerHTML=
+"Sent ✓";
+
+turnstile.reset(
+document.getElementById(
+"clientTurnstile"
+)
+);
+
+}
+
+catch(err){
+
+console.error(err);
+
+button.innerHTML=
+"Failed ✕";
+
+showToast(
+"Failed to send"
+);
+
+}
+
+setTimeout(()=>{
+
+button.innerHTML=
+original;
+
+button.disabled=false;
+
+submitting=false;
+
+},2000);
+
+});
+
 }
 
 
-// =============================
-// CLOUDINARY UPLOAD
-// =============================
-async function uploadToCloudinary(file) {
-  const cloudName = "du19nhphj";
-  const uploadPreset = "Phosory";
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", uploadPreset);
-  formData.append("resource_type", "raw");
 
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
-    {
-      method: "POST",
-      body: formData
-    }
-  );
+// DEV FORM
 
-  const data = await res.json();
+if(devForm){
 
-  console.log("Cloudinary response:", data);
+let submitting=false;
 
-  const fileUrl = data.secure_url || data.url;
-  if (!fileUrl) {
-    console.log("Cloudinary error details:", data);
-    throw new Error("Upload failed");
-  }
+const button=
+devForm.querySelector(
+".submit-btn"
+);
 
-  return fileUrl;
+devForm.addEventListener(
+"submit",
+async(e)=>{
+
+e.preventDefault();
+
+if(submitting)
+return;
+
+submitting=true;
+
+const original=
+button.innerHTML;
+
+button.innerHTML=
+"Preparing...";
+
+button.disabled=true;
+
+try{
+
+const token=
+turnstile.getResponse(
+document.getElementById(
+"devTurnstile"
+)
+);
+
+if(!token){
+
+showToast(
+"Complete captcha"
+);
+
+throw new Error(
+"No captcha"
+);
+
 }
 
-function initForms() {
+const result=
+await verifyTurnstile(
+token
+);
 
-  const clientForm = document.getElementById("clientForm");
+if(!result.success){
 
-  if (clientForm) {
-    const button = clientForm.querySelector("button");
+showToast(
+"Captcha failed"
+);
 
-    clientForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+throw new Error(
+"Invalid captcha"
+);
 
-      const originalText = button.innerText;
-      button.innerText = "Sending...";
-      button.disabled = true;
-
-      try {
-        const data = Object.fromEntries(new FormData(clientForm));
-
-        await emailjs.send("service_8sgugr4", "template_3g1hxrs", data);
-
-        button.innerText = "Sent ✓";
-
-        showSuccessAnimation();
-        clientForm.reset();
-
-      } catch (err) {
-        console.error(err);
-
-        button.innerText = "Failed ✕";
-        showToast("Failed to send");
-      }
-
-      setTimeout(() => {
-        button.innerText = originalText;
-        button.disabled = false;
-      }, 2000);
-    });
-  }
-
-
-  // ===== DEV FORM =====
-  const devForm = document.getElementById("devForm");
-
-  if (devForm) {
-    const button = devForm.querySelector("button");
-
-    devForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const originalText = button.innerText;
-      button.innerText = "Preparing...";
-      button.disabled = true;
-
-      try {
-        const file = document.getElementById("resumeInput")?.files[0];
-
-        if (!file) {
-          showToast("Upload resume");
-          throw new Error("No file");
-        }
-
-        button.innerText = "Uploading...";
-
-        const link = await uploadToCloudinary(file);
-        console.log("Resume URL:", link);
-        document.getElementById("resumeLink").value = link;
-        await new Promise(r => requestAnimationFrame(r)); // Wait for input to update
-        const data = Object.fromEntries(new FormData(devForm));
-        console.log(data);
-
-        button.innerText = "Sending...";
-
-        await emailjs.send("service_8sgugr4", "template_nf0gf2k", data);
-
-        button.innerText = "Sent ✓";
-
-        showSuccessAnimation();
-        devForm.reset();
-
-      } catch (err) {
-        console.error(err);
-
-        button.innerText = "Failed ✕";
-        showToast("Application failed");
-      }
-
-      setTimeout(() => {
-        button.innerText = originalText;
-        button.disabled = false;
-      }, 2000);
-    });
-  }
 }
 
+const file=
+document.getElementById(
+"resumeInput"
+).files[0];
 
-// =============================
-// INIT
-// =============================
-document.addEventListener("DOMContentLoaded", () => {
-  initForms();
+if(!file){
+
+showToast(
+"Upload resume"
+);
+
+throw new Error(
+"No file"
+);
+
+}
+
+button.innerHTML=
+"Uploading...";
+
+const link=
+await uploadToCloudinary(
+file
+);
+
+document.getElementById(
+"resumeLink"
+).value=link;
+
+const data=
+Object.fromEntries(
+new FormData(
+devForm
+)
+);
+
+button.innerHTML=
+"Sending...";
+
+await emailjs.send(
+"service_8sgugr4",
+"template_nf0gf2k",
+data
+);
+
+showSuccessAnimation();
+
+devForm.reset();
+
+button.innerHTML=
+"Sent ✓";
+
+turnstile.reset(
+document.getElementById(
+"devTurnstile"
+)
+);
+
+}
+
+catch(err){
+
+console.error(err);
+
+button.innerHTML=
+"Failed ✕";
+
+showToast(
+"Application failed"
+);
+
+}
+
+setTimeout(()=>{
+
+button.innerHTML=
+original;
+
+button.disabled=false;
+
+submitting=false;
+
+},2000);
+
+});
+
+}
+
 });

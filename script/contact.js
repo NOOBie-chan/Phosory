@@ -1,8 +1,5 @@
 import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
-
-emailjs.init({
-  publicKey: "hzYpGwbtgq7-kUZMg"
-});
+emailjs.init("hzYpGwbtgq7-kUZMg");
 
 window.addEventListener("scroll", function(){
     let header = document.getElementById("header");
@@ -17,22 +14,27 @@ const clientBtn = document.getElementById("clientBtn");
 const developerBtn = document.getElementById("developerBtn");
 const clientForm = document.getElementById("clientForm");
 const devForm = document.getElementById("devForm");
+let clientSubmitting = false;
+let devSubmitting = false;
 // ================= FORM SWITCH =================
-clientBtn.addEventListener("click", () => {
+clientBtn?.addEventListener("click", () => {
     clientBtn.classList.add("active");
     developerBtn.classList.remove("active");
     clientForm.classList.add("activeForm");
     devForm.classList.remove("activeForm");
+
     clientForm.scrollIntoView({
         behavior:"smooth",
         block:"start"
     });
 });
-developerBtn.addEventListener("click", () => {
+
+developerBtn?.addEventListener("click", () => {
     developerBtn.classList.add("active");
     clientBtn.classList.remove("active");
     devForm.classList.add("activeForm");
     clientForm.classList.remove("activeForm");
+
     devForm.scrollIntoView({
         behavior:"smooth",
         block:"start"
@@ -45,14 +47,17 @@ function updateBudget(){
     const value = Number(budgetSlider.value);
     budgetValue.innerText = value.toLocaleString();
 }
-budgetSlider.addEventListener("input", updateBudget);
+budgetSlider?.addEventListener(
+    "input",
+    updateBudget
+);
 updateBudget();
 // ================= FILE UI =================
 const resumeInput = document.getElementById("resumeInput");
 const uploadField = document.querySelector(".upload-field");
 const uploadTitle = document.getElementById("uploadTitle");
 const uploadSubtext = document.getElementById("uploadSubtext");
-resumeInput.addEventListener("change", () => {
+resumeInput?.addEventListener("change", () => {
     const file = resumeInput.files[0];
     if(file){
         uploadField.classList.add("has-file");
@@ -143,76 +148,141 @@ async function uploadToCloudinary(file){
     return fileUrl;
 }
 // ================= CLIENT FORM =================
-clientForm.addEventListener("submit", async (e)=>{
+clientForm?.addEventListener("submit", async (e)=>{
     e.preventDefault();
+
+    if(clientSubmitting) return;
+    clientSubmitting = true;
+
     const button = clientForm.querySelector(".submit-btn");
     const original = button.innerHTML;
+
     button.innerHTML = "Sending...";
     button.disabled = true;
+
     try{
+
         const data = Object.fromEntries(
             new FormData(clientForm)
         );
+
         await emailjs.send(
             "service_8sgugr4",
             "template_3g1hxrs",
             data
         );
+
         showSuccessAnimation();
+
         clientForm.reset();
+
         updateBudget();
+
         button.innerHTML = "Sent ✓";
+
     } catch(err){
+
         console.error(err);
+
         showToast("Failed to send");
+
         button.innerHTML = "Failed ✕";
+
+    } finally{
+
+        clientSubmitting = false;
+
+        setTimeout(()=>{
+            button.innerHTML = original;
+            button.disabled = false;
+        },2000);
+
     }
-    setTimeout(()=>{
-        button.innerHTML = original;
-        button.disabled = false;
-    },2000);
+
 });
 // ================= DEV FORM =================
-devForm.addEventListener("submit", async (e)=>{
+devForm?.addEventListener("submit", async (e)=>{
+
     e.preventDefault();
+
+    if(devSubmitting) return;
+
+    devSubmitting = true;
+
     const button = devForm.querySelector(".submit-btn");
+
     const original = button.innerHTML;
+
     button.innerHTML = "Preparing...";
+
     button.disabled = true;
+
     try{
-        const file = document.getElementById("resumeInput").files[0];
+
+        const file = document.getElementById(
+            "resumeInput"
+        ).files[0];
+
         if(!file){
             showToast("Upload resume");
             throw new Error("No file");
         }
+
         button.innerHTML = "Uploading...";
+
         const link = await uploadToCloudinary(file);
-        document.getElementById("resumeLink").value = link;
+
+        document.getElementById(
+            "resumeLink"
+        ).value = link;
+
         const data = Object.fromEntries(
             new FormData(devForm)
         );
+
         button.innerHTML = "Sending...";
+
         await emailjs.send(
             "service_8sgugr4",
             "template_nf0gf2k",
             data
         );
+
         showSuccessAnimation();
+
         devForm.reset();
-        // RESET FILE UI
-        uploadField.classList.remove("has-file");
-        uploadTitle.innerText = "Upload Resume";
-        uploadSubtext.innerText = "PDF, DOC or DOCX";
+
+        uploadField.classList.remove(
+            "has-file"
+        );
+
+        uploadTitle.innerText =
+            "Upload Resume";
+
+        uploadSubtext.innerText =
+            "PDF, DOC or DOCX";
+
         button.innerHTML = "Sent ✓";
+
     } catch(err){
+
         console.error(err);
+
         showToast("Application failed");
+
         button.innerHTML = "Failed ✕";
+
+    } finally{
+
+        devSubmitting = false;
+
+        setTimeout(()=>{
+            button.innerHTML = original;
+            button.disabled = false;
+        },2000);
+
     }
-    setTimeout(()=>{
-        button.innerHTML = original;
-        button.disabled = false;
-    },2000);
+
 });
 // ================= AUTO CLIENT OPEN =================
 const params = new URLSearchParams(window.location.search);
@@ -255,18 +325,3 @@ Features: ${features || "None"}`;
         }
     },300);
 }
-
-let isSubmitting = false;
-
-clientForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  if (isSubmitting) return;
-  isSubmitting = true;
-
-  try {
-    // your code here
-  } finally {
-    isSubmitting = false;
-  }
-});

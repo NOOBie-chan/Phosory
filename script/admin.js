@@ -305,6 +305,8 @@ onAuthStateChanged(auth, async (user) => {
     email: user.email,
     uid: user.uid
   });
+
+  window.currentRole = USER_STATE.role;
    
   document.body.style.visibility = "visible";
     console.log("ROLE:", USER_STATE.role);
@@ -849,6 +851,32 @@ devs.filter(d=>d.status==="rejected").length;
 loadChart();
 
 }
+
+window.addEventListener("beforeunload", async ()=>{
+
+if(auth.currentUser){
+
+try{
+
+await addDoc(
+collection(db,"audit_logs"),
+{
+action:"Admin left page",
+target:USER_STATE.email,
+role:USER_STATE.role,
+type:"auth",
+timestamp:serverTimestamp()
+});
+
+}catch(err){
+
+console.error(err);
+
+}
+
+}
+
+});
 
 function loadChart(){
 

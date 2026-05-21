@@ -1,6 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { 
+    getFirestore 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+    getAuth,
+    setPersistence,
+    browserSessionPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCwnV4AVN_sjSmuobmer0jKLpVqNZX7Gzs",
@@ -14,4 +22,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
+
 export const auth = getAuth(app);
+
+/* Session lasts only while browser session exists */
+
+setPersistence(
+    auth,
+    browserSessionPersistence
+)
+.then(() => {
+
+    console.log(
+        "Session persistence enabled"
+    );
+
+})
+.catch((err) => {
+
+    console.error(
+        "Persistence error:",
+        err
+    );
+
+});
