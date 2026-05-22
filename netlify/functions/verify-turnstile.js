@@ -1,128 +1,85 @@
 const requestStore = new Map();
 
-export async function handler(event){
+export async function handler(event) {
+  try {
+    const ip =
+      event.headers["x-forwarded-for"] ||
+      event.headers["client-ip"] ||
+      "unknown";
 
-try{
+    const now = Date.now();
 
-const ip=
-event.headers["x-forwarded-for"] ||
-event.headers["client-ip"] ||
-"unknown";
+    const limit = 5;
 
-const now=Date.now();
+    const windowTime = 10 * 60 * 1000;
 
-const limit=5;
+    if (!requestStore.has(ip)) {
+      requestStore.set(ip, []);
+    }
 
-const windowTime=
-10*60*1000;
+    let requests = requestStore.get(ip);
 
-if(!requestStore.has(ip)){
-requestStore.set(ip,[]);
-}
+    requests = requests.filter((time) => now - time < windowTime);
 
-let requests=
-requestStore.get(ip);
+    if (requests.length >= limit) {
+      return {
+        statusCode: 429,
+        body: JSON.stringify({
+          success: false,
+          message: "Too many requests. Try again later.",
+        }),
+      };
+    }
 
-requests=requests.filter(
-time=>now-time<windowTime
-);
+    requests.push(now);
 
-if(requests.length>=limit){
+    requestStore.set(ip, requests);
 
-return{
-statusCode:429,
-body:JSON.stringify({
-success:false,
-message:"Too many requests. Try again later."
-})
-};
+    const { token, formType } = JSON.parse(event.body);
 
-}
+    let secret;
 
-requests.push(now);
+    if (formType === "client") {
+      secret = process.env.CLIENT_TURNSTILE_KEY;
+    } else if (formType === "dev") {
+      secret = process.env.DEV_TURNSTILE_KEY;
+    } else {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          success: false,
+          message: "Invalid form",
+        }),
+      };
+    }
 
-requestStore.set(
-ip,
-requests
-);
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${secret}&response=${token}`,
+      },
+    );
 
-const {
-token,
-formType
-}=
-JSON.parse(event.body);
+    const data = await response.json();
 
-let secret;
+    return {
+      statusCode: 200,
 
-if(formType==="client"){
+      body: JSON.stringify(data),
+    };
+  } catch (err) {
+    console.error(err);
 
-secret=
-process.env.CLIENT_TURNSTILE_KEY;
+    return {
+      statusCode: 500,
 
-}
-
-else if(
-formType==="dev"
-){
-
-secret=
-process.env.DEV_TURNSTILE_KEY;
-
-}
-
-else{
-
-return{
-statusCode:400,
-body:JSON.stringify({
-success:false,
-message:"Invalid form"
-})
-};
-
-}
-
-const response=
-await fetch(
-"https://challenges.cloudflare.com/turnstile/v0/siteverify",
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/x-www-form-urlencoded"
-},
-body:
-`secret=${secret}&response=${token}`
-}
-);
-
-const data=
-await response.json();
-
-return{
-
-statusCode:200,
-
-body:JSON.stringify(data)
-
-};
-
-}
-
-catch(err){
-
-console.error(err);
-
-return{
-
-statusCode:500,
-
-body:JSON.stringify({
-success:false
-})
-
-};
-
-}
-
+      body: JSON.stringify({
+        success: false,
+      }),
+    };
+  }
 }

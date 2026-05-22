@@ -1,274 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard | Control Panel</title>
-<meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Internal admin dashboard for managing orders, developers, and system logs.">
-<meta property="og:title" content="Admin Dashboard">
-<meta property="og:description" content="Internal management system">
-<meta property="og:type" content="website">
-<title>Phosory Admin</title>
-<link rel="stylesheet" href="styles/admin.css">
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-crossorigin="anonymous"
-referrerpolicy="no-referrer">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  emailjs.init("N9VA5XSXq7FpHO8Tc");
-</script>
-</head>
-<body>
-<div class="grid-bg"></div>
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Control Panel</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="Internal admin dashboard for managing orders, developers, and system logs."
+    />
+    <meta property="og:title" content="Admin Dashboard" />
+    <meta property="og:description" content="Internal management system" />
+    <meta property="og:type" content="website" />
+    <title>Phosory Admin</title>
+    <link rel="stylesheet" href="styles/admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+      emailjs.init("N9VA5XSXq7FpHO8Tc");
+    </script>
+  </head>
+  <body>
+    <div class="grid-bg"></div>
+    <div class="glow glow1"></div>
+    <div class="glow glow2"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-
-    <div class="logo-wrap">
-
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo-wrap">
         <div class="logo-circle">
-            <img
-            src="images/icon.webp"
-            alt="Phosory">
+          <img src="images/icon.webp" alt="Phosory" />
         </div>
 
         <div>
-            <h2>PHOSORY</h2>
-            <span>Dashboard</span>
+          <h2>PHOSORY</h2>
+          <span>Dashboard</span>
         </div>
+      </div>
 
-    </div>
-
-    <button
-    class="nav-btn active-btn"
-    data-view="dashboard">
-
+      <button class="nav-btn active-btn" data-view="dashboard">
         <i class="fas fa-chart-pie"></i>
         Dashboard
+      </button>
 
-    </button>
-
-    <button
-    class="nav-btn"
-    data-view="orders">
-
+      <button class="nav-btn" data-view="orders">
         <i class="fas fa-briefcase"></i>
         Orders
+      </button>
 
-    </button>
-
-    <button
-    class="nav-btn"
-    data-view="developers">
-
+      <button class="nav-btn" data-view="developers">
         <i class="fas fa-code"></i>
         Developers
+      </button>
 
-    </button>
-
-    <button
-    class="nav-btn"
-    data-view="audit">
-
+      <button class="nav-btn" data-view="audit">
         <i class="fas fa-shield-alt"></i>
         Audit Log
+      </button>
 
-    </button>
-
-    <button
-    id="logoutBtn"
-    class="logout-btn">
-
+      <button id="logoutBtn" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         Logout
+      </button>
+    </aside>
 
-    </button>
-
-</aside>
-
-<!-- MAIN -->
-<main class="main-content">
-
-    <!-- TOPBAR -->
-    <header class="topbar">
-
+    <!-- MAIN -->
+    <main class="main-content">
+      <!-- TOPBAR -->
+      <header class="topbar">
         <div class="left-topbar">
+          <button class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
 
-            <button
-            class="menu-btn"
-            id="menuBtn">
+          <div>
+            <h1 id="pageTitle">Dashboard</h1>
 
-                <i class="fas fa-bars"></i>
-
-            </button>
-
-            <div>
-
-                <h1 id="pageTitle">
-                    Dashboard
-                </h1>
-
-                <p class="subtext">
-                    Monitor your systems in real-time
-                </p>
-
-            </div>
-
+            <p class="subtext">Monitor your systems in real-time</p>
+          </div>
         </div>
         <div class="right-topbar">
-            <div class="user-info">
-                <span id="loggedRole">Loading...</span>
-            </div>
-            <input
+          <div class="user-info">
+            <span id="loggedRole">Loading...</span>
+          </div>
+          <input
             type="text"
             id="search"
             class="search-input"
-            placeholder="Search developers or orders...">
-
+            placeholder="Search developers or orders..."
+          />
         </div>
-    </header>
+      </header>
 
-    <!-- DASHBOARD -->
-    <section
-    id="dashboard"
-    class="view-section active-view">
-
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="view-section active-view">
         <!-- STATS -->
         <div class="cards-grid">
-
-            <div class="stat-card">
-
-                <div class="card-icon cyan">
-                    <i class="fas fa-layer-group"></i>
-                </div>
-
-                <div>
-                    <h2 id="ordersCount">0</h2>
-                    <p>Total Orders</p>
-                </div>
-
+          <div class="stat-card">
+            <div class="card-icon cyan">
+              <i class="fas fa-layer-group"></i>
             </div>
 
-            <div class="stat-card">
+            <div>
+              <h2 id="ordersCount">0</h2>
+              <p>Total Orders</p>
+            </div>
+          </div>
 
-                <div class="card-icon purple">
-                    <i class="fas fa-code"></i>
-                </div>
-
-                <div>
-                    <h2 id="devCount">0</h2>
-                    <p>Developers</p>
-                </div>
-
+          <div class="stat-card">
+            <div class="card-icon purple">
+              <i class="fas fa-code"></i>
             </div>
 
-            <div class="stat-card">
+            <div>
+              <h2 id="devCount">0</h2>
+              <p>Developers</p>
+            </div>
+          </div>
 
-                <div class="card-icon green">
-                    <i class="fas fa-check"></i>
-                </div>
-
-                <div>
-                    <h2 id="approvedCount">0</h2>
-                    <p>Approved</p>
-                </div>
-
+          <div class="stat-card">
+            <div class="card-icon green">
+              <i class="fas fa-check"></i>
             </div>
 
-            <div class="stat-card">
+            <div>
+              <h2 id="approvedCount">0</h2>
+              <p>Approved</p>
+            </div>
+          </div>
 
-                <div class="card-icon red">
-                    <i class="fas fa-xmark"></i>
-                </div>
-
-                <div>
-                    <h2 id="rejectedCount">0</h2>
-                    <p>Rejected</p>
-                </div>
-
+          <div class="stat-card">
+            <div class="card-icon red">
+              <i class="fas fa-xmark"></i>
             </div>
 
+            <div>
+              <h2 id="rejectedCount">0</h2>
+              <p>Rejected</p>
+            </div>
+          </div>
         </div>
 
         <!-- ANALYTICS -->
         <div class="analytics-card">
+          <div class="analytics-header">
+            <h3>System Analytics</h3>
 
-            <div class="analytics-header">
+            <span class="live-dot"> LIVE </span>
+          </div>
 
-                <h3>System Analytics</h3>
-
-                <span class="live-dot">
-                    LIVE
-                </span>
-
-            </div>
-
-            <canvas id="chart"></canvas>
-
+          <canvas id="chart"></canvas>
         </div>
+      </section>
 
-    </section>
+      <!-- ORDERS -->
+      <section id="orders" class="view-section">
+        <div class="list-grid" id="ordersContainer"></div>
+      </section>
 
-    <!-- ORDERS -->
-    <section
-    id="orders"
-    class="view-section">
+      <!-- DEVELOPERS -->
+      <section id="developers" class="view-section">
+        <div class="list-grid" id="developersContainer"></div>
+      </section>
 
-        <div
-        class="list-grid"
-        id="ordersContainer">
-        </div>
-
-    </section>
-
-    <!-- DEVELOPERS -->
-    <section
-    id="developers"
-    class="view-section">
-
-        <div
-        class="list-grid"
-        id="developersContainer">
-        </div>
-
-    </section>
-
-    <!-- AUDIT -->
-    <section id="audit" class="view-section">
+      <!-- AUDIT -->
+      <section id="audit" class="view-section">
         <div class="audit-topbar">
-            <div class="audit-filters">
-                <button class="audit-filter" data-filter="all">
-                    All
-                </button>
-                <button class="audit-filter" data-filter="auth">
-                    Auth
-                </button>
-                <button class="audit-filter" data-filter="orders">
-                    Orders
-                </button>
-                <button class="audit-filter" data-filter="devs">
-                    Devs
-                </button>
-            </div>
-            <div class="audit-tools" id="auditTools">
-                <input type="date" id="startDate" >
-                <input type="date" id="endDate">
-                <button id="exportAudit">Export PDF</button>
-            </div>
+          <div class="audit-filters">
+            <button class="audit-filter" data-filter="all">All</button>
+            <button class="audit-filter" data-filter="auth">Auth</button>
+            <button class="audit-filter" data-filter="orders">Orders</button>
+            <button class="audit-filter" data-filter="devs">Devs</button>
+          </div>
+          <div class="audit-tools" id="auditTools">
+            <input type="date" id="startDate" />
+            <input type="date" id="endDate" />
+            <button id="exportAudit">Export PDF</button>
+          </div>
         </div>
         <div class="list-grid" id="auditView"></div>
-    </section>
-</main>
+      </section>
+    </main>
 
-<script type="module" src="script/admin.js"></script>
-<script type="module" src="script/exportAudit.js"></script>
-</body>
+    <script type="module" src="script/admin.js"></script>
+    <script type="module" src="script/exportAudit.js"></script>
+  </body>
 </html>

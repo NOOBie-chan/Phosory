@@ -26,7 +26,7 @@ function resizeCanvas() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   // More balanced density
   const area = window.innerWidth * window.innerHeight;
-  particleCount = Math.floor(area /8000);
+  particleCount = Math.floor(area / 8000);
   connectionDistance = area < 500000 ? 9000 : 12000;
   initParticles();
 }
@@ -125,7 +125,7 @@ function drawBackground() {
     0,
     canvas.width / 2,
     canvas.height / 2,
-    canvas.width
+    canvas.width,
   );
   gradient.addColorStop(0, accent1);
   gradient.addColorStop(0.4, bg1);

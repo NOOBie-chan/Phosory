@@ -1,6 +1,6 @@
 import { auth } from "./firebase.js";
-import { signInWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { signInWithEmailAndPassword }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const btn = document.getElementById("loginBtn");
 const error = document.getElementById("error");
@@ -25,8 +25,8 @@ btn.addEventListener("click", async () => {
       e.code === "auth/user-not-found"
         ? "No account found"
         : e.code === "auth/wrong-password"
-        ? "Wrong password"
-        : "Login failed";
+          ? "Wrong password"
+          : "Login failed";
 
   }
 

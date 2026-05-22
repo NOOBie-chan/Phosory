@@ -2,48 +2,45 @@ import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
 
 emailjs.init("hzYpGwbtgq7-kUZMg");
 
-function showToast(message){
+function showToast(message) {
+  let toast = document.createElement("div");
 
-let toast=document.createElement("div");
+  toast.innerText = message;
 
-toast.innerText=message;
+  Object.assign(toast.style, {
+    position: "fixed",
+    top: "30px",
+    right: "30px",
+    background: "#111827",
+    color: "#fff",
+    padding: "18px 22px",
+    borderRadius: "16px",
+    zIndex: "999999",
+    border: "1px solid rgba(255,255,255,0.1)",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+  });
 
-Object.assign(toast.style,{
-position:"fixed",
-top:"30px",
-right:"30px",
-background:"#111827",
-color:"#fff",
-padding:"18px 22px",
-borderRadius:"16px",
-zIndex:"999999",
-border:"1px solid rgba(255,255,255,0.1)",
-boxShadow:"0 10px 40px rgba(0,0,0,0.4)"
-});
+  document.body.appendChild(toast);
 
-document.body.appendChild(toast);
-
-setTimeout(()=>{
-toast.remove();
-},3000);
-
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }
 
-function showSuccessAnimation(){
+function showSuccessAnimation() {
+  const overlay = document.createElement("div");
 
-const overlay=document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: "0",
+    background: "rgba(0,0,0,0.7)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: "999999",
+  });
 
-Object.assign(overlay.style,{
-position:"fixed",
-inset:"0",
-background:"rgba(0,0,0,0.7)",
-display:"flex",
-alignItems:"center",
-justifyContent:"center",
-zIndex:"999999"
-});
-
-overlay.innerHTML=`
+  overlay.innerHTML = `
 <div style="
 width:130px;
 height:130px;
@@ -65,385 +62,213 @@ color:white;
 </div>
 `;
 
-document.body.appendChild(
-overlay
-);
+  document.body.appendChild(overlay);
 
-setTimeout(()=>{
-overlay.remove();
-},1600);
-
+  setTimeout(() => {
+    overlay.remove();
+  }, 1600);
 }
 
-async function uploadToCloudinary(file){
+async function uploadToCloudinary(file) {
+  const cloudName = "du19nhphj";
 
-const cloudName="du19nhphj";
+  const uploadPreset = "Phosory";
 
-const uploadPreset="Phosory";
+  const formData = new FormData();
 
-const formData=new FormData();
+  formData.append("file", file);
 
-formData.append(
-"file",
-file
-);
+  formData.append("upload_preset", uploadPreset);
 
-formData.append(
-"upload_preset",
-uploadPreset
-);
+  formData.append("resource_type", "raw");
 
-formData.append(
-"resource_type",
-"raw"
-);
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
 
-const res=await fetch(
-`https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
-{
-method:"POST",
-body:formData
-}
-);
+  const data = await res.json();
 
-const data=await res.json();
+  const fileUrl = data.secure_url || data.url;
 
-const fileUrl=
-data.secure_url ||
-data.url;
+  if (!fileUrl) {
+    throw new Error("Upload failed");
+  }
 
-if(!fileUrl){
-
-throw new Error(
-"Upload failed"
-);
-
+  return fileUrl;
 }
 
-return fileUrl;
+async function verifyTurnstile(token) {
+  const verify = await fetch("/.netlify/functions/verify-turnstile", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token,
+    }),
+  });
 
+  return await verify.json();
 }
 
-async function verifyTurnstile(token){
+document.addEventListener("DOMContentLoaded", () => {
+  const clientForm = document.getElementById("clientForm");
 
-const verify=
-await fetch(
-"/.netlify/functions/verify-turnstile",
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/json"
-},
-body:JSON.stringify({
-token
-})
-}
-);
+  const devForm = document.getElementById("devForm");
 
-return await verify.json();
+  // CLIENT FORM
 
-}
+  if (clientForm) {
+    let submitting = false;
 
+    const button = clientForm.querySelector(".submit-btn");
 
-document.addEventListener(
-"DOMContentLoaded",
-()=>{
+    clientForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-const clientForm=
-document.getElementById(
-"clientForm"
-);
+      if (submitting) return;
 
-const devForm=
-document.getElementById(
-"devForm"
-);
+      submitting = true;
 
+      const original = button.innerHTML;
 
+      button.innerHTML = "Sending...";
 
+      button.disabled = true;
 
-// CLIENT FORM
+      try {
+        const token = turnstile.getResponse(
+          document.getElementById("clientTurnstile"),
+        );
 
-if(clientForm){
+        if (!token) {
+          showToast("Complete captcha");
 
-let submitting=false;
+          throw new Error("No captcha");
+        }
 
-const button=
-clientForm.querySelector(
-".submit-btn"
-);
+        const result = await verifyTurnstile(token);
 
-clientForm.addEventListener(
-"submit",
-async(e)=>{
+        if (!result.success) {
+          showToast("Captcha failed");
 
-e.preventDefault();
+          throw new Error("Invalid captcha");
+        }
 
-if(submitting)
-return;
+        const data = Object.fromEntries(new FormData(clientForm));
 
-submitting=true;
+        await emailjs.send("service_8sgugr4", "template_3g1hxrs", data);
 
-const original=
-button.innerHTML;
+        showSuccessAnimation();
 
-button.innerHTML=
-"Sending...";
+        clientForm.reset();
 
-button.disabled=true;
+        button.innerHTML = "Sent ✓";
 
-try{
+        turnstile.reset(document.getElementById("clientTurnstile"));
+      } catch (err) {
+        console.error(err);
 
-const token=
-turnstile.getResponse(
-document.getElementById(
-"clientTurnstile"
-)
-);
+        button.innerHTML = "Failed ✕";
 
-if(!token){
+        showToast("Failed to send");
+      }
 
-showToast(
-"Complete captcha"
-);
+      setTimeout(() => {
+        button.innerHTML = original;
 
-throw new Error(
-"No captcha"
-);
+        button.disabled = false;
 
-}
+        submitting = false;
+      }, 2000);
+    });
+  }
 
-const result=
-await verifyTurnstile(
-token
-);
+  // DEV FORM
 
-if(!result.success){
+  if (devForm) {
+    let submitting = false;
 
-showToast(
-"Captcha failed"
-);
+    const button = devForm.querySelector(".submit-btn");
 
-throw new Error(
-"Invalid captcha"
-);
+    devForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-}
+      if (submitting) return;
 
-const data=
-Object.fromEntries(
-new FormData(
-clientForm
-)
-);
+      submitting = true;
 
-await emailjs.send(
-"service_8sgugr4",
-"template_3g1hxrs",
-data
-);
+      const original = button.innerHTML;
 
-showSuccessAnimation();
+      button.innerHTML = "Preparing...";
 
-clientForm.reset();
+      button.disabled = true;
 
-button.innerHTML=
-"Sent ✓";
+      try {
+        const token = turnstile.getResponse(
+          document.getElementById("devTurnstile"),
+        );
 
-turnstile.reset(
-document.getElementById(
-"clientTurnstile"
-)
-);
+        if (!token) {
+          showToast("Complete captcha");
 
-}
+          throw new Error("No captcha");
+        }
 
-catch(err){
+        const result = await verifyTurnstile(token);
 
-console.error(err);
+        if (!result.success) {
+          showToast("Captcha failed");
 
-button.innerHTML=
-"Failed ✕";
+          throw new Error("Invalid captcha");
+        }
 
-showToast(
-"Failed to send"
-);
+        const file = document.getElementById("resumeInput").files[0];
 
-}
+        if (!file) {
+          showToast("Upload resume");
 
-setTimeout(()=>{
+          throw new Error("No file");
+        }
 
-button.innerHTML=
-original;
+        button.innerHTML = "Uploading...";
 
-button.disabled=false;
+        const link = await uploadToCloudinary(file);
 
-submitting=false;
+        document.getElementById("resumeLink").value = link;
 
-},2000);
+        const data = Object.fromEntries(new FormData(devForm));
 
-});
+        button.innerHTML = "Sending...";
 
-}
+        await emailjs.send("service_8sgugr4", "template_nf0gf2k", data);
 
+        showSuccessAnimation();
 
+        devForm.reset();
 
+        button.innerHTML = "Sent ✓";
 
-// DEV FORM
+        turnstile.reset(document.getElementById("devTurnstile"));
+      } catch (err) {
+        console.error(err);
 
-if(devForm){
+        button.innerHTML = "Failed ✕";
 
-let submitting=false;
+        showToast("Application failed");
+      }
 
-const button=
-devForm.querySelector(
-".submit-btn"
-);
+      setTimeout(() => {
+        button.innerHTML = original;
 
-devForm.addEventListener(
-"submit",
-async(e)=>{
+        button.disabled = false;
 
-e.preventDefault();
-
-if(submitting)
-return;
-
-submitting=true;
-
-const original=
-button.innerHTML;
-
-button.innerHTML=
-"Preparing...";
-
-button.disabled=true;
-
-try{
-
-const token=
-turnstile.getResponse(
-document.getElementById(
-"devTurnstile"
-)
-);
-
-if(!token){
-
-showToast(
-"Complete captcha"
-);
-
-throw new Error(
-"No captcha"
-);
-
-}
-
-const result=
-await verifyTurnstile(
-token
-);
-
-if(!result.success){
-
-showToast(
-"Captcha failed"
-);
-
-throw new Error(
-"Invalid captcha"
-);
-
-}
-
-const file=
-document.getElementById(
-"resumeInput"
-).files[0];
-
-if(!file){
-
-showToast(
-"Upload resume"
-);
-
-throw new Error(
-"No file"
-);
-
-}
-
-button.innerHTML=
-"Uploading...";
-
-const link=
-await uploadToCloudinary(
-file
-);
-
-document.getElementById(
-"resumeLink"
-).value=link;
-
-const data=
-Object.fromEntries(
-new FormData(
-devForm
-)
-);
-
-button.innerHTML=
-"Sending...";
-
-await emailjs.send(
-"service_8sgugr4",
-"template_nf0gf2k",
-data
-);
-
-showSuccessAnimation();
-
-devForm.reset();
-
-button.innerHTML=
-"Sent ✓";
-
-turnstile.reset(
-document.getElementById(
-"devTurnstile"
-)
-);
-
-}
-
-catch(err){
-
-console.error(err);
-
-button.innerHTML=
-"Failed ✕";
-
-showToast(
-"Application failed"
-);
-
-}
-
-setTimeout(()=>{
-
-button.innerHTML=
-original;
-
-button.disabled=false;
-
-submitting=false;
-
-},2000);
-
-});
-
-}
-
+        submitting = false;
+      }, 2000);
+    });
+  }
 });

@@ -1,17 +1,14 @@
 import { auth, db } from "./firebase.js";
 
-import {
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   doc,
   getDoc,
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 
 /* =========================
    STATE CONTROL
@@ -25,7 +22,6 @@ let lockUntil = 0;
 const loginForm = document.getElementById("loginForm");
 const loginBtn = document.getElementById("loginBtn");
 const status = document.getElementById("loginStatus");
-
 
 /* =========================
    LOGIN
@@ -45,7 +41,11 @@ loginForm.addEventListener("submit", async (e) => {
     loginBtn.innerText = "Authenticating...";
 
     /* AUTH */
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
     const user = userCredential.user;
     const now = Date.now();
 
@@ -74,7 +74,6 @@ loginForm.addEventListener("submit", async (e) => {
 
     justLoggedIn = true; // 🔥 ONLY TRUE FOR REAL LOGIN EVENT
 
-
     /* AUDIT LOG (LOGIN ONLY ON REAL LOGIN) */
     if (justLoggedIn) {
       await addDoc(collection(db, "audit_logs"), {
@@ -82,7 +81,7 @@ loginForm.addEventListener("submit", async (e) => {
         target: email,
         role: window.currentRole,
         timestamp: serverTimestamp(),
-        type: "auth"
+        type: "auth",
       });
 
       justLoggedIn = false; // reset immediately
@@ -99,7 +98,6 @@ loginForm.addEventListener("submit", async (e) => {
     setTimeout(() => {
       window.location.href = "admin.html";
     }, 1200);
-
   } catch (error) {
     loginAttempts++;
     if (loginAttempts >= 5) {
@@ -120,7 +118,6 @@ loginForm.addEventListener("submit", async (e) => {
     } else {
       status.innerText = "Authentication failed.";
     }
-
   } finally {
     loginBtn.disabled = false;
     loginBtn.innerText = "ENTER SYSTEM";

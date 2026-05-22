@@ -1,626 +1,718 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style2.css">
-    <link rel="stylesheet" href="styles/header&footer.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style2.css" />
+    <link rel="stylesheet" href="styles/header&footer.css" />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <script src="script/observer.js"></script>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico?v=2">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico?v=2" />
     <title>About Phosory | Who We Are & What We Build</title>
 
-    <meta name="description" content="Learn about Phosory, a digital solutions company focused on building modern websites, software systems, and secure digital experiences for businesses.">
+    <meta
+      name="description"
+      content="Learn about Phosory, a digital solutions company focused on building modern websites, software systems, and secure digital experiences for businesses."
+    />
 
-    <meta name="keywords" content="about Phosory, digital agency Nigeria, web development team, software company, cybersecurity developers">
+    <meta
+      name="keywords"
+      content="about Phosory, digital agency Nigeria, web development team, software company, cybersecurity developers"
+    />
 
-    <meta name="author" content="Phosory">
+    <meta name="author" content="Phosory" />
 
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow" />
 
-    <link rel="canonical" href="https://phosory.netlify.app/about">
+    <link rel="canonical" href="https://phosory.netlify.app/about" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="About Phosory | Our Mission & Vision">
-    <meta property="og:description" content="Discover the team behind Phosory and our mission to build secure, fast, and scalable digital systems.">
-    <meta property="og:url" content="https://phosory.netlify.app/about">
-    <meta property="og:type" content="article">
-    <meta property="og:image" content="https://phosory.netlify.app/assets/about-preview.jpg">
+    <meta property="og:title" content="About Phosory | Our Mission & Vision" />
+    <meta
+      property="og:description"
+      content="Discover the team behind Phosory and our mission to build secure, fast, and scalable digital systems."
+    />
+    <meta property="og:url" content="https://phosory.netlify.app/about" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:image"
+      content="https://phosory.netlify.app/assets/about-preview.jpg"
+    />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About Phosory">
-    <meta name="twitter:description" content="Meet the team building modern digital solutions and secure systems.">
-    <meta name="twitter:image" content="https://phosory.netlify.app/assets/about-preview.jpg">
-    </head>
-<body>
-   <nav class="nav">
-    <div class="nav-container">
-
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="About Phosory" />
+    <meta
+      name="twitter:description"
+      content="Meet the team building modern digital solutions and secure systems."
+    />
+    <meta
+      name="twitter:image"
+      content="https://phosory.netlify.app/assets/about-preview.jpg"
+    />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-container">
         <!-- Logo -->
         <div class="logo">
-        <img src="images/icon.webp" alt="Phosory" />
-        <span>Phosory</span>
+          <img src="images/icon.webp" alt="Phosory" />
+          <span>Phosory</span>
         </div>
 
         <!-- Desktop Links -->
         <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="about.html">About</a>
 
-        <a href="index.html">Home</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">About</a>
-
-        <!-- Dropdown -->
-        <div class="dropdown">
+          <!-- Dropdown -->
+          <div class="dropdown">
             <button class="dropdown-btn">
-            Profiles <i class="fas fa-chevron-down"></i>
+              Profiles <i class="fas fa-chevron-down"></i>
             </button>
 
             <div class="dropdown-menu">
-            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
-            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
+              <a
+                href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf"
+                target="_blank"
+                >Client Profile</a
+              >
+              <a
+                href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf"
+                target="_blank"
+                >Talent Profile</a
+              >
             </div>
-        </div>
+          </div>
 
-        <a href="contact.html">Contact</a>
+          <a href="contact.html">Contact</a>
         </div>
 
         <!-- Hamburger -->
         <div class="hamburger" id="openMenu">
-        <i class="fas fa-bars"></i>
+          <i class="fas fa-bars"></i>
         </div>
-
-    </div>
+      </div>
     </nav>
     <div class="sidebar" id="sidebar">
-    <div class="sidebar-top">
+      <div class="sidebar-top">
         <span class="brand">Phosory</span>
         <i class="fas fa-x close-btn" id="closeMenu"></i>
-    </div>
-    <div class="sidebar-links">
+      </div>
+      <div class="sidebar-links">
         <a href="index.html">Home</a>
         <a href="services.html">Services</a>
         <a href="about.html">About</a>
         <div class="sidebar-dropdown">
-        <button id="mobileDropBtn">
+          <button id="mobileDropBtn">
             Profiles <i class="fas fa-chevron-down"></i>
-        </button>
-        <div class="sidebar-dropdown-menu" id="mobileDropdown">
-            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf" target="_blank">Client Profile</a>
-            <a href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf" target="_blank">Talent Profile</a>
-        </div>
+          </button>
+          <div class="sidebar-dropdown-menu" id="mobileDropdown">
+            <a
+              href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_%20client_Profile.pdf"
+              target="_blank"
+              >Client Profile</a
+            >
+            <a
+              href="https://pub-446f14ba278c41468983857ae9955885.r2.dev/Phosory_Talent_Profile.pdf"
+              target="_blank"
+              >Talent Profile</a
+            >
+          </div>
         </div>
         <a href="contact.html">Contact</a>
-    </div>
+      </div>
     </div>
 
     <header class="hero">
-        <div class="bubbles">
-            <span style="--1:11"></span>
-            <span style="--1:12"></span>
-            <span style="--1:24"></span>
-            <span style="--1:10"></span>
-            <span style="--1:14"></span>
-            <span style="--1:23"></span>
-            <span style="--1:18"></span>
-            <span style="--1:16"></span>
-            <span style="--1:16"></span>
-            <span style="--1:20"></span>
-            <span style="--1:22"></span>
-            <span style="--1:25"></span>
-            <span style="--1:18"></span>
-            <span style="--1:21"></span>
-            <span style="--1:15"></span>
-            <span style="--1:13"></span>
-            <span style="--1:26"></span>
-            <span style="--1:17"></span>
-            <span style="--1:13"></span>
-            <span style="--1:28"></span>
-            <span style="--1:11"></span>
-            <span style="--1:12"></span>
-            <span style="--1:24"></span>
-            <span style="--1:10"></span>
-            <span style="--1:14"></span>
-            <span style="--1:23"></span>
-            <span style="--1:18"></span>
-            <span style="--1:16"></span>
-            <span style="--1:16"></span>
-            <span style="--1:20"></span>
-            <span style="--1:22"></span>
-            <span style="--1:25"></span>
-            <span style="--1:18"></span>
-            <span style="--1:21"></span>
-            <span style="--1:15"></span>
-            <span style="--1:13"></span>
-            <span style="--1:26"></span>
-            <span style="--1:17"></span>
-            <span style="--1:13"></span>
-            <span style="--1:28"></span>
-            <span style="--1:13"></span>
-            <span style="--1:28"></span>
-            <span style="--1:11"></span>
-            <span style="--1:12"></span>
-            <span style="--1:24"></span>
-            <span style="--1:10"></span>
-            <span style="--1:14"></span>
-            <span style="--1:23"></span>
-        </div>
-        <div class="hero-text">
-            <h1>Phosory exists to close the gap between raw talent and real opportunity.</h1>
-            <p>Too many developers are skilled but unseen. <br>Too many ideas are valuable but unbuilt. <br>Phosory connects both.</p>
-        </div>
+      <div class="bubbles">
+        <span style="--1: 11"></span>
+        <span style="--1: 12"></span>
+        <span style="--1: 24"></span>
+        <span style="--1: 10"></span>
+        <span style="--1: 14"></span>
+        <span style="--1: 23"></span>
+        <span style="--1: 18"></span>
+        <span style="--1: 16"></span>
+        <span style="--1: 16"></span>
+        <span style="--1: 20"></span>
+        <span style="--1: 22"></span>
+        <span style="--1: 25"></span>
+        <span style="--1: 18"></span>
+        <span style="--1: 21"></span>
+        <span style="--1: 15"></span>
+        <span style="--1: 13"></span>
+        <span style="--1: 26"></span>
+        <span style="--1: 17"></span>
+        <span style="--1: 13"></span>
+        <span style="--1: 28"></span>
+        <span style="--1: 11"></span>
+        <span style="--1: 12"></span>
+        <span style="--1: 24"></span>
+        <span style="--1: 10"></span>
+        <span style="--1: 14"></span>
+        <span style="--1: 23"></span>
+        <span style="--1: 18"></span>
+        <span style="--1: 16"></span>
+        <span style="--1: 16"></span>
+        <span style="--1: 20"></span>
+        <span style="--1: 22"></span>
+        <span style="--1: 25"></span>
+        <span style="--1: 18"></span>
+        <span style="--1: 21"></span>
+        <span style="--1: 15"></span>
+        <span style="--1: 13"></span>
+        <span style="--1: 26"></span>
+        <span style="--1: 17"></span>
+        <span style="--1: 13"></span>
+        <span style="--1: 28"></span>
+        <span style="--1: 13"></span>
+        <span style="--1: 28"></span>
+        <span style="--1: 11"></span>
+        <span style="--1: 12"></span>
+        <span style="--1: 24"></span>
+        <span style="--1: 10"></span>
+        <span style="--1: 14"></span>
+        <span style="--1: 23"></span>
+      </div>
+      <div class="hero-text">
+        <h1>
+          Phosory exists to close the gap between raw talent and real
+          opportunity.
+        </h1>
+        <p>
+          Too many developers are skilled but unseen. <br />Too many ideas are
+          valuable but unbuilt. <br />Phosory connects both.
+        </p>
+      </div>
     </header>
 
- <section class="our-story-section">
-    <div class="story-bg">
-      <div class="glow glow-1"></div>
-      <div class="glow glow-2"></div>
-      <div class="grid-overlay"></div>
-    </div>
-    <div class="story-header">
-      <h2>
-        Building Digital Solutions <br>
-        While Empowering Future Talent
-      </h2>
-      <p>
-        Phosory exists to bridge innovation, execution, and opportunity —
-        creating impactful digital solutions while building pathways for
-        future tech talent to grow.
-      </p>
-    </div>
-    <div class="story-container">
-      <div class="story-left">
-        <div class="sticky-content">
-          <div class="main-orb">
-            <div class="orb-ring"></div>
-            <div class="orb-ring ring-2"></div>
-            <div class="orb-core">
-              <i class="fa-solid fa-lightbulb"></i>
+    <section class="our-story-section">
+      <div class="story-bg">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="grid-overlay"></div>
+      </div>
+      <div class="story-header">
+        <h2>
+          Building Digital Solutions <br />
+          While Empowering Future Talent
+        </h2>
+        <p>
+          Phosory exists to bridge innovation, execution, and opportunity —
+          creating impactful digital solutions while building pathways for
+          future tech talent to grow.
+        </p>
+      </div>
+      <div class="story-container">
+        <div class="story-left">
+          <div class="sticky-content">
+            <div class="main-orb">
+              <div class="orb-ring"></div>
+              <div class="orb-ring ring-2"></div>
+              <div class="orb-core">
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div class="particle"></div>
+              <div class="particle p2"></div>
+              <div class="particle p3"></div>
+              <div class="particle p4"></div>
             </div>
-            <div class="particle"></div>
-            <div class="particle p2"></div>
-            <div class="particle p3"></div>
-            <div class="particle p4"></div>
+            <h3>Driven By Purpose</h3>
+            <p>
+              More than a digital brand — <b>Phosory</b> is a vision focused on
+              innovation, scalable systems, and meaningful growth.
+            </p>
+            <div class="mini-stats">
+              <div class="stat-card">
+                <h4>Innovation</h4>
+                <span>Future Focused</span>
+              </div>
+              <div class="stat-card">
+                <h4>Execution</h4>
+                <span>Built To Deliver</span>
+              </div>
+              <div class="stat-card">
+                <h4>Growth</h4>
+                <span>Talent Empowerment</span>
+              </div>
+            </div>
           </div>
-          <h3>Driven By Purpose</h3>
-          <p>
-            More than a digital brand — <b>Phosory</b> is a vision focused on
-            innovation, scalable systems, and meaningful growth.
-          </p>
-          <div class="mini-stats">
-            <div class="stat-card">
-              <h4>Innovation</h4>
-              <span>Future Focused</span>
+        </div>
+        <div class="story-right">
+          <div class="timeline-line">
+            <div class="timeline-progress"></div>
+          </div>
+
+          <div class="story-card">
+            <div class="timeline-dot"></div>
+            <div class="card-icon">
+              <i class="fa-solid fa-seedling"></i>
             </div>
-            <div class="stat-card">
-              <h4>Execution</h4>
-              <span>Built To Deliver</span>
+            <div class="card-content">
+              <span>THE BEGINNING</span>
+              <h3>Where It Started</h3>
+              <p>
+                <b>Phosory</b> began with a realization that many businesses
+                struggle to access secure scalable digital solutions while many
+                talented individuals lack opportunities to truly grow in tech.
+              </p>
             </div>
-            <div class="stat-card">
-              <h4>Growth</h4>
-              <span>Talent Empowerment</span>
+          </div>
+
+          <div class="story-card">
+            <div class="timeline-dot"></div>
+            <div class="card-icon">
+              <i class="fa-solid fa-link-slash"></i>
+            </div>
+            <div class="card-content">
+              <span>THE GAP</span>
+              <h3>The Problem We Saw</h3>
+              <p>
+                Too many digital solutions are generic and disconnected from
+                real goals. At the same time, aspiring talents often lack
+                structure, mentorship, and practical experience.
+              </p>
+            </div>
+          </div>
+
+          <div class="story-card">
+            <div class="timeline-dot"></div>
+            <div class="card-icon">
+              <i class="fa-solid fa-earth-africa"></i>
+            </div>
+            <div class="card-content">
+              <span>OUR VISION</span>
+              <h3>Building The Future</h3>
+              <p>
+                We envision a future where technology becomes a tool for
+                empowerment, innovation is accessible, and businesses can scale
+                confidently through modern digital systems.
+              </p>
+            </div>
+          </div>
+
+          <div class="story-card">
+            <div class="timeline-dot"></div>
+            <div class="card-icon">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div class="card-content">
+              <span>OUR MISSION</span>
+              <h3>Mission In Action</h3>
+              <p>
+                Through development, automation, cybersecurity, and scalable
+                digital solutions, <b>Phosory</b> focuses on helping brands grow
+                while fostering structured talent development.
+              </p>
+            </div>
+          </div>
+
+          <div class="story-card">
+            <div class="timeline-dot"></div>
+            <div class="card-icon">
+              <i class="fa-solid fa-rocket"></i>
+            </div>
+            <div class="card-content">
+              <span>THE FUTURE</span>
+              <h3>Looking Ahead</h3>
+              <p>
+                <b>Phosory</b> is built for long-term impact — connecting
+                innovation, execution, and future-ready talent to create
+                meaningful digital transformation.
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <div class="story-right">
-        <div class="timeline-line">
-          <div class="timeline-progress"></div>
-        </div>
-         
-        <div class="story-card">
-          <div class="timeline-dot"></div>
-          <div class="card-icon">
-            <i class="fa-solid fa-seedling"></i>
-          </div>
-          <div class="card-content">
-            <span>THE BEGINNING</span>
-            <h3>Where It Started</h3>
-            <p>
-              <b>Phosory</b> began with a realization that many businesses struggle
-              to access secure scalable digital solutions while many talented
-              individuals lack opportunities to truly grow in tech.
-            </p>
-          </div>
-        </div>
-         
-        <div class="story-card">
-          <div class="timeline-dot"></div>
-          <div class="card-icon">
-            <i class="fa-solid fa-link-slash"></i>
-          </div>
-          <div class="card-content">
-            <span>THE GAP</span>
-            <h3>The Problem We Saw</h3>
-            <p>
-              Too many digital solutions are generic and disconnected from
-              real goals. At the same time, aspiring talents often lack
-              structure, mentorship, and practical experience.
-            </p>
-          </div>
-        </div>
-         
-        <div class="story-card">
-          <div class="timeline-dot"></div>
-          <div class="card-icon">
-            <i class="fa-solid fa-earth-africa"></i>
-          </div>
-          <div class="card-content">
-            <span>OUR VISION</span>
-            <h3>Building The Future</h3>
-            <p>
-              We envision a future where technology becomes a tool for
-              empowerment, innovation is accessible, and businesses can scale
-              confidently through modern digital systems.
-            </p>
-          </div>
-        </div>
-         
-        <div class="story-card">
-          <div class="timeline-dot"></div>
-          <div class="card-icon">
-            <i class="fa-solid fa-bullseye"></i>
-          </div>
-          <div class="card-content">
-            <span>OUR MISSION</span>
-            <h3>Mission In Action</h3>
-            <p>
-              Through development, automation, cybersecurity, and scalable
-              digital solutions, <b>Phosory</b> focuses on helping brands grow while
-              fostering structured talent development.
-            </p>
-          </div>
-        </div>
-         
-        <div class="story-card">
-          <div class="timeline-dot"></div>
-          <div class="card-icon">
-            <i class="fa-solid fa-rocket"></i>
-          </div>
-          <div class="card-content">
-            <span>THE FUTURE</span>
-            <h3>Looking Ahead</h3>
-            <p>
-              <b>Phosory</b> is built for long-term impact — connecting innovation,
-              execution, and future-ready talent to create meaningful digital
-              transformation.
-            </p>
-          </div>
-        </div>
-      </div> 
-    </div>
-    <div class="story-cta">
-      <h3>
-        Join Us In Building What's Next
-      </h3>
-      <p>
-        Whether you're scaling a business or growing your skills, <b>Phosory</b> is
-        focused on creating meaningful digital impact through innovation and
-        collaboration.
-      </p>
-      <a href="services.html" class="story-btn">
-        Explore Services
-      </a>
-    </div>
-  </section>
+      <div class="story-cta">
+        <h3>Join Us In Building What's Next</h3>
+        <p>
+          Whether you're scaling a business or growing your skills,
+          <b>Phosory</b> is focused on creating meaningful digital impact
+          through innovation and collaboration.
+        </p>
+        <a href="services.html" class="story-btn"> Explore Services </a>
+      </div>
+    </section>
 
     <section class="morph-section">
-        <div class="sticky-wrap">
-            <h2 class="title">The Problem</h2>
-            <div class="cards">
-                <div class="card">
-                    <span class="problem">Unverified freelancers</span>
-                    <span class="solution">Vetted professionals</span>
-                </div>
-                <div class="card">
-                    <span class="problem">No real experience</span>
-                    <span class="solution">Proven project history</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Missed deadlines</span>
-                    <span class="solution">Strict delivery systems</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Inconsistent quality</span>
-                    <span class="solution">Quality-controlled output</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Poor communication</span>
-                    <span class="solution">Clear structured updates</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Fake portfolios</span>
-                    <span class="solution">Verified real work</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Overpromising skills</span>
-                    <span class="solution">Skill-matched projects</span>
-                </div>
-                <div class="card">
-                    <span class="problem">No accountability</span>
-                    <span class="solution">Tracked performance</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Difficult collaboration</span>
-                    <span class="solution">Seamless teamwork</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Wasted budgets</span>
-                    <span class="solution">Efficient cost control</span>
-                </div>
-                <div class="card">
-                    <span class="problem">Lack of structure</span>
-                    <span class="solution">Structured workflow</span>
-                </div>
-                <div class="card">
-                    <span class="problem">No growth path</span>
-                    <span class="solution">Developer progression system</span>
-                </div>
-            </div>
+      <div class="sticky-wrap">
+        <h2 class="title">The Problem</h2>
+        <div class="cards">
+          <div class="card">
+            <span class="problem">Unverified freelancers</span>
+            <span class="solution">Vetted professionals</span>
+          </div>
+          <div class="card">
+            <span class="problem">No real experience</span>
+            <span class="solution">Proven project history</span>
+          </div>
+          <div class="card">
+            <span class="problem">Missed deadlines</span>
+            <span class="solution">Strict delivery systems</span>
+          </div>
+          <div class="card">
+            <span class="problem">Inconsistent quality</span>
+            <span class="solution">Quality-controlled output</span>
+          </div>
+          <div class="card">
+            <span class="problem">Poor communication</span>
+            <span class="solution">Clear structured updates</span>
+          </div>
+          <div class="card">
+            <span class="problem">Fake portfolios</span>
+            <span class="solution">Verified real work</span>
+          </div>
+          <div class="card">
+            <span class="problem">Overpromising skills</span>
+            <span class="solution">Skill-matched projects</span>
+          </div>
+          <div class="card">
+            <span class="problem">No accountability</span>
+            <span class="solution">Tracked performance</span>
+          </div>
+          <div class="card">
+            <span class="problem">Difficult collaboration</span>
+            <span class="solution">Seamless teamwork</span>
+          </div>
+          <div class="card">
+            <span class="problem">Wasted budgets</span>
+            <span class="solution">Efficient cost control</span>
+          </div>
+          <div class="card">
+            <span class="problem">Lack of structure</span>
+            <span class="solution">Structured workflow</span>
+          </div>
+          <div class="card">
+            <span class="problem">No growth path</span>
+            <span class="solution">Developer progression system</span>
+          </div>
         </div>
-        <script src="script/morph.js"></script>
+      </div>
+      <script src="script/morph.js"></script>
     </section>
 
     <section class="values">
-        <h2>The Principles That Drive Phosory</h2>
-        <p>The foundation behind every solution, system and opportunity we create.</p>
-        <div class="cards">
-            <div class="card">
-                <i class="fas fa-shield-halved" style="--background: rgba(255, 0, 0, 0.384);"></i>
-                <span>
-                    <h3>Security</h3>
-                    <p>Security-driven thinking is integrated into every solution to promote reliability, projection and digital trust.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-wand-magic-sparkles" style="--background: rgba(0, 255, 255, 0.384);"></i>
-                <span>
-                    <h3>Innovation</h3>
-                    <p>We embrace forward thinking ideas and modern technology to create impactful and future-ready digital solutions.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-crosshairs" style="--background: rgba(0, 0, 255, 0.384);"></i>
-                <span>
-                    <h3>Precision</h3>
-                    <p>Every project is built with intentional structure, strategy and attention to detail from start to finish.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-arrow-up-right-dots" style="--background: rgba(0, 128, 0, 0.384);"></i>
-                <span>
-                    <h3>Empowerment</h3>
-                    <p>We believe technology should create opportunities, helping businesses and talent grow together.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-chart-line" style="--background: rgba(0, 255, 0, 0.384);"></i>
-                <span>
-                    <h3>Growth Mindset</h3>
-                    <p>We are committed to continuous improvement, innovation and long-term development for businesses and talent.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-arrows-rotate" style="--background: rgba(128, 0, 128, 0.384);"></i>
-                <span>
-                    <h3>Adaptability</h3>
-                    <p>We evolve with technology, trends and challenges to build scalable systems that remain effective.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-people-group" style="--background: rgba(255, 166, 0, 0.384);"></i>
-                <span>
-                    <h3>Collaboration</h3>
-                    <p>Strong ideas grow through teamwork, communication and meaningful partnerships built on trust.</p>
-                </span>
-            </div>
-            <div class="card">
-                <i class="fas fa-bolt" style="--background: rgba(255, 255, 0, 0.384);"></i>
-                <span>
-                    <h3>Execution</h3>
-                    <p>We focus on turning ideas into functional systems that deliver measurable and lasting impact.</p>
-                </span>
-            </div>
+      <h2>The Principles That Drive Phosory</h2>
+      <p>
+        The foundation behind every solution, system and opportunity we create.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <i
+            class="fas fa-shield-halved"
+            style="--background: rgba(255, 0, 0, 0.384)"
+          ></i>
+          <span>
+            <h3>Security</h3>
+            <p>
+              Security-driven thinking is integrated into every solution to
+              promote reliability, projection and digital trust.
+            </p>
+          </span>
         </div>
+        <div class="card">
+          <i
+            class="fas fa-wand-magic-sparkles"
+            style="--background: rgba(0, 255, 255, 0.384)"
+          ></i>
+          <span>
+            <h3>Innovation</h3>
+            <p>
+              We embrace forward thinking ideas and modern technology to create
+              impactful and future-ready digital solutions.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-crosshairs"
+            style="--background: rgba(0, 0, 255, 0.384)"
+          ></i>
+          <span>
+            <h3>Precision</h3>
+            <p>
+              Every project is built with intentional structure, strategy and
+              attention to detail from start to finish.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-arrow-up-right-dots"
+            style="--background: rgba(0, 128, 0, 0.384)"
+          ></i>
+          <span>
+            <h3>Empowerment</h3>
+            <p>
+              We believe technology should create opportunities, helping
+              businesses and talent grow together.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-chart-line"
+            style="--background: rgba(0, 255, 0, 0.384)"
+          ></i>
+          <span>
+            <h3>Growth Mindset</h3>
+            <p>
+              We are committed to continuous improvement, innovation and
+              long-term development for businesses and talent.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-arrows-rotate"
+            style="--background: rgba(128, 0, 128, 0.384)"
+          ></i>
+          <span>
+            <h3>Adaptability</h3>
+            <p>
+              We evolve with technology, trends and challenges to build scalable
+              systems that remain effective.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-people-group"
+            style="--background: rgba(255, 166, 0, 0.384)"
+          ></i>
+          <span>
+            <h3>Collaboration</h3>
+            <p>
+              Strong ideas grow through teamwork, communication and meaningful
+              partnerships built on trust.
+            </p>
+          </span>
+        </div>
+        <div class="card">
+          <i
+            class="fas fa-bolt"
+            style="--background: rgba(255, 255, 0, 0.384)"
+          ></i>
+          <span>
+            <h3>Execution</h3>
+            <p>
+              We focus on turning ideas into functional systems that deliver
+              measurable and lasting impact.
+            </p>
+          </span>
+        </div>
+      </div>
     </section>
 
     <section class="workflow-section">
-        <div class="workflow-container">
-            <div class="workflow-header">
-            <h2>From Vision to Execution</h2>
-            <p class="subtitle">
-                Structured systems designed for scalable, secure, and future-ready digital solutions.
-            </p>
-            </div>
-            <div class="timeline">
-            <div class="timeline-line">
-                <div class="timeline-glow-orb"></div>
-            </div>
-            <div class="step left">
-                <div class="card">
-                <h3>Discovery</h3>
-                <p>Understanding goals, requirements, and long-term objectives.</p>
-                </div>
-            </div>
-            <div class="step right">
-                <div class="card">
-                <h3>Strategy</h3>
-                <p>Designing architecture, structure, and execution roadmap.</p>
-                </div>
-            </div>
-            <div class="step left">
-                <div class="card">
-                <h3>Development</h3>
-                <p>Building scalable, modern, and high-performance systems.</p>
-                </div>
-            </div>
-            <div class="step right">
-                <div class="card">
-                <h3>Security & Optimization</h3>
-                <p>Strengthening systems for performance and protection.</p>
-                </div>
-            </div>
-            <div class="step left">
-                <div class="card">
-                <h3>Deployment</h3>
-                <p>Launching stable, production-ready solutions.</p>
-                </div>
-            </div>
-            <div class="step right">
-                <div class="card">
-                <h3>Growth & Support</h3>
-                <p>Continuous improvement, scaling, and maintenance.</p>
-                </div>
-            </div>
-            </div>
+      <div class="workflow-container">
+        <div class="workflow-header">
+          <h2>From Vision to Execution</h2>
+          <p class="subtitle">
+            Structured systems designed for scalable, secure, and future-ready
+            digital solutions.
+          </p>
         </div>
-        <script src="script/timeline.js"></script>
+        <div class="timeline">
+          <div class="timeline-line">
+            <div class="timeline-glow-orb"></div>
+          </div>
+          <div class="step left">
+            <div class="card">
+              <h3>Discovery</h3>
+              <p>
+                Understanding goals, requirements, and long-term objectives.
+              </p>
+            </div>
+          </div>
+          <div class="step right">
+            <div class="card">
+              <h3>Strategy</h3>
+              <p>Designing architecture, structure, and execution roadmap.</p>
+            </div>
+          </div>
+          <div class="step left">
+            <div class="card">
+              <h3>Development</h3>
+              <p>Building scalable, modern, and high-performance systems.</p>
+            </div>
+          </div>
+          <div class="step right">
+            <div class="card">
+              <h3>Security & Optimization</h3>
+              <p>Strengthening systems for performance and protection.</p>
+            </div>
+          </div>
+          <div class="step left">
+            <div class="card">
+              <h3>Deployment</h3>
+              <p>Launching stable, production-ready solutions.</p>
+            </div>
+          </div>
+          <div class="step right">
+            <div class="card">
+              <h3>Growth & Support</h3>
+              <p>Continuous improvement, scaling, and maintenance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="script/timeline.js"></script>
     </section>
 
     <section class="philosophy-section">
-        <div class="philo-container">
-            <div class="philo-header">
-                <h2 class="label">OUR PHILOSOPHY</h2>
-                <p class="subtext">
-                    The principles that guide how we design, build, and scale digital systems.
-                </p>
-            </div>
-            <div class="core-statement">
-            We don’t just build software. We design structured systems with security,
-            scalability, and long-term thinking at the core.
-            </div>
-            <div class="philo-grid">
-            <div class="philo-card">
-                <h3>Think Deep</h3>
-                <p>
-                Every system starts with understanding before execution. Clarity comes before complexity.
-                </p>
-            </div>
-            <div class="philo-card">
-                <h3>Build with Structure</h3>
-                <p>
-                Clean architecture creates scalable systems. We avoid shortcuts that break in the future.
-                </p>
-            </div>
-            <div class="philo-card">
-                <h3>Scale Always</h3>
-                <p>
-                If it cannot grow, it is incomplete. Everything is designed for expansion from day one.
-                </p>
-            </div>
-            <div class="philo-card">
-                <h3>Security First</h3>
-                <p>
-                Protection is not optional. Every system is built with resilience and security in mind.
-                </p>
-            </div>
-            </div>
+      <div class="philo-container">
+        <div class="philo-header">
+          <h2 class="label">OUR PHILOSOPHY</h2>
+          <p class="subtext">
+            The principles that guide how we design, build, and scale digital
+            systems.
+          </p>
         </div>
+        <div class="core-statement">
+          We don’t just build software. We design structured systems with
+          security, scalability, and long-term thinking at the core.
+        </div>
+        <div class="philo-grid">
+          <div class="philo-card">
+            <h3>Think Deep</h3>
+            <p>
+              Every system starts with understanding before execution. Clarity
+              comes before complexity.
+            </p>
+          </div>
+          <div class="philo-card">
+            <h3>Build with Structure</h3>
+            <p>
+              Clean architecture creates scalable systems. We avoid shortcuts
+              that break in the future.
+            </p>
+          </div>
+          <div class="philo-card">
+            <h3>Scale Always</h3>
+            <p>
+              If it cannot grow, it is incomplete. Everything is designed for
+              expansion from day one.
+            </p>
+          </div>
+          <div class="philo-card">
+            <h3>Security First</h3>
+            <p>
+              Protection is not optional. Every system is built with resilience
+              and security in mind.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="future-section">
-        <div class="future-bg"></div>
-        <div class="future-content">
-            <h1>Building Beyond Today</h1>
-            <p>
-            <b>Phosory</b> envision a future driven by secure systems, intelligent automation,
-            scalable technology, and empowered innovation shaping the digital world.
-            </p>
-        </div>
-        <div class="floating-container">
-            <span>Security</span>
-            <span>AI</span>
-            <span>Automation</span>
-            <span>Innovation</span>
-            <span>Systems</span>
-            <span>Growth</span>
-            <span>Infrastructure</span>
-            <span>Scalability</span>
-        </div>
-    </section>
-
-   <section class="cta-section">
-        <div class="cta-glow"></div>
-        <div class="cta-card">
-            <p class="cta-label">READY TO BUILD?</p>
-            <h1>Let’s Build Something Powerful</h1>
-            <p class="cta-text">
-            We design secure, scalable, and modern digital systems for people and businesses ready to grow beyond limits.
-            </p>
-            <div class="cta-buttons">
-            <a href="services.html"><button class="primary-btn">Start a Project</button></a>
-            <a href="contact.html"><button class="secondary-btn">Talk to Us</button></a>
-            </div>
-        </div>
-        <div class="particles">
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
-    </section>
-
-<footer class="phosory-footer">
-
-  <!-- BACKGROUND LAYERS -->
-  <div class="footer-bg">
-    <div class="grid"></div>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-  </div>
-
-  <!-- HERO LOGO SECTION -->
-  <div class="footer-hero-logo">
-    <img src="images/icon.webp" alt="Phosory Logo">
-    <h2>PHOSORY</h2>
-    <p>Secure • Scalable • Intelligent Systems</p>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="footer-container">
-
-    <!-- BRAND -->
-    <div class="footer-brand">
-      <p>
-        Building intelligent digital systems for modern businesses.
-        Clean. Secure. Scalable.
-      </p>
-
-      <div class="socials">
-        <a href="#"><i class="fab fa-x"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
+      <div class="future-bg"></div>
+      <div class="future-content">
+        <h1>Building Beyond Today</h1>
+        <p>
+          <b>Phosory</b> envision a future driven by secure systems, intelligent
+          automation, scalable technology, and empowered innovation shaping the
+          digital world.
+        </p>
       </div>
-    </div>
+      <div class="floating-container">
+        <span>Security</span>
+        <span>AI</span>
+        <span>Automation</span>
+        <span>Innovation</span>
+        <span>Systems</span>
+        <span>Growth</span>
+        <span>Infrastructure</span>
+        <span>Scalability</span>
+      </div>
+    </section>
 
-    <!-- LINKS -->
-    <div class="footer-links">
-      <h3>Navigation</h3>
-      <a href="index.html">Home</a>
-      <a href="services.html">Services</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </div>
+    <section class="cta-section">
+      <div class="cta-glow"></div>
+      <div class="cta-card">
+        <p class="cta-label">READY TO BUILD?</p>
+        <h1>Let’s Build Something Powerful</h1>
+        <p class="cta-text">
+          We design secure, scalable, and modern digital systems for people and
+          businesses ready to grow beyond limits.
+        </p>
+        <div class="cta-buttons">
+          <a href="services.html"
+            ><button class="primary-btn">Start a Project</button></a
+          >
+          <a href="contact.html"
+            ><button class="secondary-btn">Talk to Us</button></a
+          >
+        </div>
+      </div>
+      <div class="particles">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </section>
 
-    <!-- SERVICES -->
-    <div class="footer-links">
-      <h3>Services</h3>
-      <a href="services.html">Cybersecurity</a>
-      <a href="services.html">Web Development</a>
-      <a href="services.html">Web Application</a>
-      <a href="services.html">Software Development</a>
-      <a href="services.html">Automation</a>
-    </div>
+    <footer class="phosory-footer">
+      <!-- BACKGROUND LAYERS -->
+      <div class="footer-bg">
+        <div class="grid"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+      </div>
 
-  </div>
+      <!-- HERO LOGO SECTION -->
+      <div class="footer-hero-logo">
+        <img src="images/icon.webp" alt="Phosory Logo" />
+        <h2>PHOSORY</h2>
+        <p>Secure • Scalable • Intelligent Systems</p>
+      </div>
 
-  <!-- BOTTOM -->
-  <div class="footer-bottom">
-    © 2026 Phosory. All rights reserved.
-  </div>
+      <!-- MAIN CONTENT -->
+      <div class="footer-container">
+        <!-- BRAND -->
+        <div class="footer-brand">
+          <p>
+            Building intelligent digital systems for modern businesses. Clean.
+            Secure. Scalable.
+          </p>
 
-</footer>
+          <div class="socials">
+            <a href="#"><i class="fab fa-x"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+
+        <!-- LINKS -->
+        <div class="footer-links">
+          <h3>Navigation</h3>
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <!-- SERVICES -->
+        <div class="footer-links">
+          <h3>Services</h3>
+          <a href="services.html">Cybersecurity</a>
+          <a href="services.html">Web Development</a>
+          <a href="services.html">Web Application</a>
+          <a href="services.html">Software Development</a>
+          <a href="services.html">Automation</a>
+        </div>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="footer-bottom">© 2026 Phosory. All rights reserved.</div>
+    </footer>
     <script src="script/on-click.js"></script>
     <script src="script/nav.js"></script>
-</body>
+  </body>
 </html>

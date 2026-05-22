@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   // =========================
   // SIDEBAR TOGGLE
   // =========================
@@ -36,12 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   const currentPage = window.location.pathname.split("/").pop();
 
-  document.querySelectorAll(".nav-links a, .sidebar a").forEach(link => {
+  document.querySelectorAll(".nav-links a, .sidebar a").forEach((link) => {
     const href = link.getAttribute("href");
 
     if (href === currentPage) {
       link.classList.add("active");
     }
   });
-
 });

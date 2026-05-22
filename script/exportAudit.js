@@ -1,5 +1,4 @@
 export function exportAuditPDF(logs = [], filters = {}, isAdminFn) {
-
   if (typeof isAdminFn !== "function" || !isAdminFn()) return;
 
   const { jsPDF } = window.jspdf;
@@ -26,14 +25,14 @@ export function exportAuditPDF(logs = [], filters = {}, isAdminFn) {
   if (endDate) endDate.setHours(23, 59, 59, 999);
 
   if (startDate) {
-    data = data.filter(l => {
+    data = data.filter((l) => {
       const t = getTime(l);
       return t && t >= startDate;
     });
   }
 
   if (endDate) {
-    data = data.filter(l => {
+    data = data.filter((l) => {
       const t = getTime(l);
       return t && t <= endDate;
     });
@@ -114,7 +113,6 @@ export function exportAuditPDF(logs = [], filters = {}, isAdminFn) {
 
   // ================= ROWS =================
   data.forEach((log, i) => {
-
     const time = getTime(log)?.toLocaleString() || "--";
 
     const action = (log.action || "N/A").slice(0, 25);
