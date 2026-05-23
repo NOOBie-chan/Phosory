@@ -130,8 +130,16 @@ async function uploadToCloudinary(file) {
     const cloudName = "du19nhphj";
     const uploadPreset = "Phosory";
     const allowedTypes = [
-        "application/pdf"
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ];
+
+    if (!allowedTypes.includes(file.type)) {
+        throw new Error(
+            "Only PDF, DOC and DOCX files allowed"
+        );
+    }
 
     const maxSize = 5 * 1024 * 1024;
 

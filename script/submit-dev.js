@@ -4,7 +4,8 @@ import {
    collection,
    addDoc,
    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+   from "https:
 
 const devForm =
    document.getElementById("devForm");
@@ -21,9 +22,6 @@ const uploadTitle =
 const uploadSubtext =
    document.getElementById("uploadSubtext");
 
-/* =========================
-   FILE UI
-========================= */
 
 resumeInput.addEventListener("change", () => {
 
@@ -31,7 +29,8 @@ resumeInput.addEventListener("change", () => {
 
    if (file) {
 
-      uploadTitle.innerText = file.name;
+      uploadTitle.innerText =
+         file.name;
 
       uploadSubtext.innerText =
          `${(file.size / 1024 / 1024).toFixed(2)} MB`;
@@ -40,154 +39,178 @@ resumeInput.addEventListener("change", () => {
 
 });
 
-/* =========================
-   CLOUDINARY
-========================= */
 
 async function uploadResume(file) {
+
    const allowedTypes = [
-      "application/pdf"
+
+      "application/pdf",
+
+      "application/msword",
+
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
    ];
 
-   const maxSize = 5 * 1024 * 1024;
+   const maxSize =
+      5 * 1024 * 1024;
 
    if (!allowedTypes.includes(file.type)) {
-      alert("Only PDF files allowed");
-      return;
+
+      throw new Error(
+         "Only PDF, DOC and DOCX files allowed"
+      );
+
    }
 
    if (file.size > maxSize) {
-      alert("File too large");
-      return;
-   }
-   const formData = new FormData();
 
-   formData.append("file", file);
+      throw new Error(
+         "File too large (Max: 5MB)"
+      );
+
+   }
+
+   const formData =
+      new FormData();
+
+   formData.append(
+      "file",
+      file
+   );
 
    formData.append(
       "upload_preset",
       "Phosory"
    );
 
-   const response = await fetch(
+   const response =
+      await fetch(
+         "https:
+         {
+            method: "POST",
+            body: formData
+         }
+      );
 
-      "https://api.cloudinary.com/v1_1/du19nhphj/raw/upload",
+   if (!response.ok) {
 
-      {
-         method: "POST",
-         body: formData
-      }
+      throw new Error(
+         "Resume upload failed"
+      );
 
-   );
+   }
 
-   const data = await response.json();
+   const data =
+      await response.json();
 
    return data.secure_url;
 
 }
 
-/* =========================
-   SUBMIT
-========================= */
 
-devForm.addEventListener("submit", async (e) => {
 
-   e.preventDefault();
+devForm.addEventListener(
+   "submit",
+   async (e) => {
 
-   const submitBtn =
-      devForm.querySelector("button");
+      e.preventDefault();
 
-   submitBtn.disabled = true;
+      const submitBtn =
+         devForm.querySelector("button");
 
-   submitBtn.innerHTML =
-      `Submitting...`;
+      submitBtn.disabled = true;
 
-   try {
+      submitBtn.innerHTML =
+         "Submitting...";
 
-      const formData =
-         new FormData(devForm);
+      try {
 
-      const name =
-         formData.get("name");
+         const formData =
+            new FormData(devForm);
 
-      const email =
-         formData.get("email");
+         const name =
+            formData.get("name");
 
-      const skill =
-         formData.get("skills");
+         const email =
+            formData.get("email");
 
-      const file =
-         resumeInput.files[0];
+         const skill =
+            formData.get("skills");
 
-      if (!file) {
+         const file =
+            resumeInput.files[0];
 
-         alert("Please upload a resume");
+         if (!file) {
+
+            throw new Error(
+               "Please upload a resume"
+            );
+
+         }
+
+         const resumeURL =
+            await uploadResume(file);
+
+         resumeLinkInput.value =
+            resumeURL;
+
+
+         await addDoc(
+            collection(
+               db,
+               "developerApplications"
+            ),
+            {
+
+               name,
+
+               email,
+
+               skill,
+
+               resumeURL,
+
+               status: "pending",
+
+               submittedAt:
+                  serverTimestamp()
+
+            }
+
+         );
+
+
+         alert(
+            "Application submitted successfully"
+         );
+
+         devForm.reset();
+
+         uploadTitle.innerText =
+            "Upload Resume";
+
+         uploadSubtext.innerText =
+            "PDF, DOC or DOCX";
+
+      }
+      catch (err) {
+
+         console.error(err);
+
+         alert(
+            err.message ||
+            "Failed to submit application"
+         );
+
+      }
+      finally {
 
          submitBtn.disabled = false;
 
          submitBtn.innerHTML =
             `Apply Now <i class="fas fa-arrow-right"></i>`;
 
-         return;
-
       }
 
-      /* =========================
-         UPLOAD RESUME
-      ========================= */
-
-      const resumeURL =
-         await uploadResume(file);
-
-      resumeLinkInput.value =
-         resumeURL;
-
-      /* =========================
-         SAVE TO FIRESTORE
-      ========================= */
-
-      await addDoc(
-         collection(db, "developers"),
-         {
-
-            name,
-            email,
-            skill,
-            resumeURL,
-
-            status: "pending",
-
-            submittedAt: serverTimestamp()
-
-         }
-      );
-
-      /* =========================
-         SUCCESS
-      ========================= */
-
-      alert("Application submitted successfully");
-
-      devForm.reset();
-
-      uploadTitle.innerText =
-         "Upload Resume";
-
-      uploadSubtext.innerText =
-         "PDF, DOC or DOCX";
-
-   }
-   catch (err) {
-
-      console.error(err);
-
-      alert("Failed to submit application");
-
-   }
-
-   submitBtn.disabled = false;
-
-   submitBtn.innerHTML =
-      `Apply Now <i class="fas fa-arrow-right"></i>`;
-
-});
+   });
