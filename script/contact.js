@@ -1,14 +1,6 @@
 import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
 emailjs.init("hzYpGwbtgq7-kUZMg");
 
-window.addEventListener("scroll", function () {
-    let header = document.getElementById("header");
-    if (window.scrollY > 10) {
-        header.classList.add("scrolled");
-    } else {
-        header.classList.remove("scrolled");
-    }
-});
 // ================= ELEMENTS =================
 const clientBtn = document.getElementById("clientBtn");
 const developerBtn = document.getElementById("developerBtn");

@@ -13,8 +13,6 @@ body {
   display: flex;
 }
 
-/* GRID */
-
 .grid-bg {
   position: fixed;
   inset: 0;
@@ -40,8 +38,6 @@ body {
   }
 }
 
-/* GLOWS */
-
 .glow {
   position: fixed;
   border-radius: 50%;
@@ -65,8 +61,6 @@ body {
   bottom: -100px;
   right: -100px;
 }
-
-/* SIDEBAR */
 
 .sidebar {
   width: 280px;
@@ -143,8 +137,6 @@ body {
   }
 }
 
-/* NAV BUTTONS */
-
 .nav-btn {
   width: 100%;
 
@@ -188,8 +180,6 @@ body {
   border-color: cyan;
 }
 
-/* LOGOUT */
-
 .logout-btn {
   margin-top: auto;
 
@@ -214,8 +204,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* MAIN */
-
 .main-content {
   margin-left: 280px;
 
@@ -227,8 +215,6 @@ body {
 
   overflow-x: hidden;
 }
-
-/* TOPBAR */
 
 .topbar {
   display: flex;
@@ -276,8 +262,6 @@ body {
   border-color: cyan;
 }
 
-/* MENU BUTTON */
-
 .menu-btn {
   display: none;
 
@@ -296,8 +280,6 @@ body {
 
   cursor: pointer;
 }
-
-/* CARDS */
 
 .cards-grid {
   display: grid;
@@ -397,8 +379,6 @@ body {
   color: #ff4d8d;
 }
 
-/* ANALYTICS */
-
 .analytics-card {
   background: rgba(15, 18, 35, 0.9);
 
@@ -445,8 +425,6 @@ body {
   }
 }
 
-/* LIST GRID */
-
 .list-grid {
   display: grid;
 
@@ -454,8 +432,6 @@ body {
 
   gap: 20px;
 }
-
-/* ITEM CARD */
 
 .item {
   position: relative;
@@ -544,8 +520,6 @@ body {
   color: #ff4d8d;
 }
 
-/* ACTIONS */
-
 .actions {
   display: flex;
   gap: 12px;
@@ -585,8 +559,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* VIEW */
-
 .view-section {
   display: none;
   animation: fade 0.35s ease;
@@ -607,8 +579,6 @@ body {
     transform: translateY(0);
   }
 }
-
-/* MOBILE */
 
 .sidebar-overlay {
   display: none;
@@ -689,7 +659,6 @@ body {
   padding: 10px;
 }
 
-/* main log card */
 .audit-item {
   display: flex;
   gap: 12px;
@@ -708,7 +677,6 @@ body {
   border-color: rgba(0, 255, 255, 0.4);
 }
 
-/* timeline dot */
 .audit-dot {
   width: 10px;
   height: 10px;
@@ -718,7 +686,6 @@ body {
   box-shadow: 0 0 10px cyan;
 }
 
-/* content */
 .audit-content h4 {
   margin: 0;
   font-size: 0.95rem;
@@ -736,7 +703,6 @@ body {
   color: #666;
 }
 
-/* status colors */
 .log-success .audit-dot {
   background: #00ff7b !important;
   box-shadow: 0 0 12px #00ffaa !important;
@@ -774,21 +740,6 @@ body {
   color: cyan;
   font-size: 12px;
 }
-
-/* .audit-group {
-  margin-bottom: 2rem;
-}
-
-.audit-title {
-  color: cyan;
-  font-size: 0.9rem;
-  margin: 1rem 0;
-  opacity: 0.8;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border-left: 3px solid cyan;
-  padding-left: 10px;
-} */
 
 .audit-filters {
   display: flex;

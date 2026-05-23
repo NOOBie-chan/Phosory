@@ -1,108 +1,50 @@
-const requestStore = new Map();
-
-export async function handler(event) {
+exports.handler = async (event) => {
   try {
-
-    const ip = (
-      event.headers["x-nf-client-connection-ip"] ||
-      event.headers["x-forwarded-for"] ||
-      "unknown"
-    ).split(",")[0];
-
-    const now = Date.now();
-
-    const limit = 5;
-    const windowTime = 10 * 60 * 1000;
-
-    if (!requestStore.has(ip)) {
-      requestStore.set(ip, []);
-    }
-
-    let requests = requestStore.get(ip);
-
-    requests = requests.filter(
-      time => now - time < windowTime
-    );
-
-    if (requests.length >= limit) {
+    if (event.httpMethod !== "POST") {
       return {
-        statusCode: 429,
-        body: JSON.stringify({
-          success: false,
-          message: "Too many requests. Try again later."
-        })
+        statusCode: 405,
+        body: JSON.stringify({ success: false, message: "Only POST allowed" }),
       };
     }
 
-    requests.push(now);
+    const { token, formType } = JSON.parse(event.body || "{}");
 
-    requestStore.set(ip, requests);
-
-    const { token, formType } = JSON.parse(event.body);
-
-    let secret;
-
-    if (formType === "client") {
-      secret = process.env.CLIENT_TURNSTILE_KEY;
-    }
-    else if (formType === "dev") {
-      secret = process.env.DEV_TURNSTILE_KEY;
-    }
-    else {
+    if (!token) {
       return {
         statusCode: 400,
-        body: JSON.stringify({
-          success: false,
-          message: "Invalid form"
-        })
+        body: JSON.stringify({ success: false, message: "No token" }),
       };
     }
 
-    const params = new URLSearchParams();
+    const secret =
+      formType === "client"
+        ? process.env.CLIENT_TURNSTILE_KEY
+        : process.env.DEV_TURNSTILE_KEY;
 
-    params.append("secret", secret);
-    params.append("response", token);
-
-    const response = await fetch(
+    const verifyRes = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method: "POST",
         headers: {
-          "Content-Type":
-            "application/x-www-form-urlencoded"
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: params
+        body: `secret=${secret}&response=${token}`,
       }
     );
 
-    const data = await response.json();
-
-    if (!data.success) {
-      return {
-        statusCode: 403,
-        body: JSON.stringify({
-          success: false,
-          message: "Captcha failed"
-        })
-      }
-    }
+    const data = await verifyRes.json();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        success: true
-      })
+      body: JSON.stringify(data),
     };
-
   } catch (err) {
-
-    console.error(err);
-
     return {
       statusCode: 500,
       body: JSON.stringify({
-        success: false
-      })
+        success: false,
+        message: "Server error",
+      }),
     };
   }
-}
+};

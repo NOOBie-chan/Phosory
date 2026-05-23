@@ -4,8 +4,12 @@ import {
    collection,
    addDoc,
    serverTimestamp
-}
-   from "https:
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
+emailjs.init(
+   "hzYpGwbtgq7-kUZMg"
+);
 
 const devForm =
    document.getElementById("devForm");
@@ -23,9 +27,11 @@ const uploadSubtext =
    document.getElementById("uploadSubtext");
 
 
+
 resumeInput.addEventListener("change", () => {
 
-   const file = resumeInput.files[0];
+   const file =
+      resumeInput.files[0];
 
    if (file) {
 
@@ -39,6 +45,45 @@ resumeInput.addEventListener("change", () => {
 
 });
 
+async function verifyTurnstile(token, formType) {
+
+   const response =
+      await fetch(
+         "/.netlify/functions/verify-turnstile",
+         {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+               token,
+               formType
+            })
+         }
+      );
+
+   let data = {};
+
+   try {
+      data = await response.json();
+   } catch {
+      throw new Error(
+         "Security service unavailable"
+      );
+   }
+
+   if (!response.ok) {
+
+      throw new Error(
+         data.message ||
+         "Security verification failed"
+      );
+
+   }
+
+   return data;
+
+}
 
 async function uploadResume(file) {
 
@@ -58,7 +103,7 @@ async function uploadResume(file) {
    if (!allowedTypes.includes(file.type)) {
 
       throw new Error(
-         "Only PDF, DOC and DOCX files allowed"
+         "Only PDF, DOC and DOCX allowed"
       );
 
    }
@@ -66,7 +111,7 @@ async function uploadResume(file) {
    if (file.size > maxSize) {
 
       throw new Error(
-         "File too large (Max: 5MB)"
+         "Maximum file size is 5MB"
       );
 
    }
@@ -86,7 +131,7 @@ async function uploadResume(file) {
 
    const response =
       await fetch(
-         "https:
+         "https://api.cloudinary.com/v1_1/du19nhphj/raw/upload",
          {
             method: "POST",
             body: formData
@@ -110,107 +155,96 @@ async function uploadResume(file) {
 
 
 
-devForm.addEventListener(
-   "submit",
-   async (e) => {
 
-      e.preventDefault();
+devForm.addEventListener("submit", async (e) => {
+   e.preventDefault();
 
-      const submitBtn =
-         devForm.querySelector("button");
+   const submitBtn = devForm.querySelector("button");
 
-      submitBtn.disabled = true;
+   submitBtn.disabled = true;
+   submitBtn.innerHTML = "Submitting...";
 
-      submitBtn.innerHTML =
-         "Submitting...";
+   try {
+      const formData = new FormData(devForm);
 
-      try {
+      const name = formData.get("name");
+      const email = formData.get("email");
+      const skill = formData.get("skills");
+      const file = resumeInput.files[0];
 
-         const formData =
-            new FormData(devForm);
+      if (!file) {
+         throw new Error("Please upload a resume");
+      }
 
-         const name =
-            formData.get("name");
+      // ---------------------------
+      // TURNSTILE FIX (IMPORTANT)
+      // ---------------------------
+      const widget = document.getElementById("devTurnstile");
 
-         const email =
-            formData.get("email");
+      const token = turnstile.getResponse(widget);
 
-         const skill =
-            formData.get("skills");
+      if (!token) {
+         throw new Error("Complete security verification");
+      }
 
-         const file =
-            resumeInput.files[0];
+      const verifyResult = await verifyTurnstile(token, "dev");
 
-         if (!file) {
+      if (!verifyResult.success) {
+         throw new Error("Security verification failed");
+      }
 
-            throw new Error(
-               "Please upload a resume"
-            );
+      // ---------------------------
+      // UPLOAD FILE
+      // ---------------------------
+      const resumeURL = await uploadResume(file);
 
+      resumeLinkInput.value = resumeURL;
+
+      // ---------------------------
+      // FIREBASE WRITE
+      // ---------------------------
+      await addDoc(collection(db, "developers"), {
+         name,
+         email,
+         skill,
+         resumeURL,
+         status: "pending",
+         submittedAt: serverTimestamp()
+      });
+
+      // ---------------------------
+      // EMAIL
+      // ---------------------------
+      await emailjs.send(
+         "service_8sgugr4",
+         "template_nf0gf2k",
+         {
+            name,
+            email,
+            skills: skill,
+            resumeLink: resumeURL
          }
+      );
 
-         const resumeURL =
-            await uploadResume(file);
+      alert("Application submitted successfully");
 
-         resumeLinkInput.value =
-            resumeURL;
+      devForm.reset();
 
+      uploadTitle.innerText = "Upload Resume";
+      uploadSubtext.innerText = "PDF, DOC or DOCX";
 
-         await addDoc(
-            collection(
-               db,
-               "developerApplications"
-            ),
-            {
-
-               name,
-
-               email,
-
-               skill,
-
-               resumeURL,
-
-               status: "pending",
-
-               submittedAt:
-                  serverTimestamp()
-
-            }
-
-         );
-
-
-         alert(
-            "Application submitted successfully"
-         );
-
-         devForm.reset();
-
-         uploadTitle.innerText =
-            "Upload Resume";
-
-         uploadSubtext.innerText =
-            "PDF, DOC or DOCX";
-
-      }
-      catch (err) {
-
-         console.error(err);
-
-         alert(
-            err.message ||
-            "Failed to submit application"
-         );
-
-      }
-      finally {
-
-         submitBtn.disabled = false;
-
-         submitBtn.innerHTML =
-            `Apply Now <i class="fas fa-arrow-right"></i>`;
-
+      // FIXED RESET
+      if (window.turnstile) {
+         turnstile.reset(widget);
       }
 
-   });
+   } catch (err) {
+      console.error("ERROR:", err);
+
+      alert(err.message || "Submission failed");
+
+   } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `Apply Now <i class="fas fa-arrow-right"></i>`;
+   }
+});
