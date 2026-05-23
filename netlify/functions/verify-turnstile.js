@@ -2,15 +2,16 @@ const requestStore = new Map();
 
 export async function handler(event) {
   try {
-    const ip =
+
+    const ip = (
+      event.headers["x-nf-client-connection-ip"] ||
       event.headers["x-forwarded-for"] ||
-      event.headers["client-ip"] ||
-      "unknown";
+      "unknown"
+    ).split(",")[0];
 
     const now = Date.now();
 
     const limit = 5;
-
     const windowTime = 10 * 60 * 1000;
 
     if (!requestStore.has(ip)) {
@@ -19,15 +20,17 @@ export async function handler(event) {
 
     let requests = requestStore.get(ip);
 
-    requests = requests.filter((time) => now - time < windowTime);
+    requests = requests.filter(
+      time => now - time < windowTime
+    );
 
     if (requests.length >= limit) {
       return {
         statusCode: 429,
         body: JSON.stringify({
           success: false,
-          message: "Too many requests. Try again later.",
-        }),
+          message: "Too many requests. Try again later."
+        })
       };
     }
 
@@ -41,45 +44,65 @@ export async function handler(event) {
 
     if (formType === "client") {
       secret = process.env.CLIENT_TURNSTILE_KEY;
-    } else if (formType === "dev") {
+    }
+    else if (formType === "dev") {
       secret = process.env.DEV_TURNSTILE_KEY;
-    } else {
+    }
+    else {
       return {
         statusCode: 400,
         body: JSON.stringify({
           success: false,
-          message: "Invalid form",
-        }),
+          message: "Invalid form"
+        })
       };
     }
+
+    const params = new URLSearchParams();
+
+    params.append("secret", secret);
+    params.append("response", token);
 
     const response = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type":
+            "application/x-www-form-urlencoded"
         },
-        body: `secret=${secret}&response=${token}`,
-      },
+        body: params
+      }
     );
 
     const data = await response.json();
 
+    if (!data.success) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          success: false,
+          message: "Captcha failed"
+        })
+      }
+    }
+
     return {
       statusCode: 200,
-
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        success: true
+      })
     };
+
   } catch (err) {
+
     console.error(err);
 
     return {
       statusCode: 500,
-
       body: JSON.stringify({
-        success: false,
-      }),
+        success: false
+      })
     };
   }
 }

@@ -1,11 +1,11 @@
 import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
 emailjs.init("hzYpGwbtgq7-kUZMg");
 
-window.addEventListener("scroll", function(){
+window.addEventListener("scroll", function () {
     let header = document.getElementById("header");
-    if(window.scrollY > 10){
+    if (window.scrollY > 10) {
         header.classList.add("scrolled");
-    } else{
+    } else {
         header.classList.remove("scrolled");
     }
 });
@@ -24,8 +24,8 @@ clientBtn?.addEventListener("click", () => {
     devForm.classList.remove("activeForm");
 
     clientForm.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior: "smooth",
+        block: "start"
     });
 });
 
@@ -36,14 +36,14 @@ developerBtn?.addEventListener("click", () => {
     clientForm.classList.remove("activeForm");
 
     devForm.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior: "smooth",
+        block: "start"
     });
 });
 // ================= BUDGET SLIDER =================
 const budgetSlider = document.getElementById("budgetSlider");
 const budgetValue = document.getElementById("budgetValue");
-function updateBudget(){
+function updateBudget() {
     const value = Number(budgetSlider.value);
     budgetValue.innerText = value.toLocaleString();
 }
@@ -59,7 +59,7 @@ const uploadTitle = document.getElementById("uploadTitle");
 const uploadSubtext = document.getElementById("uploadSubtext");
 resumeInput?.addEventListener("change", () => {
     const file = resumeInput.files[0];
-    if(file){
+    if (file) {
         uploadField.classList.add("has-file");
         uploadTitle.innerText = file.name;
         const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
@@ -71,37 +71,37 @@ resumeInput?.addEventListener("change", () => {
     }
 });
 // ================= TOAST =================
-function showToast(message){
+function showToast(message) {
     const toast = document.createElement("div");
     toast.innerText = message;
     Object.assign(toast.style, {
-        position:"fixed",
-        top:"30px",
-        right:"30px",
-        background:"#111827",
-        color:"#fff",
-        padding:"18px 22px",
-        borderRadius:"16px",
-        zIndex:"999999",
-        border:"1px solid rgba(255,255,255,0.1)",
-        boxShadow:"0 10px 40px rgba(0,0,0,0.4)"
+        position: "fixed",
+        top: "30px",
+        right: "30px",
+        background: "#111827",
+        color: "#fff",
+        padding: "18px 22px",
+        borderRadius: "16px",
+        zIndex: "999999",
+        border: "1px solid rgba(255,255,255,0.1)",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
     });
     document.body.appendChild(toast);
-    setTimeout(()=>{
+    setTimeout(() => {
         toast.remove();
-    },3000);
+    }, 3000);
 }
 // ================= SUCCESS ANIMATION =================
-function showSuccessAnimation(){
+function showSuccessAnimation() {
     const overlay = document.createElement("div");
-    Object.assign(overlay.style,{
-        position:"fixed",
-        inset:"0",
-        background:"rgba(0,0,0,0.7)",
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"center",
-        zIndex:"999999"
+    Object.assign(overlay.style, {
+        position: "fixed",
+        inset: "0",
+        background: "rgba(0,0,0,0.7)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: "999999"
     });
     overlay.innerHTML = `
         <div style="
@@ -121,14 +121,29 @@ function showSuccessAnimation(){
         </div>
     `;
     document.body.appendChild(overlay);
-    setTimeout(()=>{
+    setTimeout(() => {
         overlay.remove();
-    },1600);
+    }, 1600);
 }
 // ================= CLOUDINARY =================
-async function uploadToCloudinary(file){
+async function uploadToCloudinary(file) {
     const cloudName = "du19nhphj";
     const uploadPreset = "Phosory";
+    const allowedTypes = [
+        "application/pdf"
+    ];
+
+    const maxSize = 5 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+        alert("Only PDF files allowed");
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert("File too large");
+        return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
@@ -136,22 +151,22 @@ async function uploadToCloudinary(file){
     const res = await fetch(
         `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`,
         {
-            method:"POST",
-            body:formData
+            method: "POST",
+            body: formData
         }
     );
     const data = await res.json();
     const fileUrl = data.secure_url || data.url;
-    if(!fileUrl){
+    if (!fileUrl) {
         throw new Error("Upload failed");
     }
     return fileUrl;
 }
 // ================= CLIENT FORM =================
-clientForm?.addEventListener("submit", async (e)=>{
+clientForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if(clientSubmitting) return;
+    if (clientSubmitting) return;
     clientSubmitting = true;
 
     const button = clientForm.querySelector(".submit-btn");
@@ -160,7 +175,7 @@ clientForm?.addEventListener("submit", async (e)=>{
     button.innerHTML = "Sending...";
     button.disabled = true;
 
-    try{
+    try {
 
         const data = Object.fromEntries(
             new FormData(clientForm)
@@ -180,7 +195,7 @@ clientForm?.addEventListener("submit", async (e)=>{
 
         button.innerHTML = "Sent ✓";
 
-    } catch(err){
+    } catch (err) {
 
         console.error(err);
 
@@ -188,24 +203,24 @@ clientForm?.addEventListener("submit", async (e)=>{
 
         button.innerHTML = "Failed ✕";
 
-    } finally{
+    } finally {
 
         clientSubmitting = false;
 
-        setTimeout(()=>{
+        setTimeout(() => {
             button.innerHTML = original;
             button.disabled = false;
-        },2000);
+        }, 2000);
 
     }
 
 });
 // ================= DEV FORM =================
-devForm?.addEventListener("submit", async (e)=>{
+devForm?.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    if(devSubmitting) return;
+    if (devSubmitting) return;
 
     devSubmitting = true;
 
@@ -217,13 +232,13 @@ devForm?.addEventListener("submit", async (e)=>{
 
     button.disabled = true;
 
-    try{
+    try {
 
         const file = document.getElementById(
             "resumeInput"
         ).files[0];
 
-        if(!file){
+        if (!file) {
             showToast("Upload resume");
             throw new Error("No file");
         }
@@ -264,7 +279,7 @@ devForm?.addEventListener("submit", async (e)=>{
 
         button.innerHTML = "Sent ✓";
 
-    } catch(err){
+    } catch (err) {
 
         console.error(err);
 
@@ -272,14 +287,14 @@ devForm?.addEventListener("submit", async (e)=>{
 
         button.innerHTML = "Failed ✕";
 
-    } finally{
+    } finally {
 
         devSubmitting = false;
 
-        setTimeout(()=>{
+        setTimeout(() => {
             button.innerHTML = original;
             button.disabled = false;
-        },2000);
+        }, 2000);
 
     }
 
@@ -287,7 +302,7 @@ devForm?.addEventListener("submit", async (e)=>{
 // ================= AUTO CLIENT OPEN =================
 const params = new URLSearchParams(window.location.search);
 const autoClient = params.get("autoclient");
-if(autoClient){
+if (autoClient) {
     clientBtn.click();
 }
 // ================= AUTO SERVICE FILL =================
@@ -298,30 +313,30 @@ const pages = params.get("pages");
 const complexity = params.get("complexity");
 const price = params.get("price");
 // ================= CLIENT AUTO POPULATE =================
-if(service){
+if (service) {
     clientBtn.click();
-    setTimeout(()=>{
+    setTimeout(() => {
         const projectTypeInput = document.querySelector("[name=projectType]");
         const detailsInput = document.querySelector("[name=details]");
-        if(projectTypeInput){
+        if (projectTypeInput) {
             projectTypeInput.value = service;
         }
-        if(detailsInput){
+        if (detailsInput) {
             detailsInput.value =
-`Selected Service: ${service || "N/A"}
+                `Selected Service: ${service || "N/A"}
 Selected Type: ${type || "N/A"}
 Complexity: ${complexity || "Basic"}
 Number of Pages: ${pages || "1"}
 Features: ${features || "None"}`;
         }
-        if(price && budgetSlider){
+        if (price && budgetSlider) {
             const cleanPrice = parseInt(
                 price.replace(/[^0-9]/g, "")
             );
-            if(!isNaN(cleanPrice)){
+            if (!isNaN(cleanPrice)) {
                 budgetSlider.value = cleanPrice;
                 updateBudget();
             }
         }
-    },300);
+    }, 300);
 }

@@ -1,42 +1,42 @@
 import { db } from "./firebase.js";
 
 import {
-collection,
-addDoc,
-serverTimestamp
+   collection,
+   addDoc,
+   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const devForm =
-document.getElementById("devForm");
+   document.getElementById("devForm");
 
 const resumeInput =
-document.getElementById("resumeInput");
+   document.getElementById("resumeInput");
 
 const resumeLinkInput =
-document.getElementById("resumeLink");
+   document.getElementById("resumeLink");
 
 const uploadTitle =
-document.getElementById("uploadTitle");
+   document.getElementById("uploadTitle");
 
 const uploadSubtext =
-document.getElementById("uploadSubtext");
+   document.getElementById("uploadSubtext");
 
 /* =========================
    FILE UI
 ========================= */
 
-resumeInput.addEventListener("change",()=>{
+resumeInput.addEventListener("change", () => {
 
-const file = resumeInput.files[0];
+   const file = resumeInput.files[0];
 
-if(file){
+   if (file) {
 
-uploadTitle.innerText = file.name;
+      uploadTitle.innerText = file.name;
 
-uploadSubtext.innerText =
-`${(file.size / 1024 / 1024).toFixed(2)} MB`;
+      uploadSubtext.innerText =
+         `${(file.size / 1024 / 1024).toFixed(2)} MB`;
 
-}
+   }
 
 });
 
@@ -44,31 +44,45 @@ uploadSubtext.innerText =
    CLOUDINARY
 ========================= */
 
-async function uploadResume(file){
+async function uploadResume(file) {
+   const allowedTypes = [
+      "application/pdf"
+   ];
 
-const formData = new FormData();
+   const maxSize = 5 * 1024 * 1024;
 
-formData.append("file", file);
+   if (!allowedTypes.includes(file.type)) {
+      alert("Only PDF files allowed");
+      return;
+   }
 
-formData.append(
-"upload_preset",
-"Phosory"
-);
+   if (file.size > maxSize) {
+      alert("File too large");
+      return;
+   }
+   const formData = new FormData();
 
-const response = await fetch(
+   formData.append("file", file);
 
-"https://api.cloudinary.com/v1_1/du19nhphj/raw/upload",
+   formData.append(
+      "upload_preset",
+      "Phosory"
+   );
 
-{
-method:"POST",
-body:formData
-}
+   const response = await fetch(
 
-);
+      "https://api.cloudinary.com/v1_1/du19nhphj/raw/upload",
 
-const data = await response.json();
+      {
+         method: "POST",
+         body: formData
+      }
 
-return data.secure_url;
+   );
+
+   const data = await response.json();
+
+   return data.secure_url;
 
 }
 
@@ -76,104 +90,104 @@ return data.secure_url;
    SUBMIT
 ========================= */
 
-devForm.addEventListener("submit", async (e)=>{
+devForm.addEventListener("submit", async (e) => {
 
-e.preventDefault();
+   e.preventDefault();
 
-const submitBtn =
-devForm.querySelector("button");
+   const submitBtn =
+      devForm.querySelector("button");
 
-submitBtn.disabled = true;
+   submitBtn.disabled = true;
 
-submitBtn.innerHTML =
-`Submitting...`;
+   submitBtn.innerHTML =
+      `Submitting...`;
 
-try{
+   try {
 
-const formData =
-new FormData(devForm);
+      const formData =
+         new FormData(devForm);
 
-const name =
-formData.get("name");
+      const name =
+         formData.get("name");
 
-const email =
-formData.get("email");
+      const email =
+         formData.get("email");
 
-const skill =
-formData.get("skills");
+      const skill =
+         formData.get("skills");
 
-const file =
-resumeInput.files[0];
+      const file =
+         resumeInput.files[0];
 
-if(!file){
+      if (!file) {
 
-alert("Please upload a resume");
+         alert("Please upload a resume");
 
-submitBtn.disabled = false;
+         submitBtn.disabled = false;
 
-submitBtn.innerHTML =
-`Apply Now <i class="fas fa-arrow-right"></i>`;
+         submitBtn.innerHTML =
+            `Apply Now <i class="fas fa-arrow-right"></i>`;
 
-return;
+         return;
 
-}
+      }
 
-/* =========================
-   UPLOAD RESUME
-========================= */
+      /* =========================
+         UPLOAD RESUME
+      ========================= */
 
-const resumeURL =
-await uploadResume(file);
+      const resumeURL =
+         await uploadResume(file);
 
-resumeLinkInput.value =
-resumeURL;
+      resumeLinkInput.value =
+         resumeURL;
 
-/* =========================
-   SAVE TO FIRESTORE
-========================= */
+      /* =========================
+         SAVE TO FIRESTORE
+      ========================= */
 
-await addDoc(
-collection(db,"developers"),
-{
+      await addDoc(
+         collection(db, "developers"),
+         {
 
-name,
-email,
-skill,
-resumeURL,
+            name,
+            email,
+            skill,
+            resumeURL,
 
-status:"pending",
+            status: "pending",
 
-submittedAt:serverTimestamp()
+            submittedAt: serverTimestamp()
 
-}
-);
+         }
+      );
 
-/* =========================
-   SUCCESS
-========================= */
+      /* =========================
+         SUCCESS
+      ========================= */
 
-alert("Application submitted successfully");
+      alert("Application submitted successfully");
 
-devForm.reset();
+      devForm.reset();
 
-uploadTitle.innerText =
-"Upload Resume";
+      uploadTitle.innerText =
+         "Upload Resume";
 
-uploadSubtext.innerText =
-"PDF, DOC or DOCX";
+      uploadSubtext.innerText =
+         "PDF, DOC or DOCX";
 
-}
-catch(err){
+   }
+   catch (err) {
 
-console.error(err);
+      console.error(err);
 
-alert("Failed to submit application");
+      alert("Failed to submit application");
 
-}
+   }
 
-submitBtn.disabled = false;
+   submitBtn.disabled = false;
 
-submitBtn.innerHTML =
-`Apply Now <i class="fas fa-arrow-right"></i>`;
+   submitBtn.innerHTML =
+      `Apply Now <i class="fas fa-arrow-right"></i>`;
 
 });
